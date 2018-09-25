@@ -1,6 +1,8 @@
 
 #include "wp3_calibrator/defines.h"
 #include "wp3_calibrator/classtest.h"
+#include "wp3_calibrator/functions.h"
+#include "wp3_calibrator/visualization.h"
 
 
 // STD
@@ -84,7 +86,7 @@
 
 typedef pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> pclVisColorCustom;
 typedef pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> pclVisColorGeneric;
-pcl::visualization::PCLVisualizer reg_viewer("Input clouds and registration");
+//pcl::visualization::PCLVisualizer reg_viewer("Input clouds and registration");
 //pcl::visualization::PCLVisualizer viewer1 ("Visualizer");
 //pcl::visualization::PCLVisualizer viewer2 ("Visualizer2");
 
@@ -771,120 +773,6 @@ void cloudPassthroughFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud, pcl::Po
 
 
 
-//template <typename T_color> void visualizeCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud, std::string add, std::string remove,
-//                                                pcl::visualization::PCLVisualizer * viewer, T_color * color, int point_size)
-//void visualizeCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud)
-void visualizeCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud, pcl::visualization::PCLVisualizer& viewer)
-{
-  viewer.setBackgroundColor (0, 0, 0);
-  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_1(cloud, 0, 255, 0);
-  pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_2(cloud, 0, 255, 255);
-  int vp11(0);
-  int vp12(0);
-  int vp13(0);
-  int vp21(0);
-  int vp22(0);
-  int vp23(0);
-  viewer.createViewPort (0.0, 0.0, 0.33, 0.5, vp11);
-  viewer.createViewPort (0.33, 0.0, 0.66, 0.5, vp12);
-  viewer.createViewPort (0.66, 0.0, 1.0, 0.5, vp13);
-  viewer.createViewPort (0.0, 0.5, 0.33, 1.0, vp21);
-  viewer.createViewPort (0.33, 0.5, 0.66, 1.0, vp22);
-  viewer.createViewPort (0.66, 0.5, 1.0, 1.0, vp23);
-
-//  viewer.removetext
-  viewer.removeAllPointClouds();
-//  viewer.addPointCloud<pcl::PointXYZ> (cloud, color_1, "cloud_name1",vp11);
-  viewer.addPointCloud<pcl::PointXYZ> (cloud, color_1, "cloud_name1");
-  //  v1.spinOnce();
-  viewer.addPointCloud<pcl::PointXYZ> (cloudICP2_aTob_crop, color_2, "cloud_name2",vp21);
-  //  viewer->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, "sample cloud");
-    viewer.addCoordinateSystem (1.0);
-  //  viewer->initCameraParameters ();
-
-
-  //  viewer->removePointCloud(remove);
-  //  viewer->addPointCloud(cloud, *color, add);
-  //	Eigen::Affine3f tt;
-  //	tt = Eigen::Translation3f(0.,0.,0.);
-  //	viewer->addCoordinateSystem(1, tt, 0);
-  //  v1->setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, add);
-  //  v1->spinOnce();
-  //  v1.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, point_size, add);
-  viewer.spinOnce();
-  //  v1.spin();
-  //  cv::waitKey(1);
-  if(not viewer.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text"))
-  viewer.addText ("ARUCO FULL VIEW", 10, 10, "vp11_text", vp11);
-  viewer.addText ("ARUCO CROPPED VIEW", 10, 10, "vp2 text", vp21);
-//  viewer.initCameraParameters();
-  viewer.setCameraPosition(-1.23666, -8.81802, -6.55671,
-                           -0.0567675, -2.09815, 5.04277,
-                           0.323175, -0.832741, 0.449555);
-//Cam:
-// - pos: (-1.23666, -8.81802, -6.55671)
-// - view: (0.323175, -0.832741, 0.449555)
-//  - focal: (-0.0567675, -2.09815, 5.04277
-}
-
-void updateVisualizer(pcl::visualization::PCLVisualizer& viewer)
-{
-  if (not reg_viewer.wasStopped())
-  {
-    reg_viewer.spinOnce();
-    cv::waitKey(1);
-
-    //Save the position of the camera
-    std::vector<pcl::visualization::Camera> cam;
-    reg_viewer.getCameras(cam);
-
-    //Print recorded points on the screen:
-      cout << "Cam: " << endl
-                   << " - pos: (" << cam[0].pos[0] << ", "    << cam[0].pos[1] << ", "    << cam[0].pos[2] << ")" << endl
-                   << " - view: ("    << cam[0].view[0] << ", "   << cam[0].view[1] << ", "   << cam[0].view[2] << ")"    << endl
-                   << " - focal: ("   << cam[0].focal[0] << ", "  << cam[0].focal[1] << ", "  << cam[0].focal[2] << ")"   << endl;
-
-    std::ostringstream text;
-    text << "Cam: " << endl
-            << " - pos: (" << cam[0].pos[0] << ", "    << cam[0].pos[1] << ", "    << cam[0].pos[2] << ")" << endl
-            << " - view: ("    << cam[0].view[0] << ", "   << cam[0].view[1] << ", "   << cam[0].view[2] << ")"    << endl
-            << " - focal: ("   << cam[0].focal[0] << ", "  << cam[0].focal[1] << ", "  << cam[0].focal[2] << ")"   << endl;
-    std::string text_str = text.str();
-
-    if(not reg_viewer.updateText(text_str, 10, 30, "Cam_text"))
-    {
-      reg_viewer.addText(text_str, 10, 30, "Cam_text");
-    }
-
-  }
-}
-
-//while (not final_viewer.wasStopped())
-//{
-//  final_viewer.spinOnce();
-//  cv::waitKey(1);
-//}
-
-// function from openptrack
-//void
-//TrajectoryRegistration::visualizeClouds (std::vector<pcl::PointCloud<pcl::PointXYZRGB>::Ptr > cloud_vector,
-//    std::string viewer_name, bool spin_flag)
-//{
-//  pcl::visualization::PCLVisualizer viewer (viewer_name);
-//  viewer.setCameraPosition(4.85038, 0.777564, 23.63, 0.0101831, 0.998897, -0.0458376);
-//  for(std::map<std::string, int>::iterator colormap_iterator = color_map_.begin(); colormap_iterator != color_map_.end(); colormap_iterator++)
-//  {
-//    pcl::visualization::PointCloudColorHandlerRGBField<pcl::PointXYZRGB> rgb(cloud_vector[colormap_iterator->second]);
-//    viewer.addPointCloud<pcl::PointXYZRGB> (cloud_vector[colormap_iterator->second], rgb, colormap_iterator->first);
-//    viewer.setPointCloudRenderingProperties (pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 3, colormap_iterator->first);
-//    viewer.spinOnce();
-//  }
-//  if (spin_flag)
-//    viewer.spin();
-//}
-
-
-
 // Checks if a matrix is a valid rotation matrix.
 bool isRotationMatrix(cv::Mat &R)
 {
@@ -1227,6 +1115,7 @@ int main (int argc, char** argv)
   ros::spinOnce();
   arucoProcessor aruco_A;
   arucoProcessor aruco_B;
+  wp3::Visualization viewer;
 
   std::string reference_node = "4";
   std::string calibration_order_initial[] = {"6", "3", "5", "2", "1"};
@@ -1262,7 +1151,8 @@ int main (int argc, char** argv)
       aruco_B.detectMarkers(current_image_B, current_depthMat_B, transform_B, calibration_order_initial[calib_counter]);
       aruco_B.getCroppedCloud(src_cloudB_cropTotal);
       calcTransMats(transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
-      visualizeCloud(current_cloud_B, reg_viewer);
+      viewer.run(current_cloud_B);
+      //      wp3::runVisualizer(current_cloud_B, reg_viewer);
     }
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
     if (key == 115) // s
@@ -1284,7 +1174,8 @@ int main (int argc, char** argv)
     }
 
 // VIEWER -------------------------------------------------------------------------
-    updateVisualizer(reg_viewer);
+//    wp3::updateVisualizer(reg_viewer);
+    viewer.update();
 // VIEWER -------------------------------------------------------------------------
     //                        visualizeCloud(cloudICP1_AtoB, "cloud1",  &viewer1, &color_A, 0.1);
     //                        visualizeCloud(current_cloud_B, "cloud2",  &viewer1, &color_B, 0.1);

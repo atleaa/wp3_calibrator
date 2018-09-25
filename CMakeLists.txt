@@ -143,7 +143,11 @@ include_directories(
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
-ADD_EXECUTABLE(calibrate src/calibrate.cpp)
+ADD_EXECUTABLE(calibrate
+    src/calibrate.cpp
+    src/functions.cpp
+    src/visualization.cpp
+    )
 
 ## Enable debugging mode
 set(CMAKE_BUILD_TYPE Debug)
