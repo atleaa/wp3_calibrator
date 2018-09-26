@@ -90,6 +90,14 @@ typedef pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> pc
 //pcl::visualization::PCLVisualizer viewer1 ("Visualizer");
 //pcl::visualization::PCLVisualizer viewer2 ("Visualizer2");
 
+
+
+// Global variables:
+//std::vector<cv::Vec3f> camera_colors;     // vector containing colors to use to identify cameras in the network
+std::map<std::string, int> color_map;     // map between camera frame_id and color
+std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6;
+
+
 cv::Mat current_image_A;
 cv::Mat current_depthMat_A;
 cv::Mat current_depthMat_A_crop1;
@@ -1151,7 +1159,51 @@ int main (int argc, char** argv)
       aruco_B.detectMarkers(current_image_B, current_depthMat_B, transform_B, calibration_order_initial[calib_counter]);
       aruco_B.getCroppedCloud(src_cloudB_cropTotal);
       calcTransMats(transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
-      viewer.run(current_cloud_B);
+      //make cloud vector --> do this smarter..
+//      for (unsigned int i = 0; i < curr_cloud_vector.size(); i++)
+//      {
+//        pcl::PointCloud<pcl::PointXYZRGB>::Ptr empty_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
+
+      // cropped clouds
+      cloud_vector_1.clear();
+      cloud_vector_1.push_back(cloudA_to_B_cropped);
+      cloud_vector_1.push_back(src_cloudB_cropTotal);
+      cloud_vector_2.clear();
+      cloud_vector_2.push_back(cloudICP);
+      cloud_vector_2.push_back(src_cloudB_cropTotal);
+      cloud_vector_3.clear();
+      cloud_vector_3.push_back(cloudICP2_aTob_crop);
+      cloud_vector_3.push_back(src_cloudB_cropTotal);
+
+      // full clouds
+      cloud_vector_4.clear();
+      cloud_vector_4.push_back(cloudA_to_B);
+      cloud_vector_4.push_back(current_cloud_B);
+      cloud_vector_5.clear();
+      cloud_vector_5.push_back(cloudICP1_AtoB);
+      cloud_vector_5.push_back(current_cloud_B);
+      cloud_vector_6.clear();
+      cloud_vector_6.push_back(cloudICP2_aTob);
+      cloud_vector_6.push_back(current_cloud_B);
+
+        //                        visualizeCloud(cloudICP1_AtoB, "cloud1",  &viewer1, &color_A, 0.1);
+        //                        visualizeCloud(current_cloud_B, "cloud2",  &viewer1, &color_B, 0.1);
+        //                        visualizeCloud(src_cloudA_cropTotal, "cloud1_cropped", &viewer2, &color_A, 0.1);
+        //                        visualizeCloud(src_cloudB_cropTotal, "cloud2_cropped", &viewer2, &color_B, 0.1);
+        //      if(viz_counter==0) {visualizeCloud(current_cloud_A, "cloudA_init","cloudA_init", &viewer1, &color_A, 0.01);}
+        //      if(viz_counter==1) {visualizeCloud(cloudA_to_B, "Aruco", "Aruco", &viewer1, &color_A, 0.01);}
+        //      if(viz_counter==2) {visualizeCloud(cloudICP1_AtoB, "ICP_ROI", "ICP_ROI", &viewer1, &color_A, 0.01);}
+        //      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob, "BIG_ICP", "BIG_ICP", &viewer1, &color_A, 0.01);}
+
+        //      if(viz_counter==0) {visualizeCloud(src_cloudA_cropTotal, "cloudA_init","cloudA_init", &viewer2, &color_A, 0.01);}
+        //      if(viz_counter==1) {visualizeCloud(cloudA_to_B_cropped, "Aruco", "Aruco", &viewer2, &color_A, 0.01);}
+        //      if(viz_counter==2) {visualizeCloud(cloudICP, "ICP_ROI", "ICP_ROI", &viewer2, &color_A, 0.01);}
+        //      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob_crop, "BIG_ICP", "BIG_ICP", &viewer2, &color_A, 0.01);}
+//      }
+
+
+
+      viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6);
       //      wp3::runVisualizer(current_cloud_B, reg_viewer);
     }
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
