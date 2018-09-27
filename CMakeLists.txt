@@ -147,6 +147,7 @@ ADD_EXECUTABLE(calibrate
     src/calibrate.cpp
     src/functions.cpp
     src/visualization.cpp
+    src/arucoprocessor.cpp
     )
 
 ## Enable debugging mode

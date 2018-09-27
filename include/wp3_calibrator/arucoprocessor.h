@@ -1,36 +1,15 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef ARUCOPROCESSOR_H
+#define ARUCOPROCESSOR_H
 
-//#include <iostream>
-//#include <fstream>
-//#include <string.h>
-//#include <Eigen/Eigen>
-//#include <limits>
-//#include <pcl/filters/extract_indices.h>
-//#include <pcl_ros/point_cloud.h>
-//#include <pcl/point_types.h>
-
-//#include <pcl/common/centroid.h>
-//#include <pcl/registration/icp.h>
-//#include <pcl/registration/icp_nl.h>
-//#include <pcl/filters/voxel_grid.h>
-//#include <pcl/ModelCoefficients.h>
-//#include <pcl/sample_consensus/method_types.h>
-//#include <pcl/sample_consensus/model_types.h>
-//#include <pcl/segmentation/sac_segmentation.h>
-//#include <pcl/filters/extract_indices.h>
-
-//#include <pcl/visualization/pcl_visualizer.h>
-//#include <opencv2/highgui/highgui.hpp>
-
-// STD
-#include <vector>
+#include "wp3_calibrator/defines.h"
+#include "wp3_calibrator/functions.h"
 
 // openCV for image processing
-//#include <opencv2/highgui/highgui.hpp>
-//#include <opencv2/aruco.hpp>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/aruco.hpp>
 #include "opencv2/opencv.hpp"
-//#include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/imgproc/imgproc.hpp>
+
 
 // PCL
 //#include <pcl_ros/point_cloud.h>
@@ -50,21 +29,38 @@
 //#include <Eigen/Dense>  // Includes Core, Geometry, LU, Cholesky, SVD, QR, and Eigenvalues header files
 //#include <Eigen/Eigen>  // Includes Dense and Sparse header files (the whole Eigen library)
 
+namespace wp3 {
 
 
-namespace wp3
+
+class arucoProcessor
 {
+public:
+  // Contructor
+  arucoProcessor();
 
+  // Deconstrucor
+  ~arucoProcessor();
 
-void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
+  void detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number);
 
-void pointcloudFromDepthImage (cv::Mat& depth_image,
-                               Eigen::Matrix3f& depth_intrinsics,
-                               pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
-                               bool crop,
-                               std::vector<float> c_ext,
-                               cv::Mat depth_aruco_dummy);
-}
+  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
+  void createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
 
-#endif // FUNCTIONS_H
+private:
+  // TODO, create vectors
+  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
+  cv::Mat current_depthMat_A_crop1_;
+  cv::Mat current_depthMat_A_crop2_;
+  cv::Mat current_depthMat_A_crop3_;
+  cv::Mat current_depthMat_B_crop1_;
+  cv::Mat current_depthMat_B_crop2_;
+  cv::Mat current_depthMat_B_crop3_;
+};
+
+} // end namespace wp3
+
+#endif // ARUCOPROCESSOR_H

@@ -2,7 +2,7 @@
 
 namespace wp3 {
 
-// contstructor
+// Constructor
 Visualization::Visualization() :
     //    viewer_(new pcl::visualization::PCLVisualizer("Input clouds and registration"))
     viewer_("Input clouds and registration")
@@ -42,6 +42,8 @@ Visualization::Visualization() :
   viewer_.spinOnce();
 }
 
+
+// Desctructor
 Visualization::~Visualization()
 {
     // do nothing
