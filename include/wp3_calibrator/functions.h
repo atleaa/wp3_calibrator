@@ -1,30 +1,20 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-//#include <iostream>
-//#include <fstream>
-//#include <string.h>
-//#include <Eigen/Eigen>
-//#include <limits>
-//#include <pcl/filters/extract_indices.h>
-//#include <pcl_ros/point_cloud.h>
-//#include <pcl/point_types.h>
-
-//#include <pcl/common/centroid.h>
-//#include <pcl/registration/icp.h>
-//#include <pcl/registration/icp_nl.h>
-//#include <pcl/filters/voxel_grid.h>
-//#include <pcl/ModelCoefficients.h>
-//#include <pcl/sample_consensus/method_types.h>
-//#include <pcl/sample_consensus/model_types.h>
-//#include <pcl/segmentation/sac_segmentation.h>
-//#include <pcl/filters/extract_indices.h>
-
-//#include <pcl/visualization/pcl_visualizer.h>
-//#include <opencv2/highgui/highgui.hpp>
 
 // STD
-#include <vector>
+//#include <stdio.h>
+//#include <stdlib.h>
+#include <iostream>
+//#include <math.h>
+//#include <fstream>
+#include <string>
+//#include <unistd.h>
+//#include <mutex>
+//#include <thread>
+//#include <vector>
+
+//#include <limits>
 
 // openCV for image processing
 //#include <opencv2/highgui/highgui.hpp>
@@ -36,9 +26,22 @@
 //#include <pcl_ros/point_cloud.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+//#include <pcl/filters/extract_indices.h>
+//#include <pcl_ros/point_cloud.h>
+//#include <pcl/point_types.h>
+//#include <pcl/common/centroid.h>
+//#include <pcl/registration/icp.h>
+//#include <pcl/registration/icp_nl.h>
+//#include <pcl/filters/voxel_grid.h>
+//#include <pcl/ModelCoefficients.h>
+//#include <pcl/sample_consensus/method_types.h>
+//#include <pcl/sample_consensus/model_types.h>
+//#include <pcl/segmentation/sac_segmentation.h>
+//#include <pcl/filters/extract_indices.h>
+//#include <pcl/visualization/pcl_visualizer.h>
 
 // Eigen for matrix calculations
-#include <Eigen/Core> // Matrix and Array classes, basic linear algebra (including triangular and selfadjoint products), array manipulation
+//#include <Eigen/Core> // Matrix and Array classes, basic linear algebra (including triangular and selfadjoint products), array manipulation
 //#include <Eigen/Geometry> // Transform, Translation, Scaling, Rotation2D and 3D rotations (Quaternion, AngleAxis)
 //#include <Eigen/LU> // Inverse, determinant, LU decompositions with solver (FullPivLU, PartialPivLU)
 //#include <Eigen/Cholesky> // LLT and LDLT Cholesky factorization with solver
@@ -47,23 +50,30 @@
 //#include <Eigen/QR> // QR decomposition with solver (HouseholderQR, ColPivHouseholderQR, FullPivHouseholderQR)
 //#include <Eigen/Eigenvalues>  // Eigenvalue, eigenvector decompositions (EigenSolver, SelfAdjointEigenSolver, ComplexEigenSolver)
 //#include <Eigen/Sparse> // Sparse matrix storage and related basic linear algebra (SparseMatrix, SparseVector)
-//#include <Eigen/Dense>  // Includes Core, Geometry, LU, Cholesky, SVD, QR, and Eigenvalues header files
+#include <Eigen/Dense>  // Includes Core, Geometry, LU, Cholesky, SVD, QR, and Eigenvalues header files
 //#include <Eigen/Eigen>  // Includes Dense and Sparse header files (the whole Eigen library)
 
 
 
 namespace wp3
 {
+void init_reference(std::string kinect_number);
 
+void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_number);
 
-void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
+//void readTopics(std::string nodeA, std::string nodeB, cv::Mat* rgb_A, cv::Mat* depth_A, cv::Mat* rgb_B, cv::Mat* depth_B, bool update);
+void readTopics(std::string nodeA,
+                std::string nodeB,
+                cv::Mat* rgb_A,
+                cv::Mat* depth_A,
+                cv::Mat* rgb_B,
+                cv::Mat* depth_B,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
+                bool update);
 
-void pointcloudFromDepthImage (cv::Mat& depth_image,
-                               Eigen::Matrix3f& depth_intrinsics,
-                               pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
-                               bool crop,
-                               std::vector<float> c_ext,
-                               cv::Mat depth_aruco_dummy);
 }
 
 

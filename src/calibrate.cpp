@@ -4,6 +4,7 @@
 #include "wp3_calibrator/functions.h"
 #include "wp3_calibrator/visualization.h"
 #include "wp3_calibrator/arucoprocessor.h"
+#include "wp3_calibrator/imageconverter.h"
 
 
 // STD
@@ -58,9 +59,8 @@
 #include <pcl/io/pcd_io.h>
 //#include <pcl/ros/conversions.h>
 // /usr/include/pcl-1.7/pcl/ros/conversions.h:44:2: warning: #warning The <pcl/ros/conversions.h> header is deprecated.
-//please use <pcl/conversions.h> instead. [-Wcpp] #warning The <pcl/ros/conversions.h> header is deprecated. please use \
-#include <pcl_conversions/pcl_conversions.h>
-#include <pcl_conversions/pcl_conversions.h>
+//please use <pcl/conversions.h> instead. [-Wcpp] #warning The <pcl/ros/conversions.h> header is deprecated. please use #include <pcl_conversions/pcl_conversions.h>
+
 
 // Registration
 #include <pcl/registration/sample_consensus_prerejective.h>
@@ -96,17 +96,15 @@ typedef pcl::visualization::PointCloudColorHandlerGenericField<pcl::PointXYZ> pc
 // Global variables:
 //std::vector<cv::Vec3f> camera_colors;     // vector containing colors to use to identify cameras in the network
 std::map<std::string, int> color_map;     // map between camera frame_id and color
-std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6;
+//std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6;
 
 
-cv::Mat current_image_A;
-cv::Mat current_depthMat_A;
+
 //cv::Mat current_depthMat_A_crop1;
 //cv::Mat current_depthMat_A_crop2;
 //cv::Mat current_depthMat_A_crop3;
 
-cv::Mat current_image_B;
-cv::Mat current_depthMat_B;
+
 //cv::Mat current_depthMat_B_crop1;
 //cv::Mat current_depthMat_B_crop2;
 //cv::Mat current_depthMat_B_crop3;
@@ -114,12 +112,50 @@ cv::Mat current_depthMat_B;
 
 cv::Mat rot_mat(3, 3, cv::DataType<float>::type);
 
-ros::Time timestamp;
-ros::Time last_frame;
-ros::Time timestamp_depth;
-ros::Time last_frame_depth;
 
-std::recursive_mutex i_mutex, d_mutex, r_mutex2;
+std::recursive_mutex r_mutex2;
+
+
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+////pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped_filtered(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B(new pcl::PointCloud<pcl::PointXYZ>);
+
+////pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB(new pcl::PointCloud<pcl::PointXYZ>);
+////pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud2(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud2_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud3(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud3_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud4(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud5(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud5_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud6(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud6_acc(new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP (new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP1_AtoB (new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP2_aTob (new pcl::PointCloud<pcl::PointXYZ>);
+//pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP2_aTob_crop (new pcl::PointCloud<pcl::PointXYZ>);
+
+pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
+
+
+
+
+// ==============================================================
+// init images
+cv::Mat current_image_A;
+cv::Mat current_depthMat_A;
+cv::Mat current_image_B;
+cv::Mat current_depthMat_B;
+
+// init clouds
 pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A_acc(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B(new pcl::PointCloud<pcl::PointXYZ>);
@@ -129,7 +165,6 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B_filtered(new pcl::PointCloud
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped_filtered(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B(new pcl::PointCloud<pcl::PointXYZ>);
-
 pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB(new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
@@ -147,22 +182,28 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP1_AtoB (new pcl::PointCloud<pcl::Poi
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP2_aTob (new pcl::PointCloud<pcl::PointXYZ>);
 pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP2_aTob_crop (new pcl::PointCloud<pcl::PointXYZ>);
 
-pcl::StatisticalOutlierRemoval<pcl::PointXYZ> sor;
+// init cloud vectors
+std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6;
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped(new pcl::PointCloud<pcl::PointXYZ>);
 
-
-
+// init transforms
 Eigen::Matrix4f transform_A = Eigen::Matrix4f::Identity();
 Eigen::Matrix4f transform_B = Eigen::Matrix4f::Identity();
 Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
 Eigen::Affine3f transform_ICP2 = Eigen::Affine3f::Identity();
-Eigen::Matrix4f transform_ATOb;
+//Eigen::Matrix4f transform_ATOb;
 Eigen::Matrix4f world_to_reference = Eigen::Matrix4f::Identity();
 Eigen::Matrix4f world_to_B;
 Eigen::Matrix4f transform_ICP1_print = Eigen::Matrix4f::Identity();
 Eigen::Matrix4f transform_reference_global = Eigen::Matrix4f::Identity();
 
-
+// init variables
 double ICP1_fitness_to_print;
+// ================================================================
+
+
 
 
 
@@ -216,173 +257,8 @@ void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org, pcl::P
 
 
 
-class imageConverter
-{
-  cv::Mat src_image, src_depth;
-  ros::NodeHandle nh;
-  image_transport::ImageTransport it;
-  image_transport::Subscriber image_sub;
-  std::string topic_type;
-
-private:
-  std::string topicName;
-
-public:
-  imageConverter(const std::string& inputName, const std::string&  type) : it(nh)
-  {
-    //subscribe to the input video stream "/kinect2/hd/image_color"
-    //r_mutex.lock();
-    topic_type = inputName;
-    if (type == "depth")
-    {
-      image_sub = it.subscribe(inputName, 1, &imageConverter::callback_depth, this, image_transport::TransportHints("compressed"));
-    }
-
-    else if (type == "color")
-    {
-      image_sub = it.subscribe(inputName, 1, &imageConverter::callback_color, this, image_transport::TransportHints("compressed"));
-    }
-    //r_mutex.unlock();
-  }
-
-  ~imageConverter()
-  {
-    image_sub.shutdown();
-    std::cout << "ROS stopped Topic Subscription of " << topic_type <<  std::endl;
-  }
-
-  void getCurrentImage(cv::Mat *input_image)
-  {
-    while((timestamp.toSec() - last_frame.toSec()) <= 0) {
-      usleep(2000);
-      ros::spinOnce();
-    }
-    std::cout << "got new timestamp " <<  std::endl;
-    i_mutex.lock();
-    *input_image = src_image;
-    last_frame = timestamp;
-    i_mutex.unlock();
-  }
-
-  void getCurrentDepthMap(cv::Mat *input_image)
-  {
-    while((timestamp.toSec() - last_frame.toSec()) <= 0) {
-      usleep(50); // changed from 2000
-      ros::spinOnce();
-    }
-    d_mutex.lock();
-    *input_image = src_depth;
-    last_frame = timestamp;
-    d_mutex.unlock();
-  }
 
 
-  void callback_depth(const sensor_msgs::ImageConstPtr& msg)
-  {
-    ros::Time frame_time = ros::Time::now();
-    timestamp = frame_time;
-    cv_bridge::CvImageConstPtr pCvImage;
-
-    //                std::cout << "D1";
-
-    try
-    {
-      pCvImage = cv_bridge::toCvShare(msg, msg->encoding);// same encoding of the message as the source,  sensor_msgs::image_encodings::16UC1);
-    }
-    catch (cv_bridge::Exception& e)
-    {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      return;
-    }
-
-    //                std::cout << "D2";
-    pCvImage->image.copyTo(src_depth);
-    src_depth.convertTo(src_depth,  CV_32F, 0.001);
-
-
-    // TULL Resizing
-    //        cv::Mat tmp_depth;
-    //        pCvImage->image.copyTo(tmp_depth);
-    //        tmp_depth.convertTo(tmp_depth,  CV_32F, 0.001);
-    //        // scale open cv image: TULL
-    //        d_mutex.lock();
-    //        cv::resize(tmp_depth, src_depth, cv::Size(1920,1080), 0, 0, cv::INTER_CUBIC); // resize to 1920x1080 resolution
-    //        d_mutex.unlock();
-
-    //                std::cout << "D3" << std::endl;
-  }
-
-  void callback_color(const sensor_msgs::ImageConstPtr& msg)
-  {
-    ros::Time frame_time = ros::Time::now();
-    timestamp = frame_time;
-    cv_bridge::CvImagePtr cv_ptr;
-
-    //                std::cout << "C1";
-
-    try
-    {
-      cv_ptr = cv_bridge::toCvCopy(msg, sensor_msgs::image_encodings::BGR8);
-    }
-    catch (cv_bridge::Exception& e)
-    {
-      ROS_ERROR("cv_bridge exception: %s", e.what());
-      //r_mutex.unlock();
-      return;
-    }
-
-    //                std::cout << "C2";
-
-    i_mutex.lock();
-    src_image = cv_ptr->image;
-    i_mutex.unlock();
-
-    //                std::cout << "C3" << std::endl;
-  }
-};
-
-class depthProcessor
-{
-  pcl::PointCloud<pcl::PointXYZ> tmp_cloud_read;
-  ros::Subscriber depth_subA;
-  ros::NodeHandle nh_depthA;
-
-public:
-  depthProcessor(const std::string& inputNameA)
-  {
-    depth_subA = nh_depthA.subscribe(inputNameA, 1, &depthProcessor::callback_cloudA, this);
-    // this refers to the non static object  (here: a depthProcessor object used in main)
-  }
-
-  ~depthProcessor()
-  {
-    depth_subA.shutdown();
-    std::cout << "ROS stopped Depth Import" << std::endl;
-  }
-
-  void get_filtered_PCL_cloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ptr)
-  {
-    while((timestamp_depth.toSec() - last_frame_depth.toSec()) <= 0) {
-      usleep(2000);
-      ros::spinOnce();
-    }
-
-    pcl::copyPointCloud(tmp_cloud_read, *cloud_ptr);
-    //	    *cloud_ptr = tmp_cloud_read; // also a possibility
-    last_frame_depth = timestamp_depth;
-  }
-
-  void callback_cloudA(const sensor_msgs::PointCloud2ConstPtr& input)
-  {
-
-    ros::Time frame_time_depth = ros::Time::now();
-    timestamp_depth = frame_time_depth;
-    pcl::PCLPointCloud2::Ptr cloud_filtered(new pcl::PCLPointCloud2);
-
-    pcl_conversions::toPCL(*input, *cloud_filtered);
-    pcl::fromPCLPointCloud2(*cloud_filtered, tmp_cloud_read);
-  }
-};
 
 
 
@@ -474,125 +350,10 @@ void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
   tMat(1,3) = kinect_number_global_pose.at<double>(1,3);;
   tMat(2,3) = kinect_number_global_pose.at<double>(2,3);;
 }
-void readTopics(std::string nodeA, std::string nodeB, bool update = false)
-{
-  // Create char arrays
-  std::string depthMatA = "/jetson" + nodeA + "/hd/image_depth_rect";
-  //    std::string depthMatA = "/jetson" + nodeA + "/sd/image_depth_rect"; // TULL
-  std::string rgbA = "/jetson" + nodeA + "/hd/image_color_rect";
-  std::string point_cloud_A = "/master/jetson" + nodeA + "/points";
 
-  std::string depthMatB = "/jetson" + nodeB + "/hd/image_depth_rect";
-  //    std::string depthMatB = "/jetson" + nodeB + "/sd/image_depth_rect"; // TULL
-  std::string rgbB = "/jetson" + nodeB + "/hd/image_color_rect";
-  std::string point_cloud_B = "/master/jetson" + nodeB + "/points";
-
-  std::cout << "pointA_name: " << point_cloud_A << std::endl;  //eg: /master/jetson1/points
-  std::cout << "pointB_name: " << point_cloud_B << std::endl;
-
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  imageConverter IC_Depth_A = imageConverter(depthMatA, "depth");
-  //        std::cout << depthMatA << " converted" << std::endl; //TULL
-  imageConverter IC_RGB_A = imageConverter(rgbA, "color");
-  //        std::cout << rgbA << " converted" << std::endl; //TULL
-
-  imageConverter IC_Depth_B = imageConverter(depthMatB, "depth");
-  //        std::cout << depthMatB << " converted" << std::endl; //TULL
-  imageConverter IC_RGB_B = imageConverter(rgbB, "color"); // didnt use rect on clor image before
-  //        std::cout << rgbB << " converted" << std::endl; //TULL
-
-  depthProcessor dp_A = depthProcessor(point_cloud_A); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
-  depthProcessor dp_B = depthProcessor(point_cloud_B); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
-
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  //// World data from Atle
-  //
-  //	//0.185 7.360 5.07 -1.590 0 -2.59
-  //	Eigen::Matrix4f world_to_reference = Eigen::Matrix4f::Identity();
-  //	Eigen::Matrix4f world_to_B;
-  //	Eigen::Matrix4f world_to_B_inverse;
-  //	Eigen::Affine3f tf4cb = Eigen::Affine3f::Identity();
-  //	tf4cb.translation() << 0.138, 7.437, 4.930;
-  //	tf4cb.rotate (Eigen::AngleAxisf (-1.565, Eigen::Vector3f::UnitZ()));
-  //	tf4cb.rotate (Eigen::AngleAxisf (0, Eigen::Vector3f::UnitY()));
-  //	tf4cb.rotate (Eigen::AngleAxisf (-2.590, Eigen::Vector3f::UnitX()));
-  //	world_to_reference = tf4cb.matrix();
-  //	kinect6_to_4 =  world_to_reference.inverse()* global_pose_kinect6;
-  //	kinect3_to_4 =  world_to_reference.inverse()* global_pose_kinect3;
-  //	kinect5_to_4 =  world_to_reference.inverse()* global_pose_kinect5;
-  //	kinect2_to_4 =  world_to_reference.inverse()* global_pose_kinect2;
-  //
-  //
-  //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Data acquisition ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //	bool reading_complete_a;
-  if (update)
-  {
-    current_image_A.release();
-    current_depthMat_A.release();
-    current_image_B.release();
-    current_depthMat_B.release();
-    current_cloud_A->clear();
-    current_cloud_B->clear();
-    src_cloudA_cropTotal->clear();
-    src_cloudB_cropTotal->clear();
-
-    std::cout << "emptied cloud, size now: " << current_cloud_A->size() << std::endl;
-  }
-  std::cout << "Reading RGB image A... "<< std::flush;
-  while(current_image_A.empty())
-  {
-    IC_RGB_A.getCurrentImage(&current_image_A);
-
-  }
-  std::cout << "done" << std::endl;
-
-  std::cout << "Reading Depth image A... "<< std::flush;
-  while(current_depthMat_A.empty())
-  {
-    IC_Depth_A.getCurrentDepthMap(&current_depthMat_A);
-  }
-  std::cout << "done " << std::endl;
-
-  std::cout << "Reading RGB image B... "<< std::flush;
-  while(current_image_B.empty())
-  {
-    IC_RGB_B.getCurrentImage(&current_image_B);
-  }
-  std::cout << "done" << std::endl;
-
-  std::cout << "Reading Depth image B... "<< std::flush;
-  while(current_depthMat_B.empty())
-  {
-    IC_Depth_B.getCurrentDepthMap(&current_depthMat_B);
-  }
-  std::cout << "done" << std::endl;
-
-  std::cout << "Reading cloud A... "<< std::flush;
-  while( current_cloud_A->size() == 0)
-  {
-    dp_A.get_filtered_PCL_cloud(current_cloud_A);
-  }
-  std::cout << "done" << std::endl;
-
-  std::cout << "Reading cloud B... "<< std::flush;
-  while( current_cloud_B->size() == 0)
-  {
-    dp_B.get_filtered_PCL_cloud(current_cloud_B);
-  }
-  std::cout << "done" << std::endl;
-
-  //    std::cout << "Reading point clouds from A and B 5 times... "<< std::endl;
-}
-
-void visualizeRegisSteps(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloudA_init, pcl::PointCloud<pcl::PointXYZ>::Ptr & cloudB_init,
-                         pcl::PointCloud<pcl::PointXYZ>::Ptr & cloudA_Aruco, pcl::PointCloud<pcl::PointXYZ>::Ptr & cloudA_ROI,
-                         pcl::PointCloud<pcl::PointXYZ>::Ptr & cloudA_ICP)
-{
-
-}
 void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
 {
+  Eigen::Matrix4f transform_ATOb;
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   transform_ATOb = transform_B*transform_A.inverse();
@@ -634,42 +395,7 @@ void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eig
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
-void make4_happen_baby(std::string kinect_number)
-{
-  std::string fs_filename = wp3::package_path + "kinect_ICP1_tMat/kinect" + kinect_number + "/results.yaml";
-  std::cout << "Creating global reference in file " << fs_filename << "  ... " << std::flush;
 
-  //0.185 7.360 5.07 -1.590 0 -2.59 // lab before summer 2018
-  // 0.5 5.05 4.4 -1.58 -0.010 -2.47 // outdoor test at MH summer 2018
-  Eigen::Matrix4f world_to_reference = Eigen::Matrix4f::Identity();
-  Eigen::Matrix4f world_to_B;
-  Eigen::Matrix4f world_to_B_inverse;
-  Eigen::Affine3f tf4cb = Eigen::Affine3f::Identity();
-  tf4cb.translation() << 0.5, 5.05, 4.4;
-  tf4cb.rotate (Eigen::AngleAxisf (-1.58, Eigen::Vector3f::UnitZ()));
-  tf4cb.rotate (Eigen::AngleAxisf (-0.01, Eigen::Vector3f::UnitY()));
-  tf4cb.rotate (Eigen::AngleAxisf (-2.47, Eigen::Vector3f::UnitX()));
-  world_to_reference = tf4cb.matrix();
-
-  cv::Mat transf_to_save_openCV = cv::Mat::eye(4, 4, CV_64F);
-  transf_to_save_openCV.at<double>(0,0) = world_to_reference(0,0);
-  transf_to_save_openCV.at<double>(1,0) = world_to_reference(1,0);
-  transf_to_save_openCV.at<double>(2,0) = world_to_reference(2,0);
-  transf_to_save_openCV.at<double>(0,1) = world_to_reference(0,1);
-  transf_to_save_openCV.at<double>(1,1) = world_to_reference(1,1);
-  transf_to_save_openCV.at<double>(2,1) = world_to_reference(2,1);
-  transf_to_save_openCV.at<double>(0,2) = world_to_reference(0,2);
-  transf_to_save_openCV.at<double>(1,2) = world_to_reference(1,2);
-  transf_to_save_openCV.at<double>(2,2) = world_to_reference(2,2);
-  transf_to_save_openCV.at<double>(0,3) = world_to_reference(0,3);
-  transf_to_save_openCV.at<double>(1,3) = world_to_reference(1,3);
-  transf_to_save_openCV.at<double>(2,3) = world_to_reference(2,3);
-
-  cv::FileStorage fs_result(fs_filename, cv::FileStorage::WRITE);
-  fs_result << "Global_transformation" << transf_to_save_openCV;
-  fs_result.release();
-  std::cout << "done" << std::endl;
-}
 void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::string kinect_number)
 {
   // The thought here is to save the final fine ICP results and the clouds before this transformation. Based on
@@ -703,41 +429,19 @@ void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::
   std::cout << "Stored results in: " << fs_filename << std::endl;
 }
 
-void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_number)
-{
-  // The thought here is to open the final fine ICP results and the transformation from the first ICP. Based on
-  // the algorithm presented in the paper, the cloud with the lowest (best) ICP score is merged with the reference cloud.
-  // New ICP scores are then calculated, and the selection process continues until all clouds have been merged.
-
-  std::string fs_filename = wp3::package_path + "kinect_ICP1_tMat/kinect" + kinect_number + "/results.yaml";
-  std::cout << "Opening global reference: " << fs_filename << "  ... " << std::flush;
-
-  cv::Mat transf_to_open_openCV = cv::Mat::eye(4, 4, CV_64F);
-
-  cv::FileStorage fs_result(fs_filename, cv::FileStorage::READ);
-  fs_result["Global_transformation"] >> transf_to_open_openCV;
-  fs_result.release();
-  // Convert to eigen matrix
-
-  transf_to_open(0,0) = transf_to_open_openCV.at<double>(0,0);
-  transf_to_open(1,0) = transf_to_open_openCV.at<double>(1,0);
-  transf_to_open(2,0) = transf_to_open_openCV.at<double>(2,0);
-  transf_to_open(0,1) = transf_to_open_openCV.at<double>(0,1);
-  transf_to_open(1,1) = transf_to_open_openCV.at<double>(1,1);
-  transf_to_open(2,1) = transf_to_open_openCV.at<double>(2,1);
-  transf_to_open(0,2) = transf_to_open_openCV.at<double>(0,2);
-  transf_to_open(1,2) = transf_to_open_openCV.at<double>(1,2);
-  transf_to_open(2,2) = transf_to_open_openCV.at<double>(2,2);
-  transf_to_open(0,3) = transf_to_open_openCV.at<double>(0,3);
-  transf_to_open(1,3) = transf_to_open_openCV.at<double>(1,3);
-  transf_to_open(2,3) = transf_to_open_openCV.at<double>(2,3);
-
-  std::cout << "done" << std::endl;
-}
 
 
+
+
+
+
+// begin main  --------------------------------------------------------------------------------------------
 int main (int argc, char** argv)
 {
+
+
+
+
   sleep(3);
 
   std::cout << "n   - new image "<<  std::endl
@@ -762,10 +466,7 @@ int main (int argc, char** argv)
 
   std::cout << calibration_order_initial[0] << std::endl;
 
-  make4_happen_baby(reference_node); // create first transformation
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Visualizer ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  pclVisColorCustom color_A(current_cloud_A, 255, 0, 255);
-//  pclVisColorCustom color_B(current_cloud_B, 0, 255, 10);
+  wp3::init_reference(reference_node); // create first initial transformation
 
   r_mutex2.lock();
   int key = cv::waitKey(30);
@@ -773,7 +474,11 @@ int main (int argc, char** argv)
   size_t calib_counter = 0;
   size_t viz_counter = 0;
 
-  openGlobalReference(transform_reference_global, reference_node);
+
+
+  wp3::openGlobalReference(transform_reference_global, reference_node);
+
+  //  begin main while ------------------------------------------------------------------------------------------
   while ((key != 27) && ros::ok())  // ESC
   {
     key = cv::waitKey(30);
@@ -782,13 +487,24 @@ int main (int argc, char** argv)
     if (key == 110 || init == true) // n
     {
       init = false;
-      readTopics(reference_node,calibration_order_initial[calib_counter],true);
+      wp3::readTopics(reference_node,
+                      calibration_order_initial[calib_counter],
+                      &current_image_A,
+                      &current_depthMat_A,
+                      &current_image_B,
+                      &current_depthMat_B,
+                      current_cloud_A,
+                      current_cloud_B,
+                      src_cloudA_cropTotal,
+                      src_cloudB_cropTotal,
+                      true);
       aruco_A.detectMarkers(current_image_A, current_depthMat_A, transform_A, reference_node);
       aruco_A.getCroppedCloud(src_cloudA_cropTotal);
       aruco_B.detectMarkers(current_image_B, current_depthMat_B, transform_B, calibration_order_initial[calib_counter]);
       aruco_B.getCroppedCloud(src_cloudB_cropTotal);
       calcTransMats(transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
-      //make cloud vector --> do this smarter..
+
+      //make cloud vector --> TODO: use a loop to create vectors
 //      for (unsigned int i = 0; i < curr_cloud_vector.size(); i++)
 //      {
 //        pcl::PointCloud<pcl::PointXYZRGB>::Ptr empty_cloud_ptr(new pcl::PointCloud<pcl::PointXYZRGB>);
@@ -815,26 +531,9 @@ int main (int argc, char** argv)
       cloud_vector_6.push_back(cloudICP2_aTob);
       cloud_vector_6.push_back(current_cloud_B);
 
-        //                        visualizeCloud(cloudICP1_AtoB, "cloud1",  &viewer1, &color_A, 0.1);
-        //                        visualizeCloud(current_cloud_B, "cloud2",  &viewer1, &color_B, 0.1);
-        //                        visualizeCloud(src_cloudA_cropTotal, "cloud1_cropped", &viewer2, &color_A, 0.1);
-        //                        visualizeCloud(src_cloudB_cropTotal, "cloud2_cropped", &viewer2, &color_B, 0.1);
-        //      if(viz_counter==0) {visualizeCloud(current_cloud_A, "cloudA_init","cloudA_init", &viewer1, &color_A, 0.01);}
-        //      if(viz_counter==1) {visualizeCloud(cloudA_to_B, "Aruco", "Aruco", &viewer1, &color_A, 0.01);}
-        //      if(viz_counter==2) {visualizeCloud(cloudICP1_AtoB, "ICP_ROI", "ICP_ROI", &viewer1, &color_A, 0.01);}
-        //      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob, "BIG_ICP", "BIG_ICP", &viewer1, &color_A, 0.01);}
-
-        //      if(viz_counter==0) {visualizeCloud(src_cloudA_cropTotal, "cloudA_init","cloudA_init", &viewer2, &color_A, 0.01);}
-        //      if(viz_counter==1) {visualizeCloud(cloudA_to_B_cropped, "Aruco", "Aruco", &viewer2, &color_A, 0.01);}
-        //      if(viz_counter==2) {visualizeCloud(cloudICP, "ICP_ROI", "ICP_ROI", &viewer2, &color_A, 0.01);}
-        //      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob_crop, "BIG_ICP", "BIG_ICP", &viewer2, &color_A, 0.01);}
-//      }
-
-
-
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6);
-      //      wp3::runVisualizer(current_cloud_B, reg_viewer);
     }
+
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
     if (key == 115) // s
     {
@@ -854,56 +553,7 @@ int main (int argc, char** argv)
       std::cout << "evaluating node " << reference_node << "vs" << calibration_order_initial[calib_counter] << std::endl;
     }
 
-// VIEWER -------------------------------------------------------------------------
-//    wp3::updateVisualizer(reg_viewer);
     viewer.update();
-// VIEWER -------------------------------------------------------------------------
-    //                        visualizeCloud(cloudICP1_AtoB, "cloud1",  &viewer1, &color_A, 0.1);
-    //                        visualizeCloud(current_cloud_B, "cloud2",  &viewer1, &color_B, 0.1);
-    //                        visualizeCloud(src_cloudA_cropTotal, "cloud1_cropped", &viewer2, &color_A, 0.1);
-    //                        visualizeCloud(src_cloudB_cropTotal, "cloud2_cropped", &viewer2, &color_B, 0.1);
-//    visualizeRegisSteps(src_cloudA_cropTotal, src_cloudB_cropTotal,
-//                        cloudA_to_B_cropped, cloudICP, cloudICP2_aTob_crop);
-
-//    visualizeCloud(src_cloudA_cropTotal, "cloudA_init", "cloudA_init", &viewer2, &color_A, 0.1);
-//    visualizeCloud(current_cloud_B, "cloudB_init","cloudB_init", &viewer1, &color_B, 0.01);
-//    visualizeCloud(src_cloudB_cropTotal, "cloudB", "cloudB", &viewer2, &color_B, 0.01);
-
-//    if (key == 42) // *
-//    {
-//      viz_counter += 1;
-//      if (viz_counter > 3) {viz_counter=0;}
-//      std::cout << "viz_counter: " << viz_counter << std::endl;
-//      if(viz_counter==0) {visualizeCloud(current_cloud_A, "cloudA_init","BIG_ICP", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==1) {visualizeCloud(cloudA_to_B, "Aruco", "cloudA_init", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==2) {visualizeCloud(cloudICP1_AtoB, "ICP_ROI", "Aruco", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob, "BIG_ICP", "ICP_ROI", &viewer1, &color_A, 0.01);}
-
-//      if(viz_counter==0) {visualizeCloud(src_cloudA_cropTotal, "cloudA_init","BIG_ICP", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==1) {visualizeCloud(cloudA_to_B_cropped, "Aruco", "cloudA_init", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==2) {visualizeCloud(cloudICP, "ICP_ROI", "Aruco", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob_crop, "BIG_ICP", "ICP_ROI", &viewer2, &color_A, 0.01);}
-//    }
-//    else{
-//      if(viz_counter==0) {visualizeCloud(current_cloud_A, "cloudA_init","cloudA_init", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==1) {visualizeCloud(cloudA_to_B, "Aruco", "Aruco", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==2) {visualizeCloud(cloudICP1_AtoB, "ICP_ROI", "ICP_ROI", &viewer1, &color_A, 0.01);}
-//      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob, "BIG_ICP", "BIG_ICP", &viewer1, &color_A, 0.01);}
-
-//      if(viz_counter==0) {visualizeCloud(src_cloudA_cropTotal, "cloudA_init","cloudA_init", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==1) {visualizeCloud(cloudA_to_B_cropped, "Aruco", "Aruco", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==2) {visualizeCloud(cloudICP, "ICP_ROI", "ICP_ROI", &viewer2, &color_A, 0.01);}
-//      if(viz_counter==3) {visualizeCloud(cloudICP2_aTob_crop, "BIG_ICP", "BIG_ICP", &viewer2, &color_A, 0.01);}
-//    }
-
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudA_to_B_cropped(new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB(new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal(new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP (new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP1_AtoB (new pcl::PointCloud<pcl::PointXYZ>);
-//        pcl::PointCloud<pcl::PointXYZ>::Ptr cloudICP2_aTob (new pcl::PointCloud<pcl::PointXYZ>);
-
   }
   //
   //	cv::Mat finalRotationMatrix = cv::Mat::eye(3, 3, CV_64F);
@@ -933,4 +583,4 @@ int main (int argc, char** argv)
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   r_mutex2.unlock();
-  }
+  } // end main

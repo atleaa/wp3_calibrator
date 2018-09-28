@@ -4,12 +4,14 @@
 #include "wp3_calibrator/defines.h"
 #include "wp3_calibrator/functions.h"
 
+// STD
+#include <vector>
+
 // openCV for image processing
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/aruco.hpp>
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
-
 
 // PCL
 //#include <pcl_ros/point_cloud.h>
@@ -49,6 +51,15 @@ public:
   void createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
 
 private:
+  void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
+
+  void pointcloudFromDepthImage (cv::Mat& depth_image,
+                                 Eigen::Matrix3f& depth_intrinsics,
+                                 pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
+                                 bool crop,
+                                 std::vector<float> c_ext,
+                                 cv::Mat depth_aruco_dummy);
+
   // TODO, create vectors
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
