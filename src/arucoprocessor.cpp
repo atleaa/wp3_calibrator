@@ -16,7 +16,7 @@ arucoProcessor::arucoProcessor() :
 }
 
 
-// Deconstrucor
+// Destrucor
 arucoProcessor::~arucoProcessor()
 {
  // boost::shared_ptr are autmatically removed when leaving scope, but can be cleared using ptr.reset();
@@ -160,7 +160,8 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
 }
 
 
-void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
+//void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
+void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Eigen::Matrix4f &transform4x4, std::string kinect_number)
 {
 
   std::string camera_name = "/kinect" + kinect_number;
@@ -283,6 +284,7 @@ void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eige
       cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
       max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
       //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
+
       if (!invalid_points)
       {
         cv::Rect myROI(botx,boty,topx-botx, topy-boty);
@@ -375,6 +377,15 @@ void arucoProcessor::getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
   *cloud += *src_cloud_crop2_;
   *cloud += *src_cloud_crop3_;
 }
+
+//pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud()
+//{
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud;
+//  *cloud += *src_cloud_crop1_;
+//  *cloud += *src_cloud_crop2_;
+//  *cloud += *src_cloud_crop3_;
+//  return cloud;
+//}
 
 void arucoProcessor::createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat)
 {

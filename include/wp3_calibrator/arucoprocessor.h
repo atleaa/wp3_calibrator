@@ -38,15 +38,16 @@ namespace wp3 {
 class arucoProcessor
 {
 public:
-  // Contructor
+  // Constructor
   arucoProcessor();
 
-  // Deconstrucor
+  // Destrucor
   ~arucoProcessor();
 
-  void detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number);
+  void detectMarkers(cv::Mat &inputImage, cv::Mat &inputDepth, Eigen::Matrix4f &transform4x4, std::string kinect_number);
 
   void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
+//    pcl::PointCloud<pcl::PointXYZ>::Ptr getCroppedCloud();
 
   void createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
 

@@ -149,6 +149,7 @@ ADD_EXECUTABLE(calibrate
     src/visualization.cpp
     src/arucoprocessor.cpp
     src/imageconverter.cpp
+    src/sensor.cpp
     )
 
 ## Enable debugging mode

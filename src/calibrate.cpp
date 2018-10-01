@@ -5,6 +5,7 @@
 #include "wp3_calibrator/visualization.h"
 #include "wp3_calibrator/arucoprocessor.h"
 #include "wp3_calibrator/imageconverter.h"
+#include "wp3_calibrator/sensor.h"
 
 
 // STD
@@ -351,14 +352,15 @@ void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
   tMat(2,3) = kinect_number_global_pose.at<double>(2,3);;
 }
 
-void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+//void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+void calcTransMats(wp3::Sensor &nodeA_local, wp3::Sensor &nodeB_local, Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
 {
   Eigen::Matrix4f transform_ATOb;
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   transform_ATOb = transform_B*transform_A.inverse();
   pcl::transformPointCloud (*src_cloudA_cropTotal, *cloudA_to_B_cropped, transform_ATOb);
-  pcl::transformPointCloud (*current_cloud_A, *cloudA_to_B, transform_ATOb);
+  pcl::transformPointCloud (*nodeA_local.cloudPtr_, *cloudA_to_B, transform_ATOb);
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -369,7 +371,7 @@ void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eig
   {
     Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
     pcl::transformPointCloud (*src_cloudA_cropTotal, *cloudICP, transform_AtoB_ICP);
-    pcl::transformPointCloud (*current_cloud_A, *cloudICP1_AtoB, transform_AtoB_ICP);
+    pcl::transformPointCloud (*nodeA_local.cloudPtr_, *cloudICP1_AtoB, transform_AtoB_ICP);
     world_to_B = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
     //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
     //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
@@ -381,7 +383,7 @@ void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eig
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to Camera B (Final Fine ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMP TULL
   bool ICP2_converged;
   double fitnessScore2;
-  ICP_allign(cloudICP1_AtoB,current_cloud_B,transform_ICP2, ICP2_converged,0.3, fitnessScore2);
+  ICP_allign(cloudICP1_AtoB,nodeB_local.cloudPtr_,transform_ICP2, ICP2_converged,0.3, fitnessScore2);
   fitnessScore_to_print = fitnessScore2;
   Eigen::Matrix4f transform_AtoB_ICP2;
   if (ICP2_converged)
@@ -389,7 +391,7 @@ void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eig
     transform_AtoB_ICP2 = transform_ICP2.matrix()*transform_ICP.matrix()*transform_B*transform_A.inverse();
     std::cout << "Transformation ICP2: "<< transform_AtoB_ICP2 << std::endl;
     pcl::transformPointCloud (*src_cloudA_cropTotal, *cloudICP2_aTob_crop, transform_AtoB_ICP2); // TULL
-    pcl::transformPointCloud (*current_cloud_A, *cloudICP2_aTob, transform_AtoB_ICP2);
+    pcl::transformPointCloud (*nodeA_local.cloudPtr_, *cloudICP2_aTob, transform_AtoB_ICP2);
 
   }
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -454,8 +456,11 @@ int main (int argc, char** argv)
   ros::init(argc, argv, "aruco_tf_publisher");
   ros::NodeHandle nh;
   ros::spinOnce();
+
+  // TODO: move creation of arucoprocessor?
   wp3::arucoProcessor aruco_A;
   wp3::arucoProcessor aruco_B;
+
   wp3::Visualization viewer;
 
   std::string reference_node = "4";
@@ -465,6 +470,18 @@ int main (int argc, char** argv)
   size_t numel_calib = 5;
 
   std::cout << calibration_order_initial[0] << std::endl;
+
+  // TODO: make node vector
+  wp3::Sensor nodeA;
+  nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
+  nodeA.setImageTopic("/jetson4/hd/image_color_rect");
+  nodeA.setCloudTopic("/master/jetson4/points");
+
+  wp3::Sensor nodeB;
+  nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
+  nodeB.setImageTopic("/jetson6/hd/image_color_rect");
+  nodeB.setCloudTopic("/master/jetson6/points");
+
 
   wp3::init_reference(reference_node); // create first initial transformation
 
@@ -487,22 +504,36 @@ int main (int argc, char** argv)
     if (key == 110 || init == true) // n
     {
       init = false;
-      wp3::readTopics(reference_node,
-                      calibration_order_initial[calib_counter],
-                      &current_image_A,
-                      &current_depthMat_A,
-                      &current_image_B,
-                      &current_depthMat_B,
-                      current_cloud_A,
-                      current_cloud_B,
-                      src_cloudA_cropTotal,
-                      src_cloudB_cropTotal,
-                      true);
-      aruco_A.detectMarkers(current_image_A, current_depthMat_A, transform_A, reference_node);
+//      wp3::readTopics(reference_node,
+//                      calibration_order_initial[calib_counter],
+//                      &current_image_A,
+//                      &current_depthMat_A,
+//                      &current_image_B,
+//                      &current_depthMat_B,
+//                      current_cloud_A,
+//                      current_cloud_B,
+//                      src_cloudA_cropTotal,
+//                      src_cloudB_cropTotal,
+//                      true);
+      nodeA.readTopics(true);
+      nodeB.readTopics(true);
+
+//      aruco_A.detectMarkers(current_image_A, current_depthMat_A, transform_A, reference_node);
+//      aruco_A.getCroppedCloud(src_cloudA_cropTotal);
+//      aruco_B.detectMarkers(current_image_B, current_depthMat_B, transform_B, calibration_order_initial[calib_counter]);
+//      aruco_B.getCroppedCloud(src_cloudB_cropTotal);
+//      calcTransMats(transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+//      cv::Mat tmpMat1 = nodeA.getImageMat();
+//      aruco_A.detectMarkers(nodeA.getImageMat(), current_depthMat_A, transform_A, reference_node);
+
+      aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transform_A, reference_node);
       aruco_A.getCroppedCloud(src_cloudA_cropTotal);
-      aruco_B.detectMarkers(current_image_B, current_depthMat_B, transform_B, calibration_order_initial[calib_counter]);
+
+      aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transform_B, calibration_order_initial[calib_counter]);
       aruco_B.getCroppedCloud(src_cloudB_cropTotal);
-      calcTransMats(transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+
+      calcTransMats(nodeA, nodeB, transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+
 
       //make cloud vector --> TODO: use a loop to create vectors
 //      for (unsigned int i = 0; i < curr_cloud_vector.size(); i++)
@@ -523,13 +554,13 @@ int main (int argc, char** argv)
       // full clouds
       cloud_vector_4.clear();
       cloud_vector_4.push_back(cloudA_to_B);
-      cloud_vector_4.push_back(current_cloud_B);
+      cloud_vector_4.push_back(nodeB.cloudPtr_);
       cloud_vector_5.clear();
       cloud_vector_5.push_back(cloudICP1_AtoB);
-      cloud_vector_5.push_back(current_cloud_B);
+      cloud_vector_5.push_back(nodeB.cloudPtr_);
       cloud_vector_6.clear();
       cloud_vector_6.push_back(cloudICP2_aTob);
-      cloud_vector_6.push_back(current_cloud_B);
+      cloud_vector_6.push_back(nodeB.cloudPtr_);
 
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6);
     }
