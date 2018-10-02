@@ -297,22 +297,26 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Ei
         std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
         pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop1_, true, aruco_cornerpoints, current_depthMat_A_crop1_);
 
-        // Create the transformation matrix
-        cv::Mat rotation3x3 = cv::Mat::eye(3, 3, CV_64F);
-        cv::Rodrigues(rotationVectors[i], rotation3x3);
-        transform4x4(0,0) = rotation3x3.at<double>(0,0);
-        transform4x4(1,0) = rotation3x3.at<double>(1,0);
-        transform4x4(2,0) = rotation3x3.at<double>(2,0);
-        transform4x4(0,1) = rotation3x3.at<double>(0,1);
-        transform4x4(1,1) = rotation3x3.at<double>(1,1);
-        transform4x4(2,1) = rotation3x3.at<double>(2,1);
-        transform4x4(0,2) = rotation3x3.at<double>(0,2);
-        transform4x4(1,2) = rotation3x3.at<double>(1,2);
-        transform4x4(2,2) = rotation3x3.at<double>(2,2);
+        Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
+        createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
+        transform4x4 = tmatTemp; // return transformation
 
-        transform4x4(0,3) = translationVectors[i].val[0]*1.0f;
-        transform4x4(1,3) = translationVectors[i].val[1]*1.0f;
-        transform4x4(2,3) = translationVectors[i].val[2]*1.0f;
+//        // Create the transformation matrix
+//        cv::Mat rotation3x3 = cv::Mat::eye(3, 3, CV_64F);
+//        cv::Rodrigues(rotationVectors[i], rotation3x3);
+//        transform4x4(0,0) = rotation3x3.at<double>(0,0);
+//        transform4x4(1,0) = rotation3x3.at<double>(1,0);
+//        transform4x4(2,0) = rotation3x3.at<double>(2,0);
+//        transform4x4(0,1) = rotation3x3.at<double>(0,1);
+//        transform4x4(1,1) = rotation3x3.at<double>(1,1);
+//        transform4x4(2,1) = rotation3x3.at<double>(2,1);
+//        transform4x4(0,2) = rotation3x3.at<double>(0,2);
+//        transform4x4(1,2) = rotation3x3.at<double>(1,2);
+//        transform4x4(2,2) = rotation3x3.at<double>(2,2);
+
+//        transform4x4(0,3) = translationVectors[i].val[0]*1.0f;
+//        transform4x4(1,3) = translationVectors[i].val[1]*1.0f;
+//        transform4x4(2,3) = translationVectors[i].val[2]*1.0f;
 
       }
     }
@@ -338,6 +342,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Ei
         //					sor.filter (*src_cloud_crop2);
         Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
         createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
+        transform4x4 = tmatTemp; // return transformation
 
       }
     }
@@ -365,6 +370,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Ei
 
         Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
         createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
+        transform4x4 = tmatTemp; // return transformation
 
       }
     }

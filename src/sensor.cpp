@@ -4,7 +4,15 @@
 namespace wp3{
 
 // Constructor
-Sensor::Sensor() : cloudPtr_(new pcl::PointCloud<pcl::PointXYZ>)
+Sensor::Sensor() :
+  cloudPtr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloudCrPtr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud1Ptr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud1CrPtr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud2Ptr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud2CrPtr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud3Ptr_(new pcl::PointCloud<pcl::PointXYZ>),
+  cloud3CrPtr_(new pcl::PointCloud<pcl::PointXYZ>)
 {
   // do nothing..
 }

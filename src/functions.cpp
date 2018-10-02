@@ -83,9 +83,6 @@ void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_nu
 }
 
 
-
-
-
 void readTopics(std::string nodeA,
                 std::string nodeB,
                 cv::Mat* rgb_A,
@@ -205,6 +202,219 @@ void readTopics(std::string nodeA,
   std::cout << "done" << std::endl;
 
   //    std::cout << "Reading point clouds from A and B 5 times... "<< std::endl;
+}
+
+
+void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_target_xyz_org,
+                Eigen::Affine3f & transform_ICP,
+                bool & converge_flag, float distThresh, double & fitnessScore)
+{
+  // >>>>>>>> Registration by ICP <<<<<<<<<
+  // Declare output point cloud and initialize ICP object
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_ICP(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::IterativeClosestPoint<pcl::PointXYZ, pcl::PointXYZ> icp;
+  std::vector<int> indices1;
+  std::vector<int> indices2;
+  pcl::removeNaNFromPointCloud(*cloud_source_xyz_org,*cloud_source_xyz_org, indices1);
+  pcl::removeNaNFromPointCloud(*cloud_target_xyz_org,*cloud_target_xyz_org, indices2);
+
+
+  // Declare ICP parameters
+  icp.setInputSource(cloud_source_xyz_org);
+  icp.setInputTarget(cloud_target_xyz_org);
+//  icp.setUseReciprocalCorrespondences(true);  //TULL testing AAA
+//  icp.setRANSACOutlierRejectionThreshold(distThresh);  //TULL testing AAA
+  icp.setMaxCorrespondenceDistance (distThresh);
+  icp.setTransformationEpsilon(0.001);
+  icp.setMaximumIterations (1000);
+  // Perform the aligment
+  icp.align(*cloud_ICP);
+
+  // Check for convergence
+  fitnessScore = 1000; // if not converged
+  converge_flag = icp.hasConverged();
+  if (converge_flag)
+  {
+    transform_ICP = icp.getFinalTransformation();
+    fitnessScore = icp.getFitnessScore();
+    std::cout << "ICP converged with fitness score: " <<  icp.getFitnessScore() << std::endl;
+  }
+  else
+  {
+    std::cout << "ICP did not converge!" << std::endl;
+  }
+
+  cloud_ICP->empty();
+}
+
+
+void cloudPassthroughFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud, pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud_filtered, float* filter_limits)
+{
+  pcl::PassThrough<pcl::PointXYZ> passthrough; // note passthrough works only one filter at a time
+  //	pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_x(new pcl::PointCloud<pcl::PointXYZ>);
+  passthrough.setInputCloud (cloud);
+  passthrough.setFilterFieldName ("x");
+  passthrough.setFilterLimits (filter_limits[0], filter_limits[1]);
+  passthrough.filter (*cloud_filtered);
+
+  passthrough.setInputCloud (cloud_filtered);
+  passthrough.setFilterFieldName ("y");
+  passthrough.setFilterLimits (filter_limits[2], filter_limits[3]);
+  passthrough.filter (*cloud_filtered);
+
+  passthrough.setInputCloud (cloud_filtered);
+  passthrough.setFilterFieldName ("z");
+  passthrough.setFilterLimits (filter_limits[4], filter_limits[5]);
+  passthrough.filter (*cloud_filtered);
+}
+
+
+// Checks if a matrix is a valid rotation matrix.
+bool isRotationMatrix(cv::Mat &R)
+{
+  cv::Mat Rt;
+  cv::transpose(R, Rt);
+  cv::Mat shouldBeIdentity = Rt * R;
+  std::cout << "should be identity: " << shouldBeIdentity << std::endl;
+  cv::Mat I = cv::Mat::eye(3,3, shouldBeIdentity.type());
+
+  return  norm(I, shouldBeIdentity) < 1e-6;
+}
+
+
+cv::Vec3f rotationMatrixToEulerAngles(cv::Mat &R)
+{
+  //    assert(isRotationMatrix(R));
+  float sy = sqrt(R.at<double>(0,0) * R.at<double>(0,0) +  R.at<double>(1,0) * R.at<double>(1,0) );
+
+  bool singular = sy < 1e-6; // If
+
+  float x, y, z;
+  if (!singular)
+  {
+    x = atan2(R.at<double>(2,1) , R.at<double>(2,2));
+    y = atan2(-R.at<double>(2,0), sy);
+    z = atan2(R.at<double>(1,0), R.at<double>(0,0));
+  }
+  else
+  {
+    x = atan2(-R.at<double>(1,2), R.at<double>(1,1));
+    y = atan2(-R.at<double>(2,0), sy);
+    z = 0;
+  }
+  return cv::Vec3f(x, y, z);
+}
+
+
+void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::string kinect_number)
+{
+  // The thought here is to save the final fine ICP results and the clouds before this transformation. Based on
+  // the algorithm presented in the paper, the cloud with the lowest (best) ICP score is merged with the reference cloud.
+  // New ICP scores are then calculated, and the selection process continues until all clouds have been merged.
+
+  std::cout << " saving result  ... " << std::flush;
+
+  // Convert to openCV matrix first
+  cv::Mat transf_to_save_openCV = cv::Mat::eye(4, 4, CV_64F);
+  transf_to_save_openCV.at<double>(0,0) = transf_to_save(0,0);
+  transf_to_save_openCV.at<double>(1,0) = transf_to_save(1,0);
+  transf_to_save_openCV.at<double>(2,0) = transf_to_save(2,0);
+  transf_to_save_openCV.at<double>(0,1) = transf_to_save(0,1);
+  transf_to_save_openCV.at<double>(1,1) = transf_to_save(1,1);
+  transf_to_save_openCV.at<double>(2,1) = transf_to_save(2,1);
+  transf_to_save_openCV.at<double>(0,2) = transf_to_save(0,2);
+  transf_to_save_openCV.at<double>(1,2) = transf_to_save(1,2);
+  transf_to_save_openCV.at<double>(2,2) = transf_to_save(2,2);
+  transf_to_save_openCV.at<double>(0,3) = transf_to_save(0,3);
+  transf_to_save_openCV.at<double>(1,3) = transf_to_save(1,3);
+  transf_to_save_openCV.at<double>(2,3) = transf_to_save(2,3);
+
+  std::string fs_filename = wp3::package_path + "kinect_ICP1_tMat/kinect" + kinect_number + "/results.yaml";
+  cv::FileStorage fs_result(fs_filename, cv::FileStorage::WRITE);
+
+  fs_result << "ICP2FitnessScore" << ICP2_fitnessScore;
+  fs_result << "Global_transformation_ICP1" << transf_to_save_openCV;
+  fs_result.release();
+
+  std::cout << "Stored results in: " << fs_filename << std::endl;
+}
+
+// not in use?..
+void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
+{
+  std::string calibration_dir= wp3::package_path + "kinect_calibrations/" + kinect_number;
+
+  cv::Mat kinect_number_global_pose = cv::Mat::eye(4, 4, CV_64F);
+  cv::FileStorage fs_calibration(calibration_dir, cv::FileStorage::READ);
+
+  fs_calibration["globalPose"] >> kinect_number_global_pose;
+  fs_calibration.release();
+  std::cout << kinect_number << kinect_number_global_pose << std::endl ;
+
+  tMat(0,0) = kinect_number_global_pose.at<double>(0,0);
+  tMat(1,0) = kinect_number_global_pose.at<double>(1,0);
+  tMat(2,0) = kinect_number_global_pose.at<double>(2,0);
+  tMat(0,1) = kinect_number_global_pose.at<double>(0,1);
+  tMat(1,1) = kinect_number_global_pose.at<double>(1,1);
+  tMat(2,1) = kinect_number_global_pose.at<double>(2,1);
+  tMat(0,2) = kinect_number_global_pose.at<double>(0,2);
+  tMat(1,2) = kinect_number_global_pose.at<double>(1,2);
+  tMat(2,2) = kinect_number_global_pose.at<double>(2,2);
+
+  tMat(0,3) = kinect_number_global_pose.at<double>(0,3);;
+  tMat(1,3) = kinect_number_global_pose.at<double>(1,3);;
+  tMat(2,3) = kinect_number_global_pose.at<double>(2,3);;
+}
+
+
+//void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
+                   Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+{
+  Eigen::Matrix4f transform_ATOb;
+  Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
+  Eigen::Affine3f transform_ICP2 = Eigen::Affine3f::Identity();
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  transform_ATOb = transform_B*transform_A.inverse();
+  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
+  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  bool ICP1_converged;
+  double fitnessScore1;
+  wp3::ICP_allign(sensorA.cloud1CrPtr_,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.6, fitnessScore1);
+  if (ICP1_converged)
+  {
+    Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
+    pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
+    pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
+    world_to_B = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
+    //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
+    //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
+    //		std::cout << "world_to b: "<< world_to_B << std::endl;
+
+  }
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to Camera B (Final Fine ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMP TULL
+  bool ICP2_converged;
+  double fitnessScore2;
+  wp3::ICP_allign(sensorA.cloud2Ptr_,sensorB.cloudPtr_,transform_ICP2, ICP2_converged,0.3, fitnessScore2);
+  fitnessScore_to_print = fitnessScore2;
+  Eigen::Matrix4f transform_AtoB_ICP2;
+  if (ICP2_converged)
+  {
+    transform_AtoB_ICP2 = transform_ICP2.matrix()*transform_ICP.matrix()*transform_B*transform_A.inverse();
+    std::cout << "Transformation ICP2: "<< transform_AtoB_ICP2 << std::endl;
+    pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud3CrPtr_, transform_AtoB_ICP2); // TULL
+    pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud3Ptr_, transform_AtoB_ICP2);
+
+  }
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 

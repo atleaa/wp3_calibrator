@@ -1,6 +1,7 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include "wp3_calibrator/sensor.h"
 
 // STD
 //#include <stdio.h>
@@ -26,12 +27,14 @@
 //#include <pcl_ros/point_cloud.h>
 #include <pcl/point_cloud.h>
 #include <pcl/point_types.h>
+#include <pcl/filters/filter.h>
+#include <pcl/filters/passthrough.h>
 //#include <pcl/filters/extract_indices.h>
 //#include <pcl_ros/point_cloud.h>
 //#include <pcl/point_types.h>
 //#include <pcl/common/centroid.h>
-//#include <pcl/registration/icp.h>
-//#include <pcl/registration/icp_nl.h>
+#include <pcl/registration/icp.h>
+#include <pcl/registration/icp_nl.h>
 //#include <pcl/filters/voxel_grid.h>
 //#include <pcl/ModelCoefficients.h>
 //#include <pcl/sample_consensus/method_types.h>
@@ -74,7 +77,28 @@ void readTopics(std::string nodeA,
                 pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
                 bool update);
 
-}
+void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
+                pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_target_xyz_org,
+                Eigen::Affine3f & transform_ICP,
+                bool & converge_flag, float distThresh, double & fitnessScore);
+
+void cloudPassthroughFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud,
+                            pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud_filtered,
+                            float* filter_limits);
+
+bool isRotationMatrix(cv::Mat &R);
+
+cv::Vec3f rotationMatrixToEulerAngles(cv::Mat &R);
+
+void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::string kinect_number);
+
+void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat);
+
+void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
+                   Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print);
+
+} // end namespace wp3
 
 
 #endif // FUNCTIONS_H
