@@ -3,6 +3,8 @@
 
 #include <pcl/visualization/pcl_visualizer.h>
 #include <opencv2/highgui/highgui.hpp>
+#include <string.h>
+
 namespace wp3 {
 
 class Visualization
@@ -14,6 +16,10 @@ public:
     // Deconstrucor
     ~Visualization();
 
+    void initialize();
+
+    void initializeSingle();
+
     void generateColors(int colors_number);
 
     // Run cloud visualization
@@ -24,8 +30,13 @@ public:
              std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_3,
              std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_4,
              std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_5,
-             std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_6);
+             std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_6,
+             std::map<std::string, Eigen::Matrix4f> &transformationsMap);
+//             std::vector<Eigen::Matrix4f> & transformVec);
 //    void run(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector);
+
+    void runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector,
+             std::map<std::string, Eigen::Matrix4f> &transformationsMap);
 
     // Spin and update pose
     void update();

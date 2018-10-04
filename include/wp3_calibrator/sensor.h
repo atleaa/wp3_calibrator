@@ -69,11 +69,12 @@ class Sensor
 {
 public:
   // Contructor
-  Sensor();
+  Sensor(std::string name);
 
   // Destructor
   ~Sensor();
 
+  std::string name_;
 //  void readTopics(std::string nodeA, std::string nodeB, cv::Mat* rgb_A,
 //                  cv::Mat* depth_A, cv::Mat* rgb_B, cv::Mat* depth_B,
 //                  pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,

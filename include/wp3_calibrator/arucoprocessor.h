@@ -44,7 +44,9 @@ public:
   // Destrucor
   ~arucoProcessor();
 
-  void detectMarkers(cv::Mat &inputImage, cv::Mat &inputDepth, Eigen::Matrix4f &transform4x4, std::string kinect_number);
+  void detectMarkers(cv::Mat &inputImage, cv::Mat &inputDepth,
+                     std::map<int, Eigen::Matrix4f> &transform4x4,
+                     std::string kinect_number);
 
   void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 //    pcl::PointCloud<pcl::PointXYZ>::Ptr getCroppedCloud();
@@ -65,12 +67,12 @@ private:
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
-  cv::Mat current_depthMat_A_crop1_;
-  cv::Mat current_depthMat_A_crop2_;
-  cv::Mat current_depthMat_A_crop3_;
-  cv::Mat current_depthMat_B_crop1_;
-  cv::Mat current_depthMat_B_crop2_;
-  cv::Mat current_depthMat_B_crop3_;
+//  cv::Mat current_depthMat_A_crop1_;
+//  cv::Mat current_depthMat_A_crop2_;
+//  cv::Mat current_depthMat_A_crop3_;
+//  cv::Mat current_depthMat_B_crop1_;
+//  cv::Mat current_depthMat_B_crop2_;
+//  cv::Mat current_depthMat_B_crop3_;
 };
 
 } // end namespace wp3

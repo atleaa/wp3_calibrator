@@ -161,7 +161,9 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
 
 
 //void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
-void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Eigen::Matrix4f &transform4x4, std::string kinect_number)
+void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
+                                   std::map<int, Eigen::Matrix4f> &transform4x4,
+                                   std::string kinect_number)
 {
 
   std::string camera_name = "/kinect" + kinect_number;
@@ -275,12 +277,14 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Ei
                 image->copyTo(imageDest, mask);
                 */
 
+  transform4x4.clear(); // clear transformations
 
+  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop (new pcl::PointCloud<pcl::PointXYZ>);
 
   for (size_t i = 0; i < markerIds.size(); i++)
   {
-    if (markerIds[i] == 1)
-    {
+//    if (markerIds[i] == 1)
+//    {
       cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
       max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
       //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
@@ -289,92 +293,31 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage,cv::Mat & inputDepth, Ei
       {
         cv::Rect myROI(botx,boty,topx-botx, topy-boty);
         cv::Mat croppedImage = inputImage(myROI);
-        cv::imshow(filename_crop1,croppedImage);
+
+        // TODO: change from defined clouds to a std::map with string and cloud
+        if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
+        if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
+        if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
+//        cv::imshow(filename_crop1,croppedImage);
         cv::waitKey(30);
 
-        current_depthMat_A_crop1_ = inputDepth(myROI);
+        cv::Mat depthMatCropped = inputDepth(myROI);
+//        current_depthMat_A_crop1_ = inputDepth(myROI);
 
         std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-        pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop1_, true, aruco_cornerpoints, current_depthMat_A_crop1_);
+        pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+
+        // TODO: change from defined clouds to a std::map with string and cloud
+        if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
+        if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
+        if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
 
         Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
         createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
-        transform4x4 = tmatTemp; // return transformation
 
-//        // Create the transformation matrix
-//        cv::Mat rotation3x3 = cv::Mat::eye(3, 3, CV_64F);
-//        cv::Rodrigues(rotationVectors[i], rotation3x3);
-//        transform4x4(0,0) = rotation3x3.at<double>(0,0);
-//        transform4x4(1,0) = rotation3x3.at<double>(1,0);
-//        transform4x4(2,0) = rotation3x3.at<double>(2,0);
-//        transform4x4(0,1) = rotation3x3.at<double>(0,1);
-//        transform4x4(1,1) = rotation3x3.at<double>(1,1);
-//        transform4x4(2,1) = rotation3x3.at<double>(2,1);
-//        transform4x4(0,2) = rotation3x3.at<double>(0,2);
-//        transform4x4(1,2) = rotation3x3.at<double>(1,2);
-//        transform4x4(2,2) = rotation3x3.at<double>(2,2);
-
-//        transform4x4(0,3) = translationVectors[i].val[0]*1.0f;
-//        transform4x4(1,3) = translationVectors[i].val[1]*1.0f;
-//        transform4x4(2,3) = translationVectors[i].val[2]*1.0f;
-
+        transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i],tmatTemp ));
       }
     }
-
-    if (markerIds[i] == 13)
-    {
-      cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
-      max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
-      //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
-      if (!invalid_points)
-      {
-        cv::Rect myROI(botx,boty,topx-botx, topy-boty);
-        cv::Mat croppedImage = inputImage(myROI);
-        cv::imshow(filename_crop2,croppedImage);
-        cv::waitKey(30);
-        current_depthMat_A_crop2_ = inputDepth(myROI);
-        std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-        pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop2_, true, aruco_cornerpoints, current_depthMat_A_crop2_);
-
-        //					sor.setInputCloud (src_cloud_crop2);
-        //					sor.setMeanK (50);
-        //					sor.setStddevMulThresh (0.4);
-        //					sor.filter (*src_cloud_crop2);
-        Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
-        createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
-        transform4x4 = tmatTemp; // return transformation
-
-      }
-    }
-
-    if (markerIds[i] == 40)
-    {
-      cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
-      max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
-      //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
-      if (!invalid_points)
-      {
-        cv::Rect myROI(botx,boty,topx-botx, topy-boty);
-        cv::Mat croppedImage = inputImage(myROI);
-        cv::imshow(filename_crop3,croppedImage);
-        cv::waitKey(30);
-
-        current_depthMat_A_crop3_ = inputDepth(myROI);
-
-        std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-        pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop3_, true, aruco_cornerpoints, current_depthMat_A_crop3_);
-        //					sor.setInputCloud (src_cloud_crop3);
-        //					sor.setMeanK (50);
-        //					sor.setStddevMulThresh (0.4);
-        //					sor.filter (*src_cloud_crop3);
-
-        Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
-        createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
-        transform4x4 = tmatTemp; // return transformation
-
-      }
-    }
-  }
 }
 
 void arucoProcessor::getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)

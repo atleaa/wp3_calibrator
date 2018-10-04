@@ -23,8 +23,12 @@ int main (int argc, char** argv)
   // init transforms
   Eigen::Matrix4f transform_A = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f transform_B = Eigen::Matrix4f::Identity();
+  std::map<int, Eigen::Matrix4f> transformMap_A;
+  std::map<int, Eigen::Matrix4f> transformMap_B;
+
   Eigen::Matrix4f transform_ICP1_print = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f transform_reference_global = Eigen::Matrix4f::Identity();
+  std::vector<Eigen::Matrix4f> transformVec;
 
   // init variables
   double ICP1_fitness_to_print;
@@ -49,9 +53,13 @@ int main (int argc, char** argv)
 
   // init pcl viewer
   wp3::Visualization viewer;
+  viewer.initialize();
+  wp3::Visualization viewerAruco;
+  viewerAruco.initializeSingle();
+  std::map<std::string, Eigen::Matrix4f> transMap;
 
   std::string reference_node = "4";
-  std::string calibration_order_initial[] = {"6", "4", "5", "2", "1"};
+  std::string calibration_order_initial[] = {"6", "2", "5", "3", "1"};
 
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
@@ -59,12 +67,12 @@ int main (int argc, char** argv)
   std::cout << calibration_order_initial[0] << std::endl;
 
   // TODO: make node vector
-  wp3::Sensor nodeA;
+  wp3::Sensor nodeA("jetson4");
   nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
   nodeA.setImageTopic("/jetson4/hd/image_color_rect");
   nodeA.setCloudTopic("/master/jetson4/points");
 
-  wp3::Sensor nodeB;
+  wp3::Sensor nodeB("jetson6");
   nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
   nodeB.setImageTopic("/jetson6/hd/image_color_rect");
   nodeB.setCloudTopic("/master/jetson6/points");
@@ -92,11 +100,15 @@ int main (int argc, char** argv)
       nodeA.readTopics(true);
       nodeB.readTopics(true);
 
-      aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transform_A, reference_node);
+      aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node);
       aruco_A.getCroppedCloud(nodeA.cloudCrPtr_);
+      transform_A = transformMap_A.at(1); // Available id's: 1, 13, 40
 
-      aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transform_B, calibration_order_initial[calib_counter]);
+      aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter]);
       aruco_B.getCroppedCloud(nodeB.cloudCrPtr_);
+      transform_B = transformMap_B.at(1);
+
+      //TODO: map intersection,  https://stackoverflow.com/questions/3772664/intersection-of-two-stl-maps
 
       wp3::calcTransMats(nodeA, nodeB, transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 
@@ -130,8 +142,29 @@ int main (int argc, char** argv)
       cloud_vector_6.push_back(nodeA.cloud3Ptr_); // step 3
       cloud_vector_6.push_back(nodeB.cloudPtr_);
 
-      viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6);
-      // std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector_2,
+
+
+      Eigen::Matrix4f camA = transform_B*transform_A.inverse();
+      Eigen::Matrix4f camB = Eigen::Matrix4f::Identity();
+
+      transMap.clear();
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeA.name_,camA ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeB.name_,camB ));
+
+      // Arucos
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-1", camB*transformMap_B.at(1) ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-13", camB*transformMap_B.at(13) ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-40", camB*transformMap_B.at(40) ));
+
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-1", camA*transformMap_A.at(1) ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-13", camA*transformMap_A.at(13) ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-40", camA*transformMap_A.at(40) ));
+      // view all results
+//      viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
+
+      // view Aruco only
+      viewerAruco.runSingle(cloud_vector_4, transMap);
+
     }
 
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
@@ -153,7 +186,8 @@ int main (int argc, char** argv)
       std::cout << "evaluating node " << reference_node << "vs" << calibration_order_initial[calib_counter] << std::endl;
     }
 
-    viewer.update();
+//    viewer.update();
+    viewerAruco.update();
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
