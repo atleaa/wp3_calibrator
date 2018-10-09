@@ -31,6 +31,8 @@
 //#include <Eigen/Dense>  // Includes Core, Geometry, LU, Cholesky, SVD, QR, and Eigenvalues header files
 //#include <Eigen/Eigen>  // Includes Dense and Sparse header files (the whole Eigen library)
 
+typedef std::map<int, Eigen::Matrix4f> MarkerMapType;
+
 namespace wp3 {
 
 
@@ -44,14 +46,21 @@ public:
   // Destrucor
   ~arucoProcessor();
 
-  void detectMarkers(cv::Mat &inputImage, cv::Mat &inputDepth,
-                     std::map<int, Eigen::Matrix4f> &transform4x4,
-                     std::string kinect_number);
+  void clearAll();
 
-  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
-//    pcl::PointCloud<pcl::PointXYZ>::Ptr getCroppedCloud();
+  void detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
+                                     MarkerMapType &transform4x4,
+                                     std::string kinect_number);
+
+  void makeCroppedCloud();
+
+//  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
   void createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
+
+  void getAverageTransformation(Eigen::Matrix4f& transMat_avg, std::map<int, Eigen::Matrix4f>& transMapUsed);
+
+  pcl::PointCloud<pcl::PointXYZ>::Ptr getCroppedCloud() const;
 
 private:
   void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
@@ -67,6 +76,11 @@ private:
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr croppedCloud_; //(new pcl::PointCloud<pcl::PointXYZ>);
+//  std::map<float, Eigen::Matrix4f> transformMap_;
+  MarkerMapType transformMap_;
+  int acc_; // iterator for accumulator
+//  typedef std::pair<int, Eigen::Matrix4f>
 //  cv::Mat current_depthMat_A_crop1_;
 //  cv::Mat current_depthMat_A_crop2_;
 //  cv::Mat current_depthMat_A_crop3_;
@@ -74,6 +88,9 @@ private:
 //  cv::Mat current_depthMat_B_crop2_;
 //  cv::Mat current_depthMat_B_crop3_;
 };
+
+
+
 
 } // end namespace wp3
 

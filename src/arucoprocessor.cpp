@@ -10,9 +10,10 @@ namespace wp3 {
 arucoProcessor::arucoProcessor() :
   src_cloud_crop1_(new pcl::PointCloud<pcl::PointXYZ>),
   src_cloud_crop2_(new pcl::PointCloud<pcl::PointXYZ>),
-  src_cloud_crop3_(new pcl::PointCloud<pcl::PointXYZ>)
+  src_cloud_crop3_(new pcl::PointCloud<pcl::PointXYZ>),
+  croppedCloud_(new pcl::PointCloud<pcl::PointXYZ>)
 {
-
+  clearAll();
 }
 
 
@@ -22,6 +23,17 @@ arucoProcessor::~arucoProcessor()
  // boost::shared_ptr are autmatically removed when leaving scope, but can be cleared using ptr.reset();
 }
 
+
+void arucoProcessor::clearAll()
+{
+  acc_ = 0;
+  src_cloud_crop1_->clear();
+  src_cloud_crop2_->clear();
+  src_cloud_crop3_->clear();
+  croppedCloud_->clear();
+
+  transformMap_.clear();
+}
 
 void arucoProcessor::max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag)
 {
@@ -159,10 +171,15 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
   }
 }
 
+pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
+{
+  return croppedCloud_;
+}
+
 
 //void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
 void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
-                                   std::map<int, Eigen::Matrix4f> &transform4x4,
+                                   MarkerMapType &transform4x4,
                                    std::string kinect_number)
 {
 
@@ -189,9 +206,9 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   ir_params(0,2) = cx_default;
   ir_params(1,2) = cy_default;
 
-  src_cloud_crop1_->clear();
-  src_cloud_crop2_->clear();
-  src_cloud_crop3_->clear();
+//  src_cloud_crop1_->clear();
+//  src_cloud_crop2_->clear();
+//  src_cloud_crop3_->clear();
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
@@ -312,19 +329,27 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
         if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
         if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
 
+        // add cropped source to combined cloud
+        *croppedCloud_ += *src_cloud_crop;
+
         Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
         createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
 
-        transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i],tmatTemp ));
+        transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+        transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+
       }
     }
+//  transformMap_ = transform4x4;
+//    transformMap_.insert(transform4x4.begin(),transform4x4.end());
+    acc_++;
 }
 
-void arucoProcessor::getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud)
+void arucoProcessor::makeCroppedCloud()
 {
-  *cloud += *src_cloud_crop1_;
-  *cloud += *src_cloud_crop2_;
-  *cloud += *src_cloud_crop3_;
+  *croppedCloud_ += *src_cloud_crop1_;
+  *croppedCloud_ += *src_cloud_crop2_;
+  *croppedCloud_ += *src_cloud_crop3_;
 }
 
 //pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud()
@@ -355,6 +380,92 @@ void arucoProcessor::createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d tran
   tMat(1,3) = translationVectors.val[1]*1.0f;
   tMat(2,3) = translationVectors.val[2]*1.0f;
 
+}
+
+//Eigen::Matrix4f arucoProcessor::getAverageTransformation()
+void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, std::map<int, Eigen::Matrix4f>& transMapUsed)
+{
+  int validCount=0;
+//  Eigen::Vector3f weight = {1, 1, 1};
+  std::vector<float> weight = {1, 1, 1};
+  std::vector<float> weights;
+  Eigen::Vector3f pos={0,0,0}, pos_avg;
+  std::vector<Eigen::Quaternionf> quaternions;
+  quaternions.clear();
+  /*std::map<int, Eigen::Matrix4f> transMapUsed*/;
+  transMapUsed.clear();
+
+  for(int i=0 ; i<acc_ ; i++)
+  {
+    if(transformMap_.count(1+100*i)>0 && transformMap_.count(13+100*i)>0 && transformMap_.count(40+100*i)>0)
+    {
+//      std::cout << "found all IDs for acc= " << i << std:: endl;
+
+      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (1+100*i, transformMap_.at(1+100*i) ));
+      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (13+100*i, transformMap_.at(13+100*i) ));
+      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (40+100*i, transformMap_.at(40+100*i) ));
+
+      // que rotations
+      Eigen::Quaternionf q1(transformMap_.at(1+100*i).block<3,3>(0,0));
+      Eigen::Quaternionf q2(transformMap_.at(13+100*i).block<3,3>(0,0));
+      Eigen::Quaternionf q3(transformMap_.at(40+100*i).block<3,3>(0,0));
+      quaternions.push_back(q1);
+      quaternions.push_back(q2);
+      quaternions.push_back(q3);
+
+      // que positions
+      pos = pos + weight[0]*transformMap_.at(1+100*i).block<3, 1>(0, 3);
+      pos = pos + weight[1]*transformMap_.at(13+100*i).block<3, 1>(0, 3);
+      pos = pos + weight[2]*transformMap_.at(40+100*i).block<3, 1>(0, 3);
+
+      validCount++;
+      weights.insert(weights.end(), std::begin(weight), std::end(weight));
+    }
+  }
+
+  // calculate average quaternion
+  Eigen::Quaternionf q_avg(wp3::getAverageQuaternion(quaternions, weights));
+  Eigen::Matrix3f R_avg = q_avg.toRotationMatrix();
+
+
+  // calculate average position
+  float weight_sum = 0.0;
+  for (auto& n : weights)
+    weight_sum += n;
+  pos_avg = (1.0 / weight_sum) * pos;
+
+  // insert transform
+  transMat_avg = Eigen::Matrix4f::Identity();
+  transMat_avg.block<3, 3>(0, 0) = R_avg;
+  transMat_avg.block<3, 1>(0, 3) = pos_avg;
+//  return transMat_avgA;
+
+
+//  // calculate average quaternion
+//  Eigen::Quaternionf q1(transformMap_.at(1).block<3,3>(0,0));
+//  Eigen::Quaternionf q2(transformMap_.at(13).block<3,3>(0,0));
+//  Eigen::Quaternionf q3(transformMap_.at(40).block<3,3>(0,0));
+//  Eigen::Vector3f weight = {1, 1, 1};
+//  std::vector<Eigen::Quaternionf> quaternions;
+//  quaternions.clear();
+//  quaternions.push_back(q1);
+//  quaternions.push_back(q2);
+//  quaternions.push_back(q3);
+//  Eigen::Quaternionf q_avg(wp3::getAverageQuaternion(quaternions, weight));
+//  Eigen::Matrix3f R_avg = q_avg.toRotationMatrix();
+
+//  // calculate average position
+//  Eigen::Vector3f pos={0,0,0}, pos_avg;
+//  pos = pos + weight[0]*transformMap_.at(1).block<3, 1>(0, 3);
+//  pos = pos + weight[1]*transformMap_.at(13).block<3, 1>(0, 3);
+//  pos = pos + weight[2]*transformMap_.at(40).block<3, 1>(0, 3);
+//  pos_avg = (1.0 / (weight[0]+weight[1]+weight[2])) * pos;
+
+//  // insert transform
+//  Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
+//  transMat_avgA.block<3, 3>(0, 0) = R_avg;
+//  transMat_avgA.block<3, 1>(0, 3) = pos_avg;
+//  return transMat_avgA;
 }
 
 } // end namespace wp3

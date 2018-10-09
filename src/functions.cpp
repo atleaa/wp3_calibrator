@@ -418,21 +418,30 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 }
 
 
-tf::Quaternion getAverageQuaternion(
-  const std::vector<tf::Quaternion>& quaternions,
-  const std::vector<double>& weights)
+//tf::Quaternion getAverageQuaternion(
+Eigen::Quaternionf getAverageQuaternion(
+//  const std::vector<tf::Quaternion>& quaternions,
+//  const std::vector<double>& weights)
+    const std::vector<Eigen::Quaternionf>& quaternions,
+    const std::vector<float>& weights)
+    //    const Eigen::Vector3f& weights)
 {
   Eigen::MatrixXd Q = Eigen::MatrixXd::Zero(4, quaternions.size());
   Eigen::Vector3d vec;
   for (size_t i = 0; i < quaternions.size(); ++i)
   {
     // Weigh the quaternions according to their associated weight
-    tf::Quaternion quat = quaternions[i] * weights[i];
+//    tf::Quaternion quat = quaternions[i] * weights[i];
+    Eigen::Quaternionf quat = quaternions[i]; //weights[i];
     // Append the weighted Quaternion to a matrix Q.
-    Q(0,i) = quat.x();
-    Q(1,i) = quat.y();
-    Q(2,i) = quat.z();
-    Q(3,i) = quat.w();
+//    Q(0,i) = quat.x();
+//    Q(1,i) = quat.y();
+//    Q(2,i) = quat.z();
+//    Q(3,i) = quat.w();
+    Q(0,i) = quat.x() * weights[i];
+    Q(1,i) = quat.y() * weights[i];
+    Q(2,i) = quat.z() * weights[i];
+    Q(3,i) = quat.w() * weights[i];
   }
 
   // Creat a solver for finding the eigenvectors and eigenvalues
@@ -455,12 +464,18 @@ tf::Quaternion getAverageQuaternion(
   // Get corresponding Eigenvector, normalize it and return it as the average quat
   auto eigenvector = es.eigenvectors().col(max_idx).normalized();
 
-  tf::Quaternion mean_orientation(
-    eigenvector[0].real(),
-    eigenvector[1].real(),
-    eigenvector[2].real(),
-    eigenvector[3].real()
-  );
+//  tf::Quaternion mean_orientation(
+//    eigenvector[0].real(),
+//    eigenvector[1].real(),
+//    eigenvector[2].real(),
+//    eigenvector[3].real()
+//  );
+  Eigen::Quaternionf mean_orientation(
+      eigenvector[3].real(), // w
+      eigenvector[0].real(), // x
+      eigenvector[1].real(), // y
+      eigenvector[2].real()  // z
+      );
 
   return mean_orientation;
 }

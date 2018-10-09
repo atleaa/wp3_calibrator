@@ -23,8 +23,11 @@ int main (int argc, char** argv)
   // init transforms
   Eigen::Matrix4f transform_A = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f transform_B = Eigen::Matrix4f::Identity();
-  std::map<int, Eigen::Matrix4f> transformMap_A;
-  std::map<int, Eigen::Matrix4f> transformMap_B;
+  //  std::map<float, Eigen::Matrix4f> transformMap_A;
+  //  std::map<float, Eigen::Matrix4f> transformMap_B;
+  MarkerMapType transformMap_A;
+  MarkerMapType transformMap_B;
+
 
   Eigen::Matrix4f transform_ICP1_print = Eigen::Matrix4f::Identity();
   Eigen::Matrix4f transform_reference_global = Eigen::Matrix4f::Identity();
@@ -97,20 +100,41 @@ int main (int argc, char** argv)
     if (key == 110 || init == true) // n
     {
       init = false;
-      nodeA.readTopics(true);
-      nodeB.readTopics(true);
+      aruco_A.clearAll();
+      aruco_B.clearAll();
 
-      aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node);
-      aruco_A.getCroppedCloud(nodeA.cloudCrPtr_);
-      transform_A = transformMap_A.at(1); // Available id's: 1, 13, 40
+      for(int i=0;i<5;i++)
+      {
+        nodeA.readTopics(true);
+        nodeB.readTopics(true);
 
-      aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter]);
-      aruco_B.getCroppedCloud(nodeB.cloudCrPtr_);
-      transform_B = transformMap_B.at(1);
+        aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node);
+//        aruco_A.getCroppedCloud(nodeA.cloudCrPtr_);
+        //      transform_A = transformMap_A.at(1); // Available id's: 1, 13, 40
+
+        aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter]);
+//        aruco_B.getCroppedCloud(nodeB.cloudCrPtr_);
+        //      transform_B = transformMap_B.at(1);
+      }
+      nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
+      nodeB.cloudCrPtr_ = aruco_B.getCroppedCloud();
 
       //TODO: map intersection,  https://stackoverflow.com/questions/3772664/intersection-of-two-stl-maps
+      Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
+      std::map<int, Eigen::Matrix4f> transMapUsed_A;
+      aruco_A.getAverageTransformation(transMat_avgA, transMapUsed_A);
 
-      wp3::calcTransMats(nodeA, nodeB, transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+      Eigen::Matrix4f transMat_avgB = Eigen::Matrix4f::Identity();
+      std::map<int, Eigen::Matrix4f> transMapUsed_B;
+      aruco_B.getAverageTransformation(transMat_avgB, transMapUsed_B);
+      // TODO: make function/loop for average Aruco pose
+
+//      Eigen::Matrix4f camA = transform_B*transform_A.inverse();
+      Eigen::Matrix4f camA = transMat_avgB*transMat_avgA.inverse();
+      Eigen::Matrix4f camB = Eigen::Matrix4f::Identity();
+
+//      wp3::calcTransMats(nodeA, nodeB, transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 
 
       //make cloud vector --> TODO: use a loop to create vectors
@@ -142,25 +166,31 @@ int main (int argc, char** argv)
       cloud_vector_6.push_back(nodeA.cloud3Ptr_); // step 3
       cloud_vector_6.push_back(nodeB.cloudPtr_);
 
-
-
-      Eigen::Matrix4f camA = transform_B*transform_A.inverse();
-      Eigen::Matrix4f camB = Eigen::Matrix4f::Identity();
-
       transMap.clear();
       transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeA.name_,camA ));
       transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeB.name_,camB ));
 
       // Arucos
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-1", camB*transformMap_B.at(1) ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-13", camB*transformMap_B.at(13) ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-40", camB*transformMap_B.at(40) ));
+      std::map<int, Eigen::Matrix4f>::iterator it;
+      for ( it = transMapUsed_A.begin(); it != transMapUsed_A.end(); it++ )
+        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-"+std::to_string(it->first), camA*it->second ));
+      for ( it = transMapUsed_B.begin(); it != transMapUsed_B.end(); it++ )
+        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-"+std::to_string(it->first), camB*it->second ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-1", camB*transformMap_B.at(1) ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-13", camB*transformMap_B.at(13) ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-40", camB*transformMap_B.at(40) ));
 
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-1", camA*transformMap_A.at(1) ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-13", camA*transformMap_A.at(13) ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-40", camA*transformMap_A.at(40) ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-1", camA*transformMap_A.at(1) ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-13", camA*transformMap_A.at(13) ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-40", camA*transformMap_A.at(40) ));
+
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-avg",camA*transMat_avgA ));
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-avg",camB*transMat_avgB ));
+
+
+
       // view all results
-//      viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
+      viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
 
       // view Aruco only
       viewerAruco.runSingle(cloud_vector_4, transMap);

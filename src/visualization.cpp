@@ -246,43 +246,26 @@ void Visualization::run(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud
     tmpId = std::string(transformation_iterator->first+"_vp11");
     //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
     viewer_.removeCoordinateSystem(tmpId, vp11_);
-    viewer_.addCoordinateSystem (1.0, tmpAffine, tmpId,vp11_);
+    viewer_.addCoordinateSystem (0.2, tmpAffine, tmpId,vp11_);
 
     tmpId = std::string(transformation_iterator->first+"_vp21");
     //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
     viewer_.removeCoordinateSystem(tmpId, vp21_);
-    viewer_.addCoordinateSystem (1.0, tmpAffine, tmpId, vp21_);
-
+    viewer_.addCoordinateSystem (0.2, tmpAffine, tmpId, vp21_);
 
     pcl::PointXYZ point;
     point.x = tmpMatrix(0,3);
     point.y = tmpMatrix(1,3);
     point.z = tmpMatrix(2,3);
 
-    // (const std::string &text, const PointT &position, double textScale=1.0, double r=1.0, double g=1.0, double b=1.0, const std::string &id="", int viewport=0)
-    //      viewer_.addText3D(transformation_iterator->first, point, 0.5, 1.0, 1.0, 1.0, transformation_iterator->first, vp11_);
-
     //BUG: add +1 to viewport due to bug in pcl 1.7, https://github.com/PointCloudLibrary/pcl/issues/1803
-    viewer_.addText3D(transformation_iterator->first, point, 0.2, 1.0, 1.0, 1.0, transformation_iterator->first, vp11_+1);
-    viewer_.addText3D(transformation_iterator->first, point, 0.2, 1.0, 1.0, 1.0, transformation_iterator->first, vp21_+1);
-    //      //        transformationsMap
-    //      Eigen::Affine3f Affine;
-    //      Affine.matrix() = transformVec[0];
-    //      if(!viewer_.updateCoordinateSystemPose("stringId", Affine))
-    //      {
-    //        viewer_.addCoordinateSystem (0.5, Affine, "stringId",vp11_);
-    //        viewer_.addCoordinateSystem (0.5, Affine, "stringId",vp21_);
-    //      }
+    viewer_.addText3D(transformation_iterator->first, point, 0.02, 1.0, 1.0, 1.0, transformation_iterator->first, vp11_+1);
+    viewer_.addText3D(transformation_iterator->first, point, 0.02, 1.0, 1.0, 1.0, transformation_iterator->first, vp21_+1);
+    //  viewer_->initCameraParameters ();
+    //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
+    //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");
+    viewer_.spinOnce();
   }
-
-
-
-
-  //  viewer_->initCameraParameters ();
-
-  //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
-  //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");
-  viewer_.spinOnce();
 }
 
 void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud_vector,
@@ -305,7 +288,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
 
   //    viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud_name3"); //can add viewport
 
-
+  // insert coordinates and coordinate text
   for(std::map<std::string, Eigen::Matrix4f>::iterator transformation_iterator = transformationsMap.begin(); transformation_iterator != transformationsMap.end(); transformation_iterator++)
   {
     //        transformationsMap
@@ -317,7 +300,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
     tmpId = std::string(transformation_iterator->first);
     //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
     viewer_.removeCoordinateSystem(tmpId);
-    viewer_.addCoordinateSystem (0.3, tmpAffine, tmpId);
+    viewer_.addCoordinateSystem (0.2, tmpAffine, tmpId);
 
     pcl::PointXYZ point;
     point.x = tmpMatrix(0,3);
@@ -326,18 +309,12 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
 
     //BUG: add +1 to viewport due to bug in pcl 1.7, https://github.com/PointCloudLibrary/pcl/issues/1803
 //    viewer_.addText3D(transformation_iterator->first, , 0.2, 1.0, 1.0, 1.0, transformation_iterator->first);
-    viewer_.addText3D(transformation_iterator->first, point, 0.05, 1.0, 1.0, 1.0, transformation_iterator->first);
-
-  }
-
-
-
-
+    viewer_.addText3D(transformation_iterator->first, point, 0.02, 1.0, 1.0, 1.0, transformation_iterator->first);
   //  viewer_->initCameraParameters ();
-
   //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
   //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");
   viewer_.spinOnce();
+  }
 }
 
 //void
