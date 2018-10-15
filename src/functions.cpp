@@ -224,7 +224,7 @@ void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
   icp.setInputSource(cloud_source_xyz_org);
   icp.setInputTarget(cloud_target_xyz_org);
 //  icp.setUseReciprocalCorrespondences(true);  //TULL testing AAA
-//  icp.setRANSACOutlierRejectionThreshold(distThresh);  //TULL testing AAA
+  icp.setRANSACOutlierRejectionThreshold(distThresh);  //TULL testing AAA
   icp.setMaxCorrespondenceDistance (distThresh);
   icp.setTransformationEpsilon(0.001);
   icp.setMaximumIterations (1000);
@@ -376,6 +376,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
   Eigen::Matrix4f transform_ATOb;
   Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
   Eigen::Affine3f transform_ICP2 = Eigen::Affine3f::Identity();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud2 (new pcl::PointCloud<pcl::PointXYZ>);
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   transform_ATOb = transform_B*transform_A.inverse();
@@ -383,22 +385,33 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
   pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-//  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-//  bool ICP1_converged;
-//  double fitnessScore1;
-//  wp3::ICP_allign(sensorA.cloud1CrPtr_,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.6, fitnessScore1);
-//  if (ICP1_converged)
-//  {
-//    Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
-//    pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
-//    pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
-//    world_to_B = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
-//    //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
-//    //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
-//    //		std::cout << "world_to b: "<< world_to_B << std::endl;
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  bool ICP1_converged;
+  double fitnessScore1;
+  Eigen::Matrix4f transform_AtoB_ICP = transform_ATOb; // initial ArUco transformation
 
-//  }
-//  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *tmpCloud, transform_AtoB_ICP);
+  *tmpCloud = *sensorA.cloud1CrPtr_;
+
+  for(int i=0 ; i<8; i++)
+  {
+    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
+    if (ICP1_converged)
+    {
+  //    Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
+      transform_AtoB_ICP = transform_ICP.matrix()*transform_AtoB_ICP;
+      pcl::transformPointCloud (*tmpCloud, *tmpCloud2, transform_ICP.matrix());
+      *tmpCloud = *tmpCloud2;
+    }
+  }
+  sensorA.cloud2CrPtr_ = tmpCloud;
+//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
+  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
+  world_to_B = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
+  //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
+  //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
+  //		std::cout << "world_to b: "<< world_to_B << std::endl;
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 //  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to Camera B (Final Fine ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ TEMP TULL
 //  bool ICP2_converged;

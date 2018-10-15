@@ -33,7 +33,7 @@ void Visualization::initialize()
   viewer_.createViewPort (0.0, 0.5, 0.33, 1.0, vp21_);
   viewer_.createViewPort (0.33, 0.5, 0.66, 1.0, vp22_);
   viewer_.createViewPort (0.66, 0.5, 1.0, 1.0, vp23_);
-  viewer_.setBackgroundColor (0, 0, 0);
+  viewer_.setBackgroundColor (1.0, 1.0, 1.0);
   viewer_.addText ("ARUCO CROPPED", 10, 10, "vp11_text", vp11_);
   viewer_.addText ("ICP1 CROPPED", 10, 10, "vp12_text", vp12_);
   viewer_.addText ("ICP2 CROPPED", 10, 10, "vp13_text", vp13_);
@@ -63,7 +63,7 @@ void Visualization::initializeSingle()
     std::cout << *i << ' ' << std::endl;
   std::cout << std::endl;
 
-  viewer_.setBackgroundColor (0, 0, 0);
+  viewer_.setBackgroundColor (1.0, 1.0, 1.0);
     //  viewer_.initCameraParameters();
 
   //Cam:
@@ -283,7 +283,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
     cloud_stream << "Node" << i << "_aruco";
     std::string cloud_str = cloud_stream.str();
     viewer_.addPointCloud<pcl::PointXYZ> (cloud_vector[i], color_curr, cloud_str);
-    viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, cloud_str); //can add viewport
+    viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 2, cloud_str); //can add viewport
   }
 
   //    viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud_name3"); //can add viewport
@@ -300,7 +300,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
     tmpId = std::string(transformation_iterator->first);
     //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
     viewer_.removeCoordinateSystem(tmpId);
-    viewer_.addCoordinateSystem (0.2, tmpAffine, tmpId);
+    viewer_.addCoordinateSystem (0.5, tmpAffine, tmpId);
 
     pcl::PointXYZ point;
     point.x = tmpMatrix(0,3);
@@ -309,7 +309,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
 
     //BUG: add +1 to viewport due to bug in pcl 1.7, https://github.com/PointCloudLibrary/pcl/issues/1803
 //    viewer_.addText3D(transformation_iterator->first, , 0.2, 1.0, 1.0, 1.0, transformation_iterator->first);
-    viewer_.addText3D(transformation_iterator->first, point, 0.02, 1.0, 1.0, 1.0, transformation_iterator->first);
+    viewer_.addText3D(transformation_iterator->first, point, 0.05, 0.0, 0.0, 0.0, transformation_iterator->first);
   //  viewer_->initCameraParameters ();
   //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
   //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");

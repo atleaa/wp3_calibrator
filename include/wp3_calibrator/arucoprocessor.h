@@ -50,7 +50,8 @@ public:
 
   void detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
                                      MarkerMapType &transform4x4,
-                                     std::string kinect_number);
+                                     std::string kinect_number,
+                                     Cropping crop);
 
   void makeCroppedCloud();
 

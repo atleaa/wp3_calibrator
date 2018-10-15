@@ -55,14 +55,18 @@ int main (int argc, char** argv)
   wp3::arucoProcessor aruco_B;
 
   // init pcl viewer
-  wp3::Visualization viewer;
-  viewer.initialize();
   wp3::Visualization viewerAruco;
   viewerAruco.initializeSingle();
+  wp3::Visualization viewerArucoCropped;
+  viewerArucoCropped.initializeSingle();
+  wp3::Visualization viewer;
+  viewer.initialize();
+
+
   std::map<std::string, Eigen::Matrix4f> transMap;
 
-  std::string reference_node = "4";
-  std::string calibration_order_initial[] = {"6", "2", "5", "3", "1"};
+  std::string reference_node = "1";
+  std::string calibration_order_initial[] = {"2", "2", "5", "3", "1"};
 
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
@@ -70,15 +74,24 @@ int main (int argc, char** argv)
   std::cout << calibration_order_initial[0] << std::endl;
 
   // TODO: make node vector
-  wp3::Sensor nodeA("jetson4");
-  nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
-  nodeA.setImageTopic("/jetson4/hd/image_color_rect");
-  nodeA.setCloudTopic("/master/jetson4/points");
+  wp3::Sensor nodeA("jetson1");
+  nodeA.setImageTopic("/jetson1/hd/image_color_rect");
+  nodeA.setDepthTopic("/jetson1/hd/image_depth_rect");
+  nodeA.setCloudTopic("/master/jetson1/points");
 
-  wp3::Sensor nodeB("jetson6");
-  nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
-  nodeB.setImageTopic("/jetson6/hd/image_color_rect");
-  nodeB.setCloudTopic("/master/jetson6/points");
+  wp3::Sensor nodeB("jetson2");
+  nodeB.setImageTopic("/jetson2/hd/image_color_rect");
+  nodeB.setDepthTopic("/jetson2/hd/image_depth_rect");
+  nodeB.setCloudTopic("/master/jetson2/points");
+//  wp3::Sensor nodeA("jetson4");
+//  nodeA.setImageTopic("/jetson4/hd/image_color_rect");
+//  nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
+//  nodeA.setCloudTopic("/master/jetson4/points");
+
+//  wp3::Sensor nodeB("jetson6");
+//  nodeB.setImageTopic("/jetson6/hd/image_color_rect");
+//  nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
+//  nodeB.setCloudTopic("/master/jetson6/points");
 
 
   wp3::init_reference(reference_node); // create first initial transformation
@@ -103,19 +116,18 @@ int main (int argc, char** argv)
       aruco_A.clearAll();
       aruco_B.clearAll();
 
-      for(int i=0;i<5;i++)
+      for(int i=0;i<20;i++) // accumulate point clouds
       {
         nodeA.readTopics(true);
         nodeB.readTopics(true);
 
-        aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node);
-//        aruco_A.getCroppedCloud(nodeA.cloudCrPtr_);
-        //      transform_A = transformMap_A.at(1); // Available id's: 1, 13, 40
-
-        aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter]);
-//        aruco_B.getCroppedCloud(nodeB.cloudCrPtr_);
-        //      transform_B = transformMap_B.at(1);
+        aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node, Mask);
+        aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter], Mask);
       }
+
+//      transform_A = transformMap_A.at(101); // Available id's: 1, 13, 40
+//      transform_B = transformMap_B.at(101);
+
       nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
       nodeB.cloudCrPtr_ = aruco_B.getCroppedCloud();
 
@@ -189,11 +201,13 @@ int main (int argc, char** argv)
 
 
 
+      // view Aruco only
+      viewerAruco.runSingle(cloud_vector_4, transMap);
+      viewerArucoCropped.runSingle(cloud_vector_1, transMap);
       // view all results
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
 
-      // view Aruco only
-      viewerAruco.runSingle(cloud_vector_4, transMap);
+
 
     }
 

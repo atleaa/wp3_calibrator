@@ -3,6 +3,8 @@
 
 #include <string>
 
+enum Cropping {Rect, Mask};
+
 namespace wp3 {
 //extern std::string package_path; // defined in arucoprocessor.cpp
 const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";

@@ -1,0 +1,5242 @@
+Panels:
+  - Class: rviz/Displays
+    Help Height: 0
+    Name: Displays
+    Property Tree Widget:
+      Expanded:
+        - /Global Options1
+        - /Status1
+        - /Grid1/Offset1
+        - /TF1/Frames1
+        - /TF1/Tree1
+        - /J2-SD-dm1/Auto Size1
+        - /J1-SD-dm-rgb1/Status1
+        - /J1-SD-dm-rgb1/Occlusion Compensation1
+        - /J1-SD-dm-rgb-acc1/Occlusion Compensation1
+        - /J1-SD-dm2/Auto Size1
+        - /J1-SD-dm2/Autocompute Value Bounds1
+        - /J2-SD-dm2/Auto Size1
+        - /J2-SD-dm2/Autocompute Value Bounds1
+        - /J3-SD-dm2/Auto Size1
+        - /J3-SD-dm2/Autocompute Value Bounds1
+        - /J4-SD-dm2/Auto Size1
+        - /J4-SD-dm2/Autocompute Value Bounds1
+        - /J5-SD-dm2/Auto Size1
+        - /J5-SD-dm2/Autocompute Value Bounds1
+        - /J1-Camera-HD1
+        - /J2-Camera-HD1/Visibility1
+        - /J1-SD-dm-rgb2/Auto Size1
+        - /J1-SD-dm-rgb2/Autocompute Value Bounds1
+        - /J1-SD-dm-rgb-HD2
+        - /J1-SD-dm-rgb-HD2/Auto Size1
+        - /J1-SD-dm-rgb-HD2/Autocompute Value Bounds1
+        - /J1-cloudify2
+        - /J1-acc-HD1
+        - /J2-SD-dm-rgb2/Auto Size1
+        - /J2-SD-dm-rgb2/Autocompute Value Bounds1
+        - /J2-SD-dm-rgb-HD1/Auto Size1
+        - /J2-SD-dm-rgb-HD1/Autocompute Value Bounds1
+        - /J3-SD-dm-rgb2/Auto Size1
+        - /J3-SD-dm-rgb2/Autocompute Value Bounds1
+        - /J3-SD-dm-rgb-HD1/Auto Size1
+        - /J3-SD-dm-rgb-HD1/Autocompute Value Bounds1
+      Splitter Ratio: 0.512820542
+    Tree Height: 999
+  - Class: rviz/Selection
+    Name: Selection
+  - Class: rviz/Tool Properties
+    Expanded:
+      - /2D Pose Estimate1
+      - /2D Nav Goal1
+      - /Publish Point1
+    Name: Tool Properties
+    Splitter Ratio: 0.588679016
+  - Class: rviz/Views
+    Expanded:
+      - /Current View1
+      - /Report Tilt1/Focal Point1
+    Name: Views
+    Splitter Ratio: 0.415274471
+  - Class: rviz/Time
+    Experimental: false
+    Name: Time
+    SyncMode: 0
+    SyncSource: J3-SD-dm-rgb
+  - Class: rviz/Selection
+    Name: Selection
+Visualization Manager:
+  Class: ""
+  Displays:
+    - Alpha: 1
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 0; 0; 0
+      Enabled: true
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid
+      Normal Cell Count: 0
+      Offset:
+        X: 5
+        Y: 5
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 0.5
+      Cell Size: 5
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: true
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid-H
+      Normal Cell Count: 1
+      Offset:
+        X: 5
+        Y: 5
+        Z: 2.5
+      Plane: XY
+      Plane Cell Count: 2
+      Reference Frame: <Fixed Frame>
+      Value: true
+    - Alpha: 0.5
+      Cell Size: 5
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid2-H
+      Normal Cell Count: 1
+      Offset:
+        X: 5
+        Y: 10
+        Z: 2.5
+      Plane: XY
+      Plane Cell Count: 2
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Alpha: 1
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 0; 0; 0
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Billboards
+      Name: Grid2
+      Normal Cell Count: 0
+      Offset:
+        X: 5
+        Y: 10
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid wall YZ
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 5
+        Z: 5
+      Plane: YZ
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid wall YZ2
+      Normal Cell Count: 0
+      Offset:
+        X: 0
+        Y: 15
+        Z: 5
+      Plane: YZ
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Alpha: 0.5
+      Cell Size: 1
+      Class: rviz/Grid
+      Color: 160; 160; 164
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid wall XZ
+      Normal Cell Count: 0
+      Offset:
+        X: 5
+        Y: 0
+        Z: 5
+      Plane: XZ
+      Plane Cell Count: 10
+      Reference Frame: <Fixed Frame>
+      Value: false
+    - Class: rviz/Axes
+      Enabled: false
+      Length: 3
+      Name: Axes
+      Radius: 0.0799999982
+      Reference Frame: world
+      Value: false
+    - Class: rviz/TF
+      Enabled: true
+      Frame Timeout: 15
+      Frames:
+        All Enabled: false
+        jetson1_ir_optical_frame:
+          Value: true
+        jetson1_link:
+          Value: true
+        jetson1_rgb_optical_frame:
+          Value: true
+        jetson2_ir_optical_frame:
+          Value: true
+        jetson2_link:
+          Value: true
+        jetson2_rgb_optical_frame:
+          Value: true
+        jetson3_ir_optical_frame:
+          Value: true
+        jetson3_link:
+          Value: true
+        jetson3_rgb_optical_frame:
+          Value: true
+        jetson4_ir_optical_frame:
+          Value: true
+        jetson4_link:
+          Value: true
+        jetson4_rgb_optical_frame:
+          Value: true
+        jetson5_ir_optical_frame:
+          Value: true
+        jetson5_link:
+          Value: true
+        jetson5_rgb_optical_frame:
+          Value: true
+        jetson6_ir_optical_frame:
+          Value: true
+        jetson6_link:
+          Value: true
+        jetson6_rgb_optical_frame:
+          Value: true
+        multisense/left_camera_optical_frame:
+          Value: true
+        velodyne:
+          Value: true
+        world:
+          Value: true
+      Marker Scale: 3
+      Name: TF
+      Show Arrows: false
+      Show Axes: true
+      Show Names: false
+      Tree:
+        world:
+          jetson1_ir_optical_frame:
+            jetson1_rgb_optical_frame:
+              {}
+          jetson1_link:
+            {}
+          jetson2_ir_optical_frame:
+            jetson2_rgb_optical_frame:
+              {}
+          jetson2_link:
+            {}
+          jetson3_ir_optical_frame:
+            jetson3_rgb_optical_frame:
+              {}
+          jetson3_link:
+            {}
+          jetson4_ir_optical_frame:
+            jetson4_rgb_optical_frame:
+              {}
+          jetson4_link:
+            {}
+          jetson5_ir_optical_frame:
+            jetson5_rgb_optical_frame:
+              {}
+          jetson5_link:
+            {}
+          jetson6_ir_optical_frame:
+            jetson6_rgb_optical_frame:
+              {}
+            multisense/left_camera_optical_frame:
+              {}
+            velodyne:
+              {}
+          jetson6_link:
+            {}
+      Update Interval: 0
+      Value: true
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: true
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 255; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: raw
+      Decay Time: 0
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 0; 0; 100
+      Max Intensity: 8.94500065
+      Min Color: 200; 200; 255
+      Min Intensity: 1.94500005
+      Name: J1 dc
+      Occlusion Compensation:
+        Occlusion Time-Out: 30
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: true
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 255; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: raw
+      Decay Time: 0
+      Depth Map Topic: /kinectAtle/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 100; 0; 0
+      Max Intensity: 11.9980001
+      Min Color: 255; 200; 200
+      Min Intensity: 0.107000008
+      Name: A1 dc
+      Occlusion Compensation:
+        Occlusion Time-Out: 30
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 100; 0; 0
+      Max Intensity: 5
+      Min Color: 255; 200; 200
+      Min Intensity: 0.126000002
+      Name: A1 pc2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /kinectA/local/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J1
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson1/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 50
+      Max Intensity: 10
+      Min Color: 20; 55; 20
+      Min Intensity: 1
+      Name: J2
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson2/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 50; 255
+      Max Intensity: 10
+      Min Color: 120; 120; 155
+      Min Intensity: 1
+      Name: J3
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson3/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 255
+      Max Intensity: 10
+      Min Color: 155; 80; 155
+      Min Intensity: 1
+      Name: J4
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson4/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 155; 155; 120
+      Min Intensity: 1
+      Name: J5
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson5/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 15
+      Min Color: 120; 155; 155
+      Min Intensity: 1
+      Name: J6
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson6/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J1-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson1/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 50
+      Max Intensity: 10
+      Min Color: 20; 55; 20
+      Min Intensity: 1
+      Name: J2-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson2/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 50; 255
+      Max Intensity: 10
+      Min Color: 120; 120; 155
+      Min Intensity: 1
+      Name: J3-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson3/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 255
+      Max Intensity: 10
+      Min Color: 155; 80; 155
+      Min Intensity: 1
+      Name: J4-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 5
+      Size (m): 0.00999999978
+      Style: Points
+      Topic: /master/jetson4/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 175; 175; 120
+      Min Intensity: 3
+      Name: J5-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson5/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 1
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 15
+      Min Color: 120; 155; 155
+      Min Intensity: 1
+      Name: J6-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson6/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 0.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 150
+      Max Intensity: 10
+      Min Color: 0; 100; 0
+      Min Intensity: 3
+      Name: J2-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 150; 255
+      Max Intensity: 10
+      Min Color: 0; 0; 100
+      Min Intensity: 3
+      Name: J3-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson4/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 255
+      Max Intensity: 10
+      Min Color: 100; 0; 100
+      Min Intensity: 3
+      Name: J4-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00300000003
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 150
+      Max Intensity: 10
+      Min Color: 100; 100; 0
+      Min Intensity: 3
+      Name: J5-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson6/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 255
+      Max Intensity: 10
+      Min Color: 0; 100; 100
+      Min Intensity: 3
+      Name: J6-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 0.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 150
+      Max Intensity: 10
+      Min Color: 0; 100; 0
+      Min Intensity: 3
+      Name: J2-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 150; 255
+      Max Intensity: 10
+      Min Color: 0; 0; 100
+      Min Intensity: 3
+      Name: J3-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson4/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 255
+      Max Intensity: 10
+      Min Color: 100; 0; 100
+      Min Intensity: 3
+      Name: J4-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 150
+      Max Intensity: 10
+      Min Color: 100; 100; 0
+      Min Intensity: 3
+      Name: J5-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson6/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 255
+      Max Intensity: 10
+      Min Color: 0; 100; 100
+      Min Intensity: 3
+      Name: J6-SD-dm-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 210
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: VLP-16
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Flat Squares
+      Topic: /velodyne_points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J6 HD
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson6/hd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 0
+      Name: J1-ir
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 0
+      Name: J2-ir
+      Normalize Range: false
+      Queue Size: 3
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 0
+      Name: J3-ir
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 0
+      Name: J4-ir
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson5/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 0
+      Name: J5-ir
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/sd/image_ir_rect
+      Max Value: 1000
+      Median window: 5
+      Min Value: 1
+      Name: J6-ir
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/sd/image_depth_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J4-depth
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 10
+      Min Color: 255; 220; 220
+      Min Intensity: 3
+      Name: J1-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson1/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 50
+      Max Intensity: 10
+      Min Color: 220; 255; 220
+      Min Intensity: 3
+      Name: J2-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson2/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 50; 255
+      Max Intensity: 10
+      Min Color: 100; 100; 135
+      Min Intensity: 3
+      Name: J3-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson3/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 255
+      Max Intensity: 10
+      Min Color: 255; 180; 255
+      Min Intensity: 3
+      Name: J4-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson4/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 255; 255; 220
+      Min Intensity: 3
+      Name: J5-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson5/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 220; 255; 255
+      Min Intensity: 3
+      Name: J6-c-rainbow
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson6/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 250; 50; 50
+      Max Intensity: 10
+      Min Color: 255; 220; 220
+      Min Intensity: 3
+      Name: J1-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson1/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 200; 50
+      Max Intensity: 10
+      Min Color: 200; 255; 200
+      Min Intensity: 3
+      Name: J2-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson2/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 0; 100; 255
+      Max Intensity: 10
+      Min Color: 200; 200; 255
+      Min Intensity: 3
+      Name: J3-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson3/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 255
+      Max Intensity: 10
+      Min Color: 255; 180; 255
+      Min Intensity: 3
+      Name: J4-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson4/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 240; 240; 200
+      Min Intensity: 3
+      Name: J5-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson5/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 220; 220
+      Max Intensity: 10
+      Min Color: 200; 240; 240
+      Min Intensity: 3
+      Name: J6-c
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson6/pc2_decompressed
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson1/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb-HD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson2/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson3/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J3-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson4/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson4/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J4-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00300000003
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson5/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J5-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson6/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson6/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J6-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson2/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson3/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J3-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson4/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson4/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J4-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson5/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J5-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson6/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 5
+      Depth Map Topic: /jetson6/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J6-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 2
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: K2-SD-points
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /kinect2/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J1-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson1/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J2-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson2/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J3-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson3/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J4-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson4/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J5-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson5/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J6-SD-points
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson6/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J1-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson1/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J2-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson2/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J3-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson3/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J4-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson4/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J5-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson5/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J6-SD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson6/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J1-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson1/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J2-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson2/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J3-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson3/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J4-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson4/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J5-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson5/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 3
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: J6-QHD-points_acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson6/qhd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: background and overlay
+      Image Topic: /jetson3/sd/image_color_rect
+      Name: Camera3
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+      Visibility:
+        "": true
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J2: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: true
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Camera-SD: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: background and overlay
+      Image Topic: /jetson4/sd/image_color_rect
+      Name: Camera4
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+      Visibility:
+        "": true
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J2: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: true
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Camera-SD: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1
+    - Alpha: 0.600000024
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: false
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Name: robot1
+      Robot Description: /robot1/robot_description
+      TF Prefix: robot1_tf
+      Update Interval: 0
+      Value: false
+      Visual Enabled: true
+    - Alpha: 0.600000024
+      Class: rviz/RobotModel
+      Collision Enabled: false
+      Enabled: false
+      Links:
+        All Links Enabled: true
+        Expand Joint Details: false
+        Expand Link Details: false
+        Expand Tree: false
+        Link Tree Style: Links in Alphabetic Order
+      Name: robot1sim
+      Robot Description: /robot1sim/robot_description
+      TF Prefix: robot1sim_tf
+      Update Interval: 0
+      Value: false
+      Visual Enabled: true
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: true
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.62922382
+        Min Value: -5.81269312
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 255; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: raw
+      Decay Time: 0
+      Depth Map Topic: /kinect2/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 5
+      Min Color: 0; 0; 0
+      Min Intensity: 2
+      Name: K2DepthCloud
+      Occlusion Compensation:
+        Occlusion Time-Out: 30
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/sd/image_ir_rect
+      Max Value: 600
+      Median window: 5
+      Min Value: 100
+      Name: kinec2 IR Image
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Alpha: 1
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 0.918475866
+        Min Value: -1.43795872
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: AxisColor
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 5
+      Min Color: 0; 0; 0
+      Min Intensity: 2
+      Name: multi PointCloud2
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /multisense/image_points2
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /multisense/left/image_rect_color
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: multi left color
+      Normalize Range: true
+      Queue Size: 4
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /kinect2/sd/image_depth_rect
+      Max Value: 2
+      Median window: 5
+      Min Value: 1
+      Name: kinect2 depth
+      Normalize Range: true
+      Queue Size: 1
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /multisense/depth
+      Max Value: 10
+      Median window: 1
+      Min Value: 2
+      Name: multi depth
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/DepthCloud
+      Color: 255; 255; 255
+      Color Image Topic: ""
+      Color Transformer: ""
+      Color Transport Hint: raw
+      Decay Time: 0
+      Depth Map Topic: /multisense/depth
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4096
+      Min Color: 0; 0; 0
+      Min Intensity: 0
+      Name: multi DepthCloud
+      Occlusion Compensation:
+        Occlusion Time-Out: 30
+        Value: false
+      Position Transformer: ""
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson1/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 150
+      Max Intensity: 10
+      Min Color: 0; 100; 0
+      Min Intensity: 3
+      Name: J2-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson2/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 150; 255
+      Max Intensity: 10
+      Min Color: 0; 0; 100
+      Min Intensity: 3
+      Name: J3-cloudify
+      Position Transformer: XYZ
+      Queue Size: 2
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson3/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 255
+      Max Intensity: 10
+      Min Color: 100; 0; 100
+      Min Intensity: 3
+      Name: J4-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson4/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 150
+      Max Intensity: 10
+      Min Color: 100; 100; 0
+      Min Intensity: 3
+      Name: J5-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson5/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 255
+      Max Intensity: 10
+      Min Color: 0; 100; 100
+      Min Intensity: 3
+      Name: J6-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson6/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/hd/image_depth_rect
+      Max Value: 10
+      Median window: 5
+      Min Value: 1
+      Name: J1-Image-dHD
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/hd/image_depth_rect
+      Max Value: 10
+      Median window: 5
+      Min Value: 1
+      Name: J2-Image-dHD
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/hd/image_depth_rect
+      Max Value: 10
+      Median window: 5
+      Min Value: 1
+      Name: J3-Image-dHD
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/hd/image_depth_rect
+      Max Value: 10
+      Median window: 5
+      Min Value: 1
+      Name: J4-Image-dHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/hd/image_depth_rect
+      Max Value: 10
+      Median window: 5
+      Min Value: 1
+      Name: J5-Image-dHD
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/hd/image_depth_rect
+      Max Value: 8000
+      Median window: 5
+      Min Value: 3000
+      Name: J6-Image-dHD
+      Normalize Range: false
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J1-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J2-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J3-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J4-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson5/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J5-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J6-Image-SD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J1-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J2-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J3-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J4-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson5/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J5-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/hd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J6-Image
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J1-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J2-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J3-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J4-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson5/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J5-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/qhd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J6-Image-qHD
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: raw
+      Unreliable: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 0.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 150
+      Max Intensity: 10
+      Min Color: 0; 100; 0
+      Min Intensity: 3
+      Name: J2-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 150; 255
+      Max Intensity: 10
+      Min Color: 0; 0; 100
+      Min Intensity: 3
+      Name: J3-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson4/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 255
+      Max Intensity: 10
+      Min Color: 100; 0; 100
+      Min Intensity: 3
+      Name: J4-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 150
+      Max Intensity: 10
+      Min Color: 100; 100; 0
+      Min Intensity: 3
+      Name: J5-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 1
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: z
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: ""
+      Color Transformer: Intensity
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson6/sd/image_depth_rect
+      Depth Map Transport Hint: raw
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 150; 255; 255
+      Max Intensity: 10
+      Min Color: 0; 100; 100
+      Min Intensity: 3
+      Name: J6-SD-dm
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0199999996
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson1/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J1-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson2/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J2-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson3/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J3-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson4/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J4-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson5/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J5-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Image
+      Enabled: false
+      Image Topic: /jetson6/sd/image_color_rect
+      Max Value: 1
+      Median window: 5
+      Min Value: 0
+      Name: J6-Image-SDc
+      Normalize Range: true
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+    - Class: rviz/Camera
+      Enabled: true
+      Image Rendering: overlay
+      Image Topic: /jetson1/hd/image_color_rect
+      Name: J1-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: true
+      Visibility:
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-acc-HD: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J2: true
+        J2-Camera-HD: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-HD: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Camera-HD: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: false
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 2
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: overlay
+      Image Topic: /jetson2/hd/image_color_rect
+      Name: J2-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+      Visibility:
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Camera-HD: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-acc-HD: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J2: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-HD: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Camera-HD: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: false
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 2
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: overlay
+      Image Topic: /jetson4/hd/image_color_rect
+      Name: J4-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+      Visibility:
+        "": true
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Camera-HD: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: false
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J2: true
+        J2-Camera-HD: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: false
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: true
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/hd/image_color_rect
+      Color Transformer: FlatColor
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb-HD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson1/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J1-acc
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson1/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 0; 255
+      Color Transformer: FlatColor
+      Decay Time: 0
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J1-acc-HD
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00400000019
+      Style: Flat Squares
+      Topic: /jetson1/hd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.800000012
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson2/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson2/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD-dm-rgb-HD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson3/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J3-SD-dm-rgb
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson3/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson3/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J3-SD-dm-rgb-HD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+  Enabled: true
+  Global Options:
+    Background Color: 200; 200; 200
+    Default Light: true
+    Fixed Frame: world
+    Frame Rate: 10
+  Name: root
+  Tools:
+    - Class: rviz/Interact
+      Hide Inactive Objects: true
+    - Class: rviz/MoveCamera
+    - Class: rviz/Select
+    - Class: rviz/FocusCamera
+    - Class: rviz/Measure
+    - Class: rviz/SetInitialPose
+      Topic: /initialpose
+    - Class: rviz/SetGoal
+      Topic: /move_base_simple/goal
+    - Class: rviz/PublishPoint
+      Single click: true
+      Topic: /clicked_point
+  Value: true
+  Views:
+    Current:
+      Class: rviz/Orbit
+      Distance: 2.66629291
+      Enable Stereo Rendering:
+        Stereo Eye Separation: 0.0599999987
+        Stereo Focal Distance: 1
+        Swap Stereo Eyes: false
+        Value: false
+      Focal Point:
+        X: 5.04173088
+        Y: 4.85382175
+        Z: -0.742443502
+      Focal Shape Fixed Size: true
+      Focal Shape Size: 0.0500000007
+      Invert Z Axis: false
+      Name: Current View
+      Near Clip Distance: 0.00999999978
+      Pitch: 1.52479637
+      Target Frame: map
+      Value: Orbit (rviz)
+      Yaw: 4.73239803
+    Saved:
+      - Class: rviz/Orbit
+        Distance: 8.35884762
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5
+          Y: 5
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: XZ
+        Near Clip Distance: 0.00999999978
+        Pitch: 0
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 4.71238899
+      - Class: rviz/Orbit
+        Distance: 19.6491737
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 2
+          Y: 7
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: YZ
+        Near Clip Distance: 0.00999999978
+        Pitch: 0
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 0
+      - Class: rviz/Orbit
+        Distance: 11.0187225
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 4.39791632
+          Y: 5.56947947
+          Z: 0.0246021934
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: XY
+        Near Clip Distance: 0.00999999978
+        Pitch: 1.56979632
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.14159203
+      - Class: rviz/Orbit
+        Distance: 10
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5
+          Y: 9
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: -XZ
+        Near Clip Distance: 0.00999999978
+        Pitch: 0
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 1.57079995
+      - Class: rviz/Orbit
+        Distance: 9.04261112
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 2
+          Y: 7
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: -YZ
+        Near Clip Distance: 0.00999999978
+        Pitch: 0
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.14159203
+      - Class: rviz/Orbit
+        Distance: 4.63147879
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 2.9860599
+          Y: 5.29933262
+          Z: 0.866464913
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: View-1
+        Near Clip Distance: 0.00999999978
+        Pitch: 0.390000045
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 4.91898251
+      - Class: rviz/Orbit
+        Distance: 15
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 4.55000019
+          Y: 7.5
+          Z: 1.79999995
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: Report Tilt
+        Near Clip Distance: 0.00999999978
+        Pitch: 0.800000012
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.14159012
+      - Class: rviz/Orbit
+        Distance: 11.6160002
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5
+          Y: 7.5
+          Z: 1.79999995
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: Report Top
+        Near Clip Distance: 0.00999999978
+        Pitch: 1.56979632
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.1415894
+      - Class: rviz/Orbit
+        Distance: 1.06254959
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 6.94936371
+          Y: 3.18501449
+          Z: 0.44968608
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: Orbit
+        Near Clip Distance: 0.00999999978
+        Pitch: 1.56979632
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.14159203
+      - Angle: 0
+        Class: rviz/TopDownOrtho
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Invert Z Axis: false
+        Name: TopDownOrtho
+        Near Clip Distance: 0.00999999978
+        Scale: 96
+        Target Frame: map
+        Value: TopDownOrtho (rviz)
+        X: 5
+        Y: 5
+      - Class: rviz/Orbit
+        Distance: 5.01713896
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5.13173294
+          Y: 7.10491896
+          Z: 1.48867822
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: Joacim rapport
+        Near Clip Distance: 0.00999999978
+        Pitch: -0.0452023745
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.36159348
+      - Class: rviz/Orbit
+        Distance: 18
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5
+          Y: 7.5
+          Z: 2.5
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: XZ orbit
+        Near Clip Distance: 0.00999999978
+        Pitch: 0
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: -1.57079637
+Window Geometry:
+  Camera3:
+    collapsed: false
+  Camera4:
+    collapsed: false
+  Displays:
+    collapsed: false
+  Height: 1176
+  Hide Left Dock: false
+  Hide Right Dock: true
+  J1-Camera-HD:
+    collapsed: false
+  J1-Image:
+    collapsed: false
+  J1-Image-SD:
+    collapsed: false
+  J1-Image-SDc:
+    collapsed: false
+  J1-Image-dHD:
+    collapsed: false
+  J1-Image-qHD:
+    collapsed: false
+  J1-ir:
+    collapsed: false
+  J2-Camera-HD:
+    collapsed: false
+  J2-Image:
+    collapsed: false
+  J2-Image-SD:
+    collapsed: false
+  J2-Image-SDc:
+    collapsed: false
+  J2-Image-dHD:
+    collapsed: false
+  J2-Image-qHD:
+    collapsed: false
+  J2-ir:
+    collapsed: false
+  J3-Image:
+    collapsed: false
+  J3-Image-SD:
+    collapsed: false
+  J3-Image-SDc:
+    collapsed: false
+  J3-Image-dHD:
+    collapsed: false
+  J3-Image-qHD:
+    collapsed: false
+  J3-ir:
+    collapsed: false
+  J4-Camera-HD:
+    collapsed: false
+  J4-Image:
+    collapsed: false
+  J4-Image-SD:
+    collapsed: false
+  J4-Image-SDc:
+    collapsed: false
+  J4-Image-dHD:
+    collapsed: false
+  J4-Image-qHD:
+    collapsed: false
+  J4-depth:
+    collapsed: false
+  J4-ir:
+    collapsed: false
+  J5-Image:
+    collapsed: false
+  J5-Image-SD:
+    collapsed: false
+  J5-Image-SDc:
+    collapsed: false
+  J5-Image-dHD:
+    collapsed: false
+  J5-Image-qHD:
+    collapsed: false
+  J5-ir:
+    collapsed: false
+  J6-Image:
+    collapsed: false
+  J6-Image-SD:
+    collapsed: false
+  J6-Image-SDc:
+    collapsed: false
+  J6-Image-dHD:
+    collapsed: false
+  J6-Image-qHD:
+    collapsed: false
+  J6-ir:
+    collapsed: false
+  QMainWindow State: 000000ff00000000fd00000004000000000000016700000442fc0200000040fc0000003b00000442000000f10100001afa000000010100000003fb0000000a004a0031002d00690072020000017e000001770000016e00000150fb000000100044006900730070006c0061007900730100000000ffffffff0000016700fffffffb0000000a005600690065007700730100000000000001670000010d00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001200530065006c0065006300740069006f006e0000000263000001a50000006100fffffffb00000010004a0031002d0049006d00610067006502000004760000011000000184000000f3fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000028000000640000006100fffffffb00000016004a0032002d0049006d006100670065002d0053004402000001de000000150000019300000140fb0000000a004a0034002d0069007202000002ef0000001e0000018500000158fb0000000a004a0036002d0069007202000002f1000002cc0000017b00000142fb00000016006d0075006c007400690020006400650070007400680200000210000000b7000004be000002bafb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000016004a0034002d0049006d006100670065002d0053004402000003d60000001e0000018200000147fb00000016004a0031002d0049006d006100670065002d0053004402000001de0000015c000001bb00000158fb00000018004a0032002d0049006d006100670065002d00710048004402000001ca000000150000020a00000144fb00000010004a0033002d0049006d00610067006502000004730000020100000189000000f9fb0000001200530065006c0065006300740069006f006e00000001c2000002060000006100fffffffb0000000a004a0035002d0069007202000002ed000001780000018800000152fb00000010004a0034002d0064006500700074006802000001ba000000bc0000042f00000342fb000000120044006900730070006c006100790073003200000002e3000001250000000000000000fb0000000c00430061006d00650072006102000001ee000001450000031c00000220fb0000000e00430061006d006500720061003302000000f9000000b800000407000002fcfb0000001800430061006d00650072006100640065007000740068003302000001f8000000b20000042c0000032bfb0000000e00430061006d006500720061003402000000c9000000ab0000043700000312fb0000000e00430061006d0065007200610033000000019f000000580000000000000000fb00000010004a0034002d0064006500700074006800000001c2000000600000000000000000fb00000018004a0036002d0049006d006100670065002d00710048004402000003e9000002950000021500000157fb0000000a004a0034002d00690072000000021f000000760000000000000000fb0000000a004a0036002d00690072000000025e000000840000000000000000fb0000000a004a0033002d00690072020000017a000002c90000017600000144fb0000000e00430061006d006500720061003400000003ac000000d40000000000000000fb0000001e006b0069006e00650063003200200049005200200049006d00610067006502000001a30000002e000005a90000046afb0000000a0049006d0061006700650000000338000000d00000000000000000fb0000001a006b0069006e0065006300740032002000640065007000740068000000030c000000fc0000001600fffffffb00000018004a0031002d0049006d006100670065002d00640048004402000002eb000000ed0000010e000000b9fb00000018004a0032002d0049006d006100670065002d00640048004402000002e1000000150000010e000000cafb00000018004a0033002d0049006d006100670065002d00640048004402000002e1000001ab0000011f000000c3fb00000018004a0034002d0049006d006100670065002d00640048004402000001e20000002a0000054000000421fb00000018004a0035002d0049006d006100670065002d0064004800440200000400000000e80000013f000000cafb00000018004a0031002d0049006d006100670065002d00710048004402000001c900000150000001f800000148fb00000010004a0032002d0049006d00610067006502000004730000001e00000188000000f1fb00000016004a0033002d0049006d006100670065002d0053004402000001dc000002b7000001b10000015bfb00000018004a0034002d0049006d006100670065002d00710048004402000003ed0000001e0000020e00000148fb00000016004a0035002d0049006d006100670065002d0053004402000003d1000001620000019c0000014dfb00000016004a0036002d0049006d006100670065002d0053004402000003ca000002ae000001ab0000016efb00000010004a0031002d0049006d006100670065030000022d00000136000001d600000155fb00000010004a0032002d0049006d006100670065030000023200000015000001cb00000122fb00000018004a0033002d0049006d006100670065002d00710048004402000001da0000029a000001e700000156fb00000010004a0034002d0049006d00610067006502000005fe0000001e0000017f000000f2fb00000018004a0035002d0049006d006100670065002d00710048004402000003f30000015c0000021200000143fb00000010004a0036002d0049006d00610067006502000005fd0000020300000180000000f3fb0000000a004a0033002d006900720300000121000002d1000001a70000016afb0000000a004a0032002d00690072020000017d0000001e000001710000015bfb00000018004a0031002d0049006d006100670065002d00530044006302000001c00000010d0000015a000000fafb00000018004a0032002d0049006d006100670065002d00530044006302000001bf0000001500000154000000effb00000018004a0033002d0049006d006100670065002d00530044006302000001bf0000020700000152000000f1fb00000018004a0034002d0049006d006100670065002d005300440063020000031b0000001500000126000000f0fb00000018004a0035002d0049006d006100670065002d00530044006302000003130000010d0000012b000000f8fb00000018004a0036002d0049006d006100670065002d0053004400630200000312000002060000012c000000f7fb0000000e00430061006d006500720061003102000002ed0000010a000002ee000001d3fb00000018004a0031002d00430061006d006500720061002d00480044030000017400000029000005b30000046bfb00000018004a0032002d00430061006d006500720061002d0048004402000001a200000020000005de00000478fb00000018004a0034002d00430061006d006500720061002d0048004402000001960000001e000005ea00000478000000010000010f000003bcfc0200000001fb0000001e0054006f006f006c002000500072006f0070006500720074006900650073010000004100000078000000000000000000000002000007470000017efc0100000007fb00000018004a0036002d0049006d006100670065002d00640048004402000001fd0000008c000004f1000003c5fc00000000000007470000000000fffffffa000000000200000002fb00000010004a0036002d0049006d0061006700650300000653000001a80000013b000000bcfb00000010004a0033002d0049006d006100670065030000053a0000019800000119000000a6fb00000010004a0034002d0049006d00610067006503000006590000001e00000105000000b0fb00000020006d0075006c007400690020006c00650066007400200063006f006c006f007202000001ae000000ad000002f3000002f5fb00000010004a0035002d0049006d00610067006502000005fe0000011100000180000000f0fb00000010004a0035002d0049006d0061006700650000000000000007470000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003bfc0100000002fb0000000800540069006d006500000000000000064f000002a400fffffffb0000000800540069006d00650100000000000004500000000000000000000006140000044200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  Selection:
+    collapsed: false
+  Time:
+    collapsed: false
+  Tool Properties:
+    collapsed: false
+  Views:
+    collapsed: false
+  Width: 1920
+  X: 1920
+  Y: 24
+  kinec2 IR Image:
+    collapsed: false
+  kinect2 depth:
+    collapsed: false
+  multi depth:
+    collapsed: false
+  multi left color:
+    collapsed: false

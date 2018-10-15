@@ -180,7 +180,8 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 //void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
 void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
                                    MarkerMapType &transform4x4,
-                                   std::string kinect_number)
+                                   std::string kinect_number,
+                                   Cropping crop)
 {
 
   std::string camera_name = "/kinect" + kinect_number;
@@ -192,19 +193,27 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
 
   std::cout << rgb_intrinsics_dir << std::endl;
 
+
+
   // TULL, use custom parameters!?
   // Default RGB parameters -> will be used in rectified depthMatrix since it is mapped onto RGB
   // Try to upscale IR intrinsics to RGB size--> use them to transform depth map to point cloud
-  float const fx_default = 1081.37;
-  float const fy_default = 1081.37;
-  float const cx_default = 959.5;
-  float const cy_default = 539.5;
+//  float const fx_default = 1081.37;
+//  float const fy_default = 1081.37;
+//  float const cx_default = 959.5;
+//  float const cy_default = 539.5;
+
+// parameters from jetson1
+//  float const fx_default = 1067.586;
+//  float const fy_default = 1068.404;
+//  float const cx_default = 919.821;
+//  float const cy_default = 548.260;
 
   Eigen::Matrix3f ir_params;
-  ir_params(0,0) = fx_default;
-  ir_params(1,1) = fy_default;
-  ir_params(0,2) = cx_default;
-  ir_params(1,2) = cy_default;
+//  ir_params(0,0) = fx_default;
+//  ir_params(1,1) = fy_default;
+//  ir_params(0,2) = cx_default;
+//  ir_params(1,2) = cy_default;
 
 //  src_cloud_crop1_->clear();
 //  src_cloud_crop2_->clear();
@@ -224,12 +233,12 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   fs_calibration["distortionCoefficients"] >> dist_coeffs;
   fs_calibration.release();
 
-  std::cout << "camera matrix aruco : " << cameraMatrix << std::endl << "distortion coeffs: " << dist_coeffs << std::endl;
+  std::cout << rgb_intrinsics_dir << std::endl << "camera matrix aruco : " << cameraMatrix << std::endl << "distortion coeffs: " << dist_coeffs << std::endl;
 
-  //		ir_params(0,0) = cameraMatrix.at<double>(0,0);
-  //		ir_params(1,1) = cameraMatrix.at<double>(1,1);
-  //		ir_params(0,2) = cameraMatrix.at<double>(0,2);
-  //		ir_params(1,2) = cameraMatrix.at<double>(1,2);
+      ir_params(0,0) = cameraMatrix.at<double>(0,0);
+      ir_params(1,1) = cameraMatrix.at<double>(1,1);
+      ir_params(0,2) = cameraMatrix.at<double>(0,2);
+      ir_params(1,2) = cameraMatrix.at<double>(1,2);
 
   //		cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
   //		cameraMatrix.at<double>(0,0) = 1057.932708427644;
@@ -244,7 +253,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ aruco param. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   double arucoSquareDimension = 0.60; // in meters
   std::vector<int> markerIds; // markerIds.size() = number of Ids found
-  std::vector<std::vector<cv::Point2f>> markerCorners, rejectCandidates;
+  std::vector<std::vector<cv::Point2f>> markerCorners, markerCornersPadded, rejectCandidates;
   cv::Ptr<cv::aruco::DetectorParameters> params = cv::aruco::DetectorParameters::create();
   //		params->doCornerRefinement = true;
   params->cornerRefinementWinSize = 5;
@@ -271,29 +280,6 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   cv::aruco::drawDetectedMarkers(inputImage,markerCorners, markerIds);
   imshow(filename_inputPicture,inputImage);
 
-
-  /* TODO - CREATE CUSTOM CROPPING LIKE THIS
-                 * ROI by creating mask for the parallelogram
-                Mat mask = cvCreateMat(480, 640, CV_8UC1);
-                // Create black image with the same size as the original
-                for(int i=0; i<mask.cols; i++)
-                   for(int j=0; j<mask.rows; j++)
-                       mask.at<uchar>(Point(i,j)) = 0;
-
-                // Create Polygon from vertices
-                vector<Point> ROI_Poly;
-                approxPolyDP(ROI_Vertices, ROI_Poly, 1.0, true);
-
-                // Fill polygon white
-                fillConvexPoly(mask, &ROI_Poly[0], ROI_Poly.size(), 255, 8, 0);
-
-                // Create new image for result storage
-                Mat imageDest = cvCreateMat(480, 640, CV_8UC3);
-
-                // Cut out ROI and store it in imageDest
-                image->copyTo(imageDest, mask);
-                */
-
   transform4x4.clear(); // clear transformations
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop (new pcl::PointCloud<pcl::PointXYZ>);
@@ -303,43 +289,173 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
 //    if (markerIds[i] == 1)
 //    {
       cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
-      max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
-      //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
 
-      if (!invalid_points)
+
+      switch(crop)
       {
-        cv::Rect myROI(botx,boty,topx-botx, topy-boty);
-        cv::Mat croppedImage = inputImage(myROI);
+      case Rect:
+      {
+        max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
+        //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
+        if (!invalid_points)
+        {
+          cv::Rect myROI(botx,boty,topx-botx, topy-boty);
+          cv::Mat croppedImage = inputImage(myROI);
 
-        // TODO: change from defined clouds to a std::map with string and cloud
-        if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
-        if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
-        if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
-//        cv::imshow(filename_crop1,croppedImage);
-        cv::waitKey(30);
+          // TODO: change from defined clouds to a std::map with string and cloud
+          if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
+          if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
+          if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
+  //        cv::imshow(filename_crop1,croppedImage);
+          cv::waitKey(30);
 
-        cv::Mat depthMatCropped = inputDepth(myROI);
-//        current_depthMat_A_crop1_ = inputDepth(myROI);
+          cv::Mat depthMatCropped = inputDepth(myROI);
+  //        current_depthMat_A_crop1_ = inputDepth(myROI);
 
-        std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-        pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+          std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
+          pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
 
-        // TODO: change from defined clouds to a std::map with string and cloud
-        if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
-        if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
-        if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
+          // TODO: change from defined clouds to a std::map with string and cloud
+          if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
+          if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
+          if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
 
-        // add cropped source to combined cloud
-        *croppedCloud_ += *src_cloud_crop;
+          // add cropped source to combined cloud
+          *croppedCloud_ += *src_cloud_crop;
 
-        Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
-        createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
+          Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
+          createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
 
-        transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
-        transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+          transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+          transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+
+        }
+      };
+
+      case Mask:
+      {
+        // Create ROI by creating mask for the parallelogram ------------------------
+//        cv::Mat mask = cvCreateMat(1920, 1080, CV_8UC1);
+//        cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
+//        // Create black image with the same size as the original
+//        for(int j=0; j<mask.cols; j++)
+//          for(int k=0; k<mask.rows; k++)
+//            mask.at<uchar>(cv::Point(j,k)) = 0;
+
+        cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
+        mask = 0;
+
+//        cv::contourArea(markerCorners[i],true);
+
+        // Calculate corners of padded aruco
+        markerCornersPadded = markerCorners;
+        float padScale=0.0;
+        padScale = 7.0/6.0-1.0; // padding is aruco square width * 0.5
+        for(int j=0 ; j<4 ; j++)
+        {
+          cv::Point2f corner;
+          corner.x = markerCorners[i][j].x + ( markerCorners[i][j].x - markerCorners[i][(j+2)%4].x ) * padScale;
+          corner.y = markerCorners[i][j].y + ( markerCorners[i][j].y - markerCorners[i][(j+2)%4].y ) * padScale;
+//          markerCornersPadded[i].push_back(corner);
+          markerCornersPadded[i][j] = corner;
+        }
+
+
+
+        // Create Polygon from vertices
+        std::vector<cv::Point> ROI_Poly;
+        cv::approxPolyDP(markerCorners[i], ROI_Poly, 1.0, true);
+        std::vector<cv::Point> ROI_PolyPadded;
+        cv::approxPolyDP(markerCornersPadded[i], ROI_PolyPadded, 1.0, true);
+
+
+
+        // Fill polygon white
+        cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
+
+//        // TEST ----------
+//        std::ostringstream stream;
+//        stream << "mask-" <<  camera_name << "." << i;
+//        std::string str = stream.str();
+//        cv::imshow(str,mask);
+//        // TEST END----------
+
+        // Create new image for result storage
+        cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
+        croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
+
+
+//        cv::Mat croppedImage(1080, 1920, CV_8UC3);
+//        cv::Mat croppedImage = cvCreateMat(1920, 1080, CV_8UC3);
+
+        // Cut out ROI and store it in imageDest
+        inputImage.copyTo(croppedImage, mask);
+
+//        cv::Mat maskRGB=cv::cvtColor(mask,cv::COLOR_GRAY2BGR); //change mask to a 3 channel image
+//        croppedImage = cv::subtract(croppedImage,maskRGB);
+
+//        cv::subtract(inputImage,mask,croppedImage);
+
+
+//        cv::Mat croppedImage = inputImage(mask);
+        // mask end -----------------------------------------------------------------
+
+
+          // TODO: change from defined clouds to a std::map with string and cloud
+          if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
+          if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
+          if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
+  //        cv::imshow(filename_crop1,croppedImage);
+          cv::waitKey(30);
+
+//          cv::Mat depthMatCropped(inputDepth.rows, inputDepth.cols,CV_8UC3);
+          cv::Mat depthMatCropped(inputDepth.rows, inputDepth.cols,CV_32F); // change type to visualize?
+          depthMatCropped.setTo(cv::Scalar(0)); // initialize depth to 0
+          inputDepth.copyTo(depthMatCropped, mask);
+//          depthMatCropped = inputDepth(myROI);
+  //        current_depthMat_A_crop1_ = inputDepth(myROI);
+
+          // TEST ----------
+          cv::Mat depthMatCroppedView;
+          depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
+          std::ostringstream stream;
+          stream << "depthcropped-" <<  camera_name << "." << markerIds[i];
+          std::string str = stream.str();
+          cv::imshow(str,depthMatCroppedView);
+          cv::waitKey(30);
+          // TEST END----------
+
+//          std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
+                  std::vector<float> aruco_cornerpoints = {0,0,1920,1080};
+
+//          float bot_row = c_ext[0];
+//          float top_row = c_ext[2];
+//          float bot_col = c_ext[1];
+//          float top_col = c_ext[3];
+//          pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+          pointcloudFromDepthImage(depthMatCropped, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+
+          // TODO: change from defined clouds to a std::map with string and cloud
+          if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
+          if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
+          if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
+
+          // add cropped source to combined cloud
+          *croppedCloud_ += *src_cloud_crop;
+
+          Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
+          createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
+
+          transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+          transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
+
+        };
 
       }
-    }
+
+
+
+  }
 //  transformMap_ = transform4x4;
 //    transformMap_.insert(transform4x4.begin(),transform4x4.end());
     acc_++;
