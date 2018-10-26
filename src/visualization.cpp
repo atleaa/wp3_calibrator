@@ -1,4 +1,5 @@
 #include "wp3_calibrator/visualization.h"
+#include "wp3_calibrator/defines.h"
 
 namespace wp3 {
 
@@ -22,10 +23,12 @@ void Visualization::initialize()
 {
   //  viewer_.generateColors(6)
   generateColors(6);
-  std::cout << std::endl << "Created colors:" << std::endl;
+  std::stringstream color_stream;
+//  std::String color_stream;
+  color_stream << "Created colors:" << std::endl;
   for (std::vector<cv::Vec3i>::const_iterator i = colors_.begin(); i != colors_.end(); ++i)
-    std::cout << *i << ' ' << std::endl;
-  std::cout << std::endl;
+    color_stream << *i << ' ' << std::endl;
+  ROS_DEBUG_STREAM(color_stream.str());
 
   viewer_.createViewPort (0.0, 0.0, 0.33, 0.5, vp11_);
   viewer_.createViewPort (0.33, 0.0, 0.66, 0.5, vp12_);
@@ -58,10 +61,12 @@ void Visualization::initializeSingle()
 {
   //  viewer_.generateColors(6)
   generateColors(6);
-  std::cout << std::endl << "Created colors:" << std::endl;
+  std::stringstream color_stream;
+//  std::String color_stream;
+  color_stream << "Created colors:" << std::endl;
   for (std::vector<cv::Vec3i>::const_iterator i = colors_.begin(); i != colors_.end(); ++i)
-    std::cout << *i << ' ' << std::endl;
-  std::cout << std::endl;
+    color_stream << *i << ' ' << std::endl;
+  ROS_DEBUG_STREAM(color_stream.str());
 
   viewer_.setBackgroundColor (1.0, 1.0, 1.0);
     //  viewer_.initCameraParameters();
@@ -208,6 +213,11 @@ void Visualization::run(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud
     viewer_.addPointCloud<pcl::PointXYZ> (cloud_vector_6[i], color_curr, cloud_str,vp23_);
     viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, cloud_str); //can add viewport
   }
+
+  // add custom point size
+  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node0_icp2"); //can add viewport
+  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node1_icp2"); //can add viewport
+
   //    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_1(cloud_vector[cloud_itr], 0, 255, 0);
 
   //    viewer_.addPointCloud<pcl::PointXYZ> (cloud, color_1, "cloud_name1",vp11_);
@@ -289,32 +299,36 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
   //    viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 1, "cloud_name3"); //can add viewport
 
   // insert coordinates and coordinate text
-  for(std::map<std::string, Eigen::Matrix4f>::iterator transformation_iterator = transformationsMap.begin(); transformation_iterator != transformationsMap.end(); transformation_iterator++)
-  {
-    //        transformationsMap
-    Eigen::Matrix4f tmpMatrix = transformation_iterator->second;
-    Eigen::Affine3f tmpAffine;
-    tmpAffine.matrix() = tmpMatrix;
-    std::string tmpId;
+//  if(transformationsMap!=0)
+//  {
+    for(std::map<std::string, Eigen::Matrix4f>::iterator transformation_iterator = transformationsMap.begin(); transformation_iterator != transformationsMap.end(); transformation_iterator++)
+    {
+      //        transformationsMap
+      Eigen::Matrix4f tmpMatrix = transformation_iterator->second;
+      Eigen::Affine3f tmpAffine;
+      tmpAffine.matrix() = tmpMatrix;
+      std::string tmpId;
 
-    tmpId = std::string(transformation_iterator->first);
-    //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
-    viewer_.removeCoordinateSystem(tmpId);
-    viewer_.addCoordinateSystem (0.5, tmpAffine, tmpId);
+      tmpId = std::string(transformation_iterator->first);
+      //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
+      viewer_.removeCoordinateSystem(tmpId);
+      viewer_.addCoordinateSystem (0.5, tmpAffine, tmpId);
 
-    pcl::PointXYZ point;
-    point.x = tmpMatrix(0,3);
-    point.y = tmpMatrix(1,3);
-    point.z = tmpMatrix(2,3);
+      pcl::PointXYZ point;
+      point.x = tmpMatrix(0,3);
+      point.y = tmpMatrix(1,3);
+      point.z = tmpMatrix(2,3);
 
-    //BUG: add +1 to viewport due to bug in pcl 1.7, https://github.com/PointCloudLibrary/pcl/issues/1803
-//    viewer_.addText3D(transformation_iterator->first, , 0.2, 1.0, 1.0, 1.0, transformation_iterator->first);
-    viewer_.addText3D(transformation_iterator->first, point, 0.05, 0.0, 0.0, 0.0, transformation_iterator->first);
-  //  viewer_->initCameraParameters ();
-  //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
-  //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");
-  viewer_.spinOnce();
-  }
+      //BUG: add +1 to viewport due to bug in pcl 1.7, https://github.com/PointCloudLibrary/pcl/issues/1803
+      //    viewer_.addText3D(transformation_iterator->first, , 0.2, 1.0, 1.0, 1.0, transformation_iterator->first);
+      viewer_.addText3D(transformation_iterator->first, point, 0.05, 0.0, 0.0, 0.0, transformation_iterator->first);
+      //  viewer_->initCameraParameters ();
+      //viewer_.updateText("ARUCO FULL VIEW UPDATED", 10, 10, "vp11_text");
+      //viewer_.updateText("ARUCO CROPPED VIEW", 10, 10, "vp2 text");
+      viewer_.spinOnce();
+    }
+    viewer_.spinOnce();
+//  }
 }
 
 //void
@@ -344,8 +358,8 @@ void Visualization::update()
     std::ostringstream text;
     text << "Cam: " << endl
          << " - pos: (" << cam[0].pos[0] << ", "    << cam[0].pos[1] << ", "    << cam[0].pos[2] << ")" << endl
-                                                                                                 << " - view: ("    << cam[0].view[0] << ", "   << cam[0].view[1] << ", "   << cam[0].view[2] << ")"    << endl
-                                                                                                                                                                                              << " - focal: ("   << cam[0].focal[0] << ", "  << cam[0].focal[1] << ", "  << cam[0].focal[2] << ")"   << endl;
+         << " - view: ("    << cam[0].view[0] << ", "   << cam[0].view[1] << ", "   << cam[0].view[2] << ")"    << endl
+         << " - focal: ("   << cam[0].focal[0] << ", "  << cam[0].focal[1] << ", "  << cam[0].focal[2] << ")"   << endl;
     std::string text_str = text.str();
 
     //    cout << text; //Print recorded points on the screen:

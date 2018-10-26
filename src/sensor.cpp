@@ -1,5 +1,6 @@
 #include "wp3_calibrator/sensor.h"
 #include "wp3_calibrator/imageconverter.h"
+#include "wp3_calibrator/defines.h"
 
 namespace wp3{
 
@@ -22,6 +23,19 @@ Sensor::Sensor(std::string name) :
 Sensor::~Sensor()
 {
 // do nothing..
+}
+
+void Sensor::clear()
+{
+  cloudPtr_->clear();
+  cloud1Ptr_->clear();
+  cloud2Ptr_->clear();
+  cloud3Ptr_->clear();
+
+  cloudAccPtr_->clear();
+  cloud1AccPtr_->clear();
+  cloud2AccPtr_->clear();
+  cloud3AccPtr_->clear();
 }
 
 std::string Sensor::getDepthTopic() const {return depthTopic_;}
@@ -60,37 +74,42 @@ void Sensor::readTopics(bool update = false)
     cloudPtr_->clear();
 //    cloudPtr_.reset();
 
-    std::cout << "emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;
+//    std::cout << "emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;
+    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
   }
 
   // get color image
-  std::cout << "Reading " << imageTopic_ << " ... "<< std::flush;
+//  std::cout << "Reading " << imageTopic_ << " ... "<< std::flush;
   while(imageMat_.empty())
   {
     IC_RGB_A.getCurrentImage(&imageMat_);
   }
-  std::cout << "done" << std::endl;
+  ROS_DEBUG_STREAM("done" << std::endl);
 
   // get depth image
-  std::cout << "Reading " << depthTopic_ << " ... "<< std::flush;
+  ROS_DEBUG_STREAM("Reading " << depthTopic_ << " ... "<< std::flush);
   while(depthMat_.empty())
   {
     IC_Depth_A.getCurrentDepthMap(&depthMat_);
   }
-  std::cout << "done " << std::endl;
+  ROS_DEBUG_STREAM("done " << std::endl);
 
   // get cloud
-  std::cout << "Reading " << cloudTopic_ << " ... "<< std::flush;
+  ROS_DEBUG_STREAM("Reading " << cloudTopic_ << " ... "<< std::flush);
   while( cloudPtr_->size() == 0)
   {
     dp_A.get_filtered_PCL_cloud(cloudPtr_);
   }
-  std::cout << "done" << std::endl;
-
-//  //    std::cout << "Reading point clouds from A and B 5 times... "<< std::endl;
-
+  ROS_DEBUG_STREAM("done" << std::endl);
 } // end readTopics
 
+void Sensor::appendClouds()
+{
+  *cloudAccPtr_ += *cloudPtr_;
+  *cloud1AccPtr_ += *cloud1Ptr_;
+//  *cloud2AccPtr_ += *cloud2Ptr_;
+//  *cloud3AccPtr_ += *cloud3Ptr_;
+}
 
 
 } // end namespace wp3

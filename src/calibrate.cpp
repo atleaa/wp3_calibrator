@@ -11,9 +11,16 @@
 //std::vector<cv::Vec3f> camera_colors;     // vector containing colors to use to identify cameras in the network
 //std::map<std::string, int> color_map;     // map between camera frame_id and color
 
+
+
+
 // begin main  --------------------------------------------------------------------------------------------
 int main (int argc, char** argv)
 {
+  //Set logging level
+  if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
+    ros::console::notifyLoggerLevelsChanged();
+  }
 
   std::recursive_mutex r_mutex2;
 
@@ -37,16 +44,18 @@ int main (int argc, char** argv)
   double ICP1_fitness_to_print;
 
   // user info
-  std::cout << "n   - new image "<<  std::endl
-            << "s   - save image "<<  std::endl
-            << "+   - next sensor "<<  std::endl
-            << "esc - quit "<<  std::endl;
+  ROS_INFO_STREAM( "Keyboard controls of calibrator:" << std::endl
+                   << "n   - new image "<<  std::endl
+                   << "s   - save image "<<  std::endl
+                   << "+   - next sensor "<<  std::endl
+                   << "esc - quit "<<  std::endl);
 
   // init ROS =============================================================
   sleep(3); // ensure that main is initialized before initing ROS
   // ROS messaging init
-  std::cout << "Starting: "<<  std::endl;
-  ros::init(argc, argv, "aruco_tf_publisher");
+  ROS_INFO_STREAM("Starting: "<<  std::endl);
+  // initialize ROS node
+  ros::init(argc, argv, "wp3_calibrator");
   ros::NodeHandle nh;
   ros::spinOnce();
 
@@ -61,7 +70,14 @@ int main (int argc, char** argv)
   viewerArucoCropped.initializeSingle();
   wp3::Visualization viewer;
   viewer.initialize();
-
+#ifdef VIEW_ICP
+  wp3::Visualization viewerICP;
+  viewerICP.initializeSingle();
+//  pcl::visualization::PCLVisualizer viewerICP ("ICP Visualizer");
+//  viewerICP.setCameraPosition(-1.23666, -8.81802, -6.55671,
+//                            -0.0567675, -2.09815, 5.04277,
+//                            0.323175, -0.832741, 0.449555);
+#endif
 
   std::map<std::string, Eigen::Matrix4f> transMap;
 
@@ -71,18 +87,30 @@ int main (int argc, char** argv)
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
 
-  std::cout << calibration_order_initial[0] << std::endl;
+//  std::cout << calibration_order_initial[0] << std::endl;
 
   // TODO: make node vector
-  wp3::Sensor nodeA("jetson1");
-  nodeA.setImageTopic("/jetson1/hd/image_color_rect");
-  nodeA.setDepthTopic("/jetson1/hd/image_depth_rect");
-  nodeA.setCloudTopic("/master/jetson1/points");
+  wp3::Sensor nodeA("jetson1_SD");
+  nodeA.setImageTopic("/jetson1/sd/image_color_rect");
+  nodeA.setDepthTopic("/jetson1/sd/image_depth_rect");
+//  nodeA.setCloudTopic("/master/jetson1/points");
+    nodeA.setCloudTopic("/jetson1/sd/points");
+//    nodeA.setImageTopic("/jetson1/hd/image_color_rect");
+//    nodeA.setDepthTopic("/jetson1/hd/image_depth_rect");
+//  //  nodeA.setCloudTopic("/master/jetson1/points");
+//      nodeA.setCloudTopic("/jetson1/hd/points");
 
-  wp3::Sensor nodeB("jetson2");
-  nodeB.setImageTopic("/jetson2/hd/image_color_rect");
-  nodeB.setDepthTopic("/jetson2/hd/image_depth_rect");
-  nodeB.setCloudTopic("/master/jetson2/points");
+
+  wp3::Sensor nodeB("jetson2_SD");
+  nodeB.setImageTopic("/jetson2/sd/image_color_rect");
+  nodeB.setDepthTopic("/jetson2/sd/image_depth_rect");
+//  nodeB.setCloudTopic("/master/jetson2/points");
+    nodeB.setCloudTopic("/jetson2/sd/points");
+//    nodeB.setImageTopic("/jetson2/hd/image_color_rect");
+//    nodeB.setDepthTopic("/jetson2/hd/image_depth_rect");
+//  //  nodeB.setCloudTopic("/master/jetson2/points");
+//    nodeB.setCloudTopic("/jetson2/hd/points");
+
 //  wp3::Sensor nodeA("jetson4");
 //  nodeA.setImageTopic("/jetson4/hd/image_color_rect");
 //  nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
@@ -112,24 +140,33 @@ int main (int argc, char** argv)
     // the process below is performed initially and updated every time the user presses the "n" key on the RGB image
     if (key == 110 || init == true) // n
     {
+      ROS_INFO_STREAM("Starting calibration routine" << std::endl);
       init = false;
       aruco_A.clearAll();
       aruco_B.clearAll();
+//      nodeA.clear();
+//      nodeB.clear();
 
-      for(int i=0;i<20;i++) // accumulate point clouds
+      ROS_INFO_STREAM("Reading topics and detecting markers to accumulate data.");
+      for(int i=0;i<ACCUMULATE;i++) // accumulate point clouds
       {
+        // reading topics
         nodeA.readTopics(true);
         nodeB.readTopics(true);
 
+        // detect and accumulate cropped clouds
         aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node, Mask);
         aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter], Mask);
+
+        // Accumulate full clouds
+        nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
+        nodeB.cloudCrPtr_ = aruco_B.getCroppedCloud();
+//        nodeA.appendClouds();
+//        nodeB.appendClouds();
       }
 
 //      transform_A = transformMap_A.at(101); // Available id's: 1, 13, 40
 //      transform_B = transformMap_B.at(101);
-
-      nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
-      nodeB.cloudCrPtr_ = aruco_B.getCroppedCloud();
 
       //TODO: map intersection,  https://stackoverflow.com/questions/3772664/intersection-of-two-stl-maps
       Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
@@ -145,9 +182,14 @@ int main (int argc, char** argv)
       Eigen::Matrix4f camA = transMat_avgB*transMat_avgA.inverse();
       Eigen::Matrix4f camB = Eigen::Matrix4f::Identity();
 
-//      wp3::calcTransMats(nodeA, nodeB, transform_A, transform_B, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+      ROS_INFO_STREAM("Performing ICP between " << nodeA.name_ << " and " << nodeB.name_);
+//      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+#ifdef VIEW_ICP
+      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print, viewerICP);
+#else
       wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
-
+#endif
+      ROS_INFO_STREAM("ICP complete with fitness score: " << ICP1_fitness_to_print);
 
       //make cloud vector --> TODO: use a loop to create vectors
       //      for (unsigned int i = 0; i < curr_cloud_vector.size(); i++)
@@ -175,8 +217,14 @@ int main (int argc, char** argv)
       cloud_vector_5.push_back(nodeA.cloud2Ptr_); // step 2
       cloud_vector_5.push_back(nodeB.cloudPtr_);
       cloud_vector_6.clear();
-      cloud_vector_6.push_back(nodeA.cloud3Ptr_); // step 3
+//      cloud_vector_6.push_back(nodeA.cloud3Ptr_); // step 3
       cloud_vector_6.push_back(nodeB.cloudPtr_);
+      // additional clouds TMP
+//      cloud_vector_6.push_back(nodeA.cloud2Ptr_); // step 2
+//      cloud_vector_6.push_back(nodeA.cloud2CrPtr_); // step 2
+      cloud_vector_6.push_back(nodeB.cloudCrPtr_);
+
+
 
       transMap.clear();
       transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeA.name_,camA ));
@@ -215,7 +263,7 @@ int main (int argc, char** argv)
     if (key == 115) // s
     {
       wp3::saveResults(transform_ICP1_print, ICP1_fitness_to_print, calibration_order_initial[calib_counter]);
-      std::cout << numel_calib << std::endl;
+//      std::cout << numel_calib << std::endl;
     }
 
 
@@ -227,11 +275,16 @@ int main (int argc, char** argv)
       {
         calib_counter = 0;
       }
-      std::cout << "evaluating node " << reference_node << "vs" << calibration_order_initial[calib_counter] << std::endl;
+//      std::cout << "evaluating node " << reference_node << "vs" << calibration_order_initial[calib_counter] << std::endl;
     }
 
 //    viewer.update();
+    viewer.update();
     viewerAruco.update();
+    viewerArucoCropped.update();
+#ifdef VIEW_ICP
+//    viewerICP.spinOnce();
+#endif
   }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

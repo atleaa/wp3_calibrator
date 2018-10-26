@@ -18,6 +18,7 @@ find_package(catkin REQUIRED COMPONENTS
   image_transport
   cv_bridge
   aruco
+  rosconsole
 )
 
 ## System dependencies are found with CMake's conventions

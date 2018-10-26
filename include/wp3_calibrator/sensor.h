@@ -74,6 +74,8 @@ public:
   // Destructor
   ~Sensor();
 
+  void clear();
+
   std::string name_;
 //  void readTopics(std::string nodeA, std::string nodeB, cv::Mat* rgb_A,
 //                  cv::Mat* depth_A, cv::Mat* rgb_B, cv::Mat* depth_B,
@@ -81,6 +83,8 @@ public:
 //                  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
 //                  bool update);
   void readTopics(bool update);
+
+  void appendClouds();
 
   // Accessors/getter/setter
   std::string getDepthTopic() const;
@@ -102,18 +106,23 @@ public:
   void setCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud);
 
 
+
   //move to private?
   cv::Mat imageMat_;  // original color image
   cv::Mat depthMat_;  // original depth image
 
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudPtr_;    // original point cloud
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudCrPtr_;  // original cropped point cloud
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1Ptr_;   // point cloud after 1 transformation
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1CrPtr_; // cropped point cloud after 1 transformation
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2Ptr_;   // point cloud after 2 transformations
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2CrPtr_; // cropped point cloud after 2 transformations
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3Ptr_;   // point cloud after 3 transformations
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3CrPtr_; // cropped point cloud after 3 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudPtr_;      // original point cloud
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudAccPtr_;   // original point cloud
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudCrPtr_;    // original cropped point cloud
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1Ptr_;     // point cloud after 1 transformation
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1AccPtr_;  // point cloud after 1 transformation
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1CrPtr_;   // cropped point cloud after 1 transformation
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2Ptr_;     // point cloud after 2 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2AccPtr_;   // point cloud after 2 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2CrPtr_;   // cropped point cloud after 2 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3Ptr_;     // point cloud after 3 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3AccPtr_;   // point cloud after 3 transformations
+  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3CrPtr_;   // cropped point cloud after 3 transformations
 
 
 private:

@@ -208,7 +208,7 @@ void readTopics(std::string nodeA,
 void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
                 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_target_xyz_org,
                 Eigen::Affine3f & transform_ICP,
-                bool & converge_flag, float distThresh, double & fitnessScore)
+                bool & converge_flag, float maxCorrDist, int iter, double & fitnessScore)
 {
   // >>>>>>>> Registration by ICP <<<<<<<<<
   // Declare output point cloud and initialize ICP object
@@ -224,10 +224,13 @@ void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
   icp.setInputSource(cloud_source_xyz_org);
   icp.setInputTarget(cloud_target_xyz_org);
 //  icp.setUseReciprocalCorrespondences(true);  //TULL testing AAA
-  icp.setRANSACOutlierRejectionThreshold(distThresh);  //TULL testing AAA
-  icp.setMaxCorrespondenceDistance (distThresh);
-  icp.setTransformationEpsilon(0.001);
-  icp.setMaximumIterations (1000);
+  icp.setRANSACOutlierRejectionThreshold(maxCorrDist);  //TULL testing AAA
+  icp.setMaxCorrespondenceDistance (maxCorrDist);
+  // Termination criteria
+  icp.setMaximumIterations (iter);
+  icp.setTransformationEpsilon (ICP_TRANS_EPSILON);
+//  icp.setEuclideanFitnessEpsilon (1e-8);
+
   // Perform the aligment
   icp.align(*cloud_ICP);
 
@@ -238,11 +241,11 @@ void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
   {
     transform_ICP = icp.getFinalTransformation();
     fitnessScore = icp.getFitnessScore();
-    std::cout << "ICP converged with fitness score: " <<  icp.getFitnessScore() << std::endl;
+//    ROS_DEBUG_STREAM("ICP converged with fitness score: " <<  icp.getFitnessScore());
   }
   else
   {
-    std::cout << "ICP did not converge!" << std::endl;
+//    ROS_ERROR_STREAM("ICP did not converge!");
   }
 
   cloud_ICP->empty();
@@ -368,10 +371,20 @@ void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
 }
 
 
-//void calcTransMats(Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B, Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+
+
+
+#ifdef VIEW_ICP
 void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
-                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print)
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore,
+//                   pcl::visualization::PCLVisualizer viewerICP)
+                   wp3::Visualization & viewer)
+#else
+void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
+                   Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore)
+#endif
 {
   Eigen::Matrix4f transform_ATOb;
   Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
@@ -387,23 +400,66 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   bool ICP1_converged;
-  double fitnessScore1;
+  double fitnessScore2=1000, fitnessChange=1000;
+  float maxCorrDist = ICP_MAX_CORR_DIST;
   Eigen::Matrix4f transform_AtoB_ICP = transform_ATOb; // initial ArUco transformation
+  fitnessScore = 1000;
+
 
 //  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *tmpCloud, transform_AtoB_ICP);
   *tmpCloud = *sensorA.cloud1CrPtr_;
 
-  for(int i=0 ; i<8; i++)
+//  for(int i=0 ; i<10; i++)
+  int round = 1;
+  int iterations = ICP_ITERATIONS;
+  while(fitnessChange>ICP_CONVERGE) // fitness change used as converge criteria
   {
-    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8/(2^round), fitnessScore1);
+    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
     if (ICP1_converged)
     {
+      ROS_INFO_STREAM("Iterative ICP cycle: " << round << ", MaxDistance: " << maxCorrDist/round  <<"\tICP converged with fitness score: " <<  fitnessScore);
   //    Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
       transform_AtoB_ICP = transform_ICP.matrix()*transform_AtoB_ICP;
       pcl::transformPointCloud (*tmpCloud, *tmpCloud2, transform_ICP.matrix());
       *tmpCloud = *tmpCloud2;
+
+//      fitnessChange = std::abs(fitnessScore1-fitnessScore2)/fitnessScore1;
+      fitnessChange = std::abs(fitnessScore-fitnessScore2);
+      fitnessScore2 = fitnessScore;
+      round++;
+//      iterations = iterations*2;
     }
+    else
+    {
+      ROS_ERROR_STREAM("ICP did not converge!");
+    }
+
+
+
+#ifdef VIEW_ICP // ICP Viewer ----------------------
+    std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_icp;
+    std::map<std::string, Eigen::Matrix4f> transMap;
+    cloud_vector_icp.clear();
+    cloud_vector_icp.push_back(tmpCloud);
+    cloud_vector_icp.push_back(sensorB.cloudCrPtr_);
+    transMap.clear();
+    transMap.insert (std::pair<std::string, Eigen::Matrix4f> ("", transform_ICP.matrix() ));
+    viewer.runSingle(cloud_vector_icp, transMap);
+
+//    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_curr(tmpCloud,255,0,0);
+//    viewerICP.removeAllPointClouds();
+//    viewerICP.removeAllShapes();
+//    viewerICP.spinOnce(); // spin to clear
+//    viewerICP.addPointCloud<pcl::PointXYZ> (tmpCloud, "cloudA");
+//    viewerICP.addPointCloud<pcl::PointXYZ> (sensorB.cloudCrPtr_, "cloudB");
+//    viewerICP.setPointCloudRenderingProperties(color_curr,)
+//    viewerICP.spinOnce(); // spin to view
+#endif
   }
+//  std::cout << "ICP complete" << std::endl;
+
   sensorA.cloud2CrPtr_ = tmpCloud;
 //  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
   pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);

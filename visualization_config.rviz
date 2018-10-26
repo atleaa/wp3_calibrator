@@ -10,9 +10,9 @@ Panels:
         - /TF1/Frames1
         - /TF1/Tree1
         - /J2-SD-dm1/Auto Size1
-        - /J1-SD-dm-rgb1/Status1
         - /J1-SD-dm-rgb1/Occlusion Compensation1
         - /J1-SD-dm-rgb-acc1/Occlusion Compensation1
+        - /J3-Image1
         - /J1-SD-dm2/Auto Size1
         - /J1-SD-dm2/Autocompute Value Bounds1
         - /J2-SD-dm2/Auto Size1
@@ -23,25 +23,16 @@ Panels:
         - /J4-SD-dm2/Autocompute Value Bounds1
         - /J5-SD-dm2/Auto Size1
         - /J5-SD-dm2/Autocompute Value Bounds1
-        - /J1-Camera-HD1
-        - /J2-Camera-HD1/Visibility1
-        - /J1-SD-dm-rgb2/Auto Size1
-        - /J1-SD-dm-rgb2/Autocompute Value Bounds1
-        - /J1-SD-dm-rgb-HD2
-        - /J1-SD-dm-rgb-HD2/Auto Size1
-        - /J1-SD-dm-rgb-HD2/Autocompute Value Bounds1
-        - /J1-cloudify2
-        - /J1-acc-HD1
+        - /J1-SD2/Auto Size1
+        - /J1-SD2/Autocompute Value Bounds1
         - /J2-SD-dm-rgb2/Auto Size1
         - /J2-SD-dm-rgb2/Autocompute Value Bounds1
-        - /J2-SD-dm-rgb-HD1/Auto Size1
-        - /J2-SD-dm-rgb-HD1/Autocompute Value Bounds1
         - /J3-SD-dm-rgb2/Auto Size1
         - /J3-SD-dm-rgb2/Autocompute Value Bounds1
         - /J3-SD-dm-rgb-HD1/Auto Size1
         - /J3-SD-dm-rgb-HD1/Autocompute Value Bounds1
       Splitter Ratio: 0.512820542
-    Tree Height: 999
+    Tree Height: 588
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -61,7 +52,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: J3-SD-dm-rgb
+    SyncSource: J2-Image
   - Class: rviz/Selection
     Name: Selection
 Visualization Manager:
@@ -71,7 +62,7 @@ Visualization Manager:
       Cell Size: 1
       Class: rviz/Grid
       Color: 0; 0; 0
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -84,12 +75,12 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Alpha: 0.5
       Cell Size: 5
       Class: rviz/Grid
       Color: 160; 160; 164
-      Enabled: true
+      Enabled: false
       Line Style:
         Line Width: 0.0299999993
         Value: Lines
@@ -102,7 +93,7 @@ Visualization Manager:
       Plane: XY
       Plane Cell Count: 2
       Reference Frame: <Fixed Frame>
-      Value: true
+      Value: false
     - Alpha: 0.5
       Cell Size: 5
       Class: rviz/Grid
@@ -201,95 +192,19 @@ Visualization Manager:
       Reference Frame: world
       Value: false
     - Class: rviz/TF
-      Enabled: true
+      Enabled: false
       Frame Timeout: 15
       Frames:
         All Enabled: false
-        jetson1_ir_optical_frame:
-          Value: true
-        jetson1_link:
-          Value: true
-        jetson1_rgb_optical_frame:
-          Value: true
-        jetson2_ir_optical_frame:
-          Value: true
-        jetson2_link:
-          Value: true
-        jetson2_rgb_optical_frame:
-          Value: true
-        jetson3_ir_optical_frame:
-          Value: true
-        jetson3_link:
-          Value: true
-        jetson3_rgb_optical_frame:
-          Value: true
-        jetson4_ir_optical_frame:
-          Value: true
-        jetson4_link:
-          Value: true
-        jetson4_rgb_optical_frame:
-          Value: true
-        jetson5_ir_optical_frame:
-          Value: true
-        jetson5_link:
-          Value: true
-        jetson5_rgb_optical_frame:
-          Value: true
-        jetson6_ir_optical_frame:
-          Value: true
-        jetson6_link:
-          Value: true
-        jetson6_rgb_optical_frame:
-          Value: true
-        multisense/left_camera_optical_frame:
-          Value: true
-        velodyne:
-          Value: true
-        world:
-          Value: true
       Marker Scale: 3
       Name: TF
       Show Arrows: false
       Show Axes: true
       Show Names: false
       Tree:
-        world:
-          jetson1_ir_optical_frame:
-            jetson1_rgb_optical_frame:
-              {}
-          jetson1_link:
-            {}
-          jetson2_ir_optical_frame:
-            jetson2_rgb_optical_frame:
-              {}
-          jetson2_link:
-            {}
-          jetson3_ir_optical_frame:
-            jetson3_rgb_optical_frame:
-              {}
-          jetson3_link:
-            {}
-          jetson4_ir_optical_frame:
-            jetson4_rgb_optical_frame:
-              {}
-          jetson4_link:
-            {}
-          jetson5_ir_optical_frame:
-            jetson5_rgb_optical_frame:
-              {}
-          jetson5_link:
-            {}
-          jetson6_ir_optical_frame:
-            jetson6_rgb_optical_frame:
-              {}
-            multisense/left_camera_optical_frame:
-              {}
-            velodyne:
-              {}
-          jetson6_link:
-            {}
+        {}
       Update Interval: 0
-      Value: true
+      Value: false
     - Alpha: 1
       Auto Size:
         Auto Size Factor: 1
@@ -2830,12 +2745,16 @@ Visualization Manager:
         Grid2-H: true
         J1: true
         J1 dc: true
+        J1-Camera-HD: true
+        J1-HD: true
         J1-Image: true
         J1-Image-SD: true
         J1-Image-SDc: true
         J1-Image-dHD: true
         J1-Image-qHD: true
         J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
         J1-SD-dm: true
         J1-SD-dm-acc: true
         J1-SD-dm-rgb: true
@@ -2848,13 +2767,18 @@ Visualization Manager:
         J1-c-rainbow: true
         J1-cloudify: true
         J1-ir: true
+        J1-rgb-HD: true
         J2: true
+        J2-Camera-HD: true
+        J2-HD: true
         J2-Image: true
         J2-Image-SD: true
         J2-Image-SDc: true
         J2-Image-dHD: true
         J2-Image-qHD: true
         J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
         J2-SD-dm: true
         J2-SD-dm-acc: true
         J2-SD-dm-rgb: true
@@ -2876,6 +2800,7 @@ Visualization Manager:
         J3-SD-dm: true
         J3-SD-dm-acc: true
         J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
         J3-SD-dm-rgb-acc: true
         J3-SD-points: true
         J3-SD-points_acc: true
@@ -2885,6 +2810,7 @@ Visualization Manager:
         J3-cloudify: true
         J3-ir: true
         J4: true
+        J4-Camera-HD: true
         J4-Image: true
         J4-Image-SD: true
         J4-Image-SDc: true
@@ -2904,7 +2830,6 @@ Visualization Manager:
         J4-depth: true
         J4-ir: true
         J5: true
-        J5-Camera-SD: true
         J5-Image: true
         J5-Image-SD: true
         J5-Image-SDc: true
@@ -2980,12 +2905,16 @@ Visualization Manager:
         Grid2-H: true
         J1: true
         J1 dc: true
+        J1-Camera-HD: true
+        J1-HD: true
         J1-Image: true
         J1-Image-SD: true
         J1-Image-SDc: true
         J1-Image-dHD: true
         J1-Image-qHD: true
         J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
         J1-SD-dm: true
         J1-SD-dm-acc: true
         J1-SD-dm-rgb: true
@@ -2998,13 +2927,18 @@ Visualization Manager:
         J1-c-rainbow: true
         J1-cloudify: true
         J1-ir: true
+        J1-rgb-HD: true
         J2: true
+        J2-Camera-HD: true
+        J2-HD: true
         J2-Image: true
         J2-Image-SD: true
         J2-Image-SDc: true
         J2-Image-dHD: true
         J2-Image-qHD: true
         J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
         J2-SD-dm: true
         J2-SD-dm-acc: true
         J2-SD-dm-rgb: true
@@ -3026,6 +2960,7 @@ Visualization Manager:
         J3-SD-dm: true
         J3-SD-dm-acc: true
         J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
         J3-SD-dm-rgb-acc: true
         J3-SD-points: true
         J3-SD-points_acc: true
@@ -3035,6 +2970,7 @@ Visualization Manager:
         J3-cloudify: true
         J3-ir: true
         J4: true
+        J4-Camera-HD: true
         J4-Image: true
         J4-Image-SD: true
         J4-Image-SDc: true
@@ -3054,7 +2990,6 @@ Visualization Manager:
         J4-depth: true
         J4-ir: true
         J5: true
-        J5-Camera-SD: true
         J5-Image: true
         J5-Image-SD: true
         J5-Image-SDc: true
@@ -3641,7 +3576,7 @@ Visualization Manager:
       Unreliable: false
       Value: false
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /jetson3/hd/image_color_rect
       Max Value: 1
       Median window: 5
@@ -3651,7 +3586,7 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: false
       Image Topic: /jetson4/hd/image_color_rect
@@ -3995,7 +3930,7 @@ Visualization Manager:
       Use rainbow: false
       Value: false
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /jetson1/sd/image_color_rect
       Max Value: 1
       Median window: 5
@@ -4005,9 +3940,9 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /jetson2/sd/image_color_rect
       Max Value: 1
       Median window: 5
@@ -4017,7 +3952,7 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Image
       Enabled: false
       Image Topic: /jetson3/sd/image_color_rect
@@ -4043,7 +3978,7 @@ Visualization Manager:
       Unreliable: false
       Value: false
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /jetson5/sd/image_color_rect
       Max Value: 1
       Median window: 5
@@ -4053,9 +3988,9 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Image
-      Enabled: false
+      Enabled: true
       Image Topic: /jetson6/sd/image_color_rect
       Max Value: 1
       Median window: 5
@@ -4065,9 +4000,9 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: false
+      Value: true
     - Class: rviz/Camera
-      Enabled: true
+      Enabled: false
       Image Rendering: overlay
       Image Topic: /jetson1/hd/image_color_rect
       Name: J1-Camera-HD
@@ -4075,7 +4010,7 @@ Visualization Manager:
       Queue Size: 2
       Transport Hint: compressed
       Unreliable: false
-      Value: true
+      Value: false
       Visibility:
         A1 dc: true
         A1 pc2: true
@@ -4091,12 +4026,15 @@ Visualization Manager:
         Grid2-H: true
         J1: true
         J1 dc: true
+        J1-HD: true
         J1-Image: true
         J1-Image-SD: true
         J1-Image-SDc: true
         J1-Image-dHD: true
         J1-Image-qHD: true
         J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
         J1-SD-dm: true
         J1-SD-dm-acc: true
         J1-SD-dm-rgb: true
@@ -4105,23 +4043,25 @@ Visualization Manager:
         J1-SD-points: true
         J1-SD-points_acc: true
         J1-acc: true
-        J1-acc-HD: true
         J1-c: true
         J1-c-rainbow: true
         J1-cloudify: true
         J1-ir: true
+        J1-rgb-HD: true
         J2: true
         J2-Camera-HD: true
+        J2-HD: true
         J2-Image: true
         J2-Image-SD: true
         J2-Image-SDc: true
         J2-Image-dHD: true
         J2-Image-qHD: true
         J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
         J2-SD-dm: true
         J2-SD-dm-acc: true
         J2-SD-dm-rgb: true
-        J2-SD-dm-rgb-HD: true
         J2-SD-dm-rgb-acc: true
         J2-SD-points: true
         J2-SD-points_acc: true
@@ -4170,6 +4110,7 @@ Visualization Manager:
         J4-depth: true
         J4-ir: true
         J5: true
+        J5-HD: true
         J5-Image: true
         J5-Image-SD: true
         J5-Image-SDc: true
@@ -4187,320 +4128,18 @@ Visualization Manager:
         J5-c-rainbow: true
         J5-cloudify: true
         J5-ir: true
+        J5-sd: true
         J6: true
         J6 HD: true
+        J6-Camera-HD: true
+        J6-HD: true
         J6-Image: true
         J6-Image-SD: true
         J6-Image-SDc: true
         J6-Image-dHD: true
         J6-Image-qHD: true
         J6-QHD-points_acc: true
-        J6-SD-dm: true
-        J6-SD-dm-acc: true
-        J6-SD-dm-rgb: true
-        J6-SD-dm-rgb-acc: true
-        J6-SD-points: true
-        J6-SD-points_acc: true
-        J6-acc: true
-        J6-c: true
-        J6-c-rainbow: true
-        J6-cloudify: true
-        J6-ir: true
-        K2-SD-points: true
-        K2DepthCloud: true
-        TF: true
-        VLP-16: true
-        Value: true
-        kinec2 IR Image: true
-        kinect2 depth: true
-        multi DepthCloud: true
-        multi PointCloud2: true
-        multi depth: true
-        multi left color: true
-        robot1: true
-        robot1sim: true
-      Zoom Factor: 2
-    - Class: rviz/Camera
-      Enabled: false
-      Image Rendering: overlay
-      Image Topic: /jetson2/hd/image_color_rect
-      Name: J2-Camera-HD
-      Overlay Alpha: 0.5
-      Queue Size: 2
-      Transport Hint: compressed
-      Unreliable: false
-      Value: false
-      Visibility:
-        A1 dc: true
-        A1 pc2: true
-        Axes: true
-        Camera3: true
-        Camera4: true
-        Grid: true
-        Grid wall XZ: true
-        Grid wall YZ: true
-        Grid wall YZ2: true
-        Grid-H: true
-        Grid2: true
-        Grid2-H: true
-        J1: true
-        J1 dc: true
-        J1-Camera-HD: true
-        J1-Image: true
-        J1-Image-SD: true
-        J1-Image-SDc: true
-        J1-Image-dHD: true
-        J1-Image-qHD: true
-        J1-QHD-points_acc: true
-        J1-SD-dm: true
-        J1-SD-dm-acc: true
-        J1-SD-dm-rgb: true
-        J1-SD-dm-rgb-HD: true
-        J1-SD-dm-rgb-acc: true
-        J1-SD-points: true
-        J1-SD-points_acc: true
-        J1-acc: true
-        J1-acc-HD: true
-        J1-c: true
-        J1-c-rainbow: true
-        J1-cloudify: true
-        J1-ir: true
-        J2: true
-        J2-Image: true
-        J2-Image-SD: true
-        J2-Image-SDc: true
-        J2-Image-dHD: true
-        J2-Image-qHD: true
-        J2-QHD-points_acc: true
-        J2-SD-dm: true
-        J2-SD-dm-acc: true
-        J2-SD-dm-rgb: true
-        J2-SD-dm-rgb-HD: true
-        J2-SD-dm-rgb-acc: true
-        J2-SD-points: true
-        J2-SD-points_acc: true
-        J2-acc: true
-        J2-c: true
-        J2-c-rainbow: true
-        J2-cloudify: true
-        J2-ir: true
-        J3: true
-        J3-Image: true
-        J3-Image-SD: true
-        J3-Image-SDc: true
-        J3-Image-dHD: true
-        J3-Image-qHD: true
-        J3-QHD-points_acc: true
-        J3-SD-dm: true
-        J3-SD-dm-acc: true
-        J3-SD-dm-rgb: true
-        J3-SD-dm-rgb-HD: true
-        J3-SD-dm-rgb-acc: true
-        J3-SD-points: true
-        J3-SD-points_acc: true
-        J3-acc: true
-        J3-c: true
-        J3-c-rainbow: true
-        J3-cloudify: true
-        J3-ir: true
-        J4: true
-        J4-Camera-HD: true
-        J4-Image: true
-        J4-Image-SD: true
-        J4-Image-SDc: true
-        J4-Image-dHD: true
-        J4-Image-qHD: true
-        J4-QHD-points_acc: true
-        J4-SD-dm: true
-        J4-SD-dm-acc: true
-        J4-SD-dm-rgb: false
-        J4-SD-dm-rgb-acc: true
-        J4-SD-points: true
-        J4-SD-points_acc: true
-        J4-acc: true
-        J4-c: true
-        J4-c-rainbow: true
-        J4-cloudify: true
-        J4-depth: true
-        J4-ir: true
-        J5: true
-        J5-Image: true
-        J5-Image-SD: true
-        J5-Image-SDc: true
-        J5-Image-dHD: true
-        J5-Image-qHD: true
-        J5-QHD-points_acc: true
-        J5-SD-dm: true
-        J5-SD-dm-acc: true
-        J5-SD-dm-rgb: true
-        J5-SD-dm-rgb-acc: true
-        J5-SD-points: true
-        J5-SD-points_acc: true
-        J5-acc: true
-        J5-c: true
-        J5-c-rainbow: true
-        J5-cloudify: true
-        J5-ir: true
-        J6: true
-        J6 HD: true
-        J6-Image: true
-        J6-Image-SD: true
-        J6-Image-SDc: true
-        J6-Image-dHD: true
-        J6-Image-qHD: true
-        J6-QHD-points_acc: true
-        J6-SD-dm: true
-        J6-SD-dm-acc: true
-        J6-SD-dm-rgb: true
-        J6-SD-dm-rgb-acc: true
-        J6-SD-points: true
-        J6-SD-points_acc: true
-        J6-acc: true
-        J6-c: true
-        J6-c-rainbow: true
-        J6-cloudify: true
-        J6-ir: true
-        K2-SD-points: true
-        K2DepthCloud: true
-        TF: true
-        VLP-16: true
-        Value: true
-        kinec2 IR Image: true
-        kinect2 depth: true
-        multi DepthCloud: true
-        multi PointCloud2: true
-        multi depth: true
-        multi left color: true
-        robot1: true
-        robot1sim: true
-      Zoom Factor: 2
-    - Class: rviz/Camera
-      Enabled: false
-      Image Rendering: overlay
-      Image Topic: /jetson4/hd/image_color_rect
-      Name: J4-Camera-HD
-      Overlay Alpha: 0.5
-      Queue Size: 2
-      Transport Hint: compressed
-      Unreliable: false
-      Value: false
-      Visibility:
-        "": true
-        A1 dc: true
-        A1 pc2: true
-        Axes: true
-        Camera3: true
-        Camera4: true
-        Grid: true
-        Grid wall XZ: true
-        Grid wall YZ: true
-        Grid wall YZ2: true
-        Grid-H: true
-        Grid2: true
-        Grid2-H: true
-        J1: true
-        J1 dc: true
-        J1-Camera-HD: true
-        J1-Image: true
-        J1-Image-SD: true
-        J1-Image-SDc: true
-        J1-Image-dHD: true
-        J1-Image-qHD: true
-        J1-QHD-points_acc: true
-        J1-SD-dm: true
-        J1-SD-dm-acc: true
-        J1-SD-dm-rgb: false
-        J1-SD-dm-rgb-HD: true
-        J1-SD-dm-rgb-acc: true
-        J1-SD-points: true
-        J1-SD-points_acc: true
-        J1-acc: true
-        J1-c: true
-        J1-c-rainbow: true
-        J1-cloudify: true
-        J1-ir: true
-        J2: true
-        J2-Camera-HD: true
-        J2-Image: true
-        J2-Image-SD: true
-        J2-Image-SDc: true
-        J2-Image-dHD: true
-        J2-Image-qHD: true
-        J2-QHD-points_acc: true
-        J2-SD-dm: true
-        J2-SD-dm-acc: true
-        J2-SD-dm-rgb: false
-        J2-SD-dm-rgb-acc: true
-        J2-SD-points: true
-        J2-SD-points_acc: true
-        J2-acc: true
-        J2-c: true
-        J2-c-rainbow: true
-        J2-cloudify: true
-        J2-ir: true
-        J3: true
-        J3-Image: true
-        J3-Image-SD: true
-        J3-Image-SDc: true
-        J3-Image-dHD: true
-        J3-Image-qHD: true
-        J3-QHD-points_acc: true
-        J3-SD-dm: true
-        J3-SD-dm-acc: true
-        J3-SD-dm-rgb: true
-        J3-SD-dm-rgb-acc: true
-        J3-SD-points: true
-        J3-SD-points_acc: true
-        J3-acc: true
-        J3-c: true
-        J3-c-rainbow: true
-        J3-cloudify: true
-        J3-ir: true
-        J4: true
-        J4-Image: true
-        J4-Image-SD: true
-        J4-Image-SDc: true
-        J4-Image-dHD: true
-        J4-Image-qHD: true
-        J4-QHD-points_acc: true
-        J4-SD-dm: true
-        J4-SD-dm-acc: true
-        J4-SD-dm-rgb: true
-        J4-SD-dm-rgb-acc: true
-        J4-SD-points: true
-        J4-SD-points_acc: true
-        J4-acc: true
-        J4-c: true
-        J4-c-rainbow: true
-        J4-cloudify: true
-        J4-depth: true
-        J4-ir: true
-        J5: true
-        J5-Image: true
-        J5-Image-SD: true
-        J5-Image-SDc: true
-        J5-Image-dHD: true
-        J5-Image-qHD: true
-        J5-QHD-points_acc: true
-        J5-SD-dm: true
-        J5-SD-dm-acc: true
-        J5-SD-dm-rgb: true
-        J5-SD-dm-rgb-acc: true
-        J5-SD-points: true
-        J5-SD-points_acc: true
-        J5-acc: true
-        J5-c: true
-        J5-c-rainbow: true
-        J5-cloudify: true
-        J5-ir: true
-        J6: true
-        J6 HD: true
-        J6-Image: true
-        J6-Image-SD: true
-        J6-Image-SDc: true
-        J6-Image-dHD: true
-        J6-Image-qHD: true
-        J6-QHD-points_acc: true
+        J6-SD: true
         J6-SD-dm: true
         J6-SD-dm-acc: true
         J6-SD-dm-rgb: true
@@ -4526,114 +4165,6 @@ Visualization Manager:
         robot1: true
         robot1sim: true
       Zoom Factor: 1
-    - Alpha: 0.699999988
-      Auto Size:
-        Auto Size Factor: 1.5
-        Value: false
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: 3.00000024
-        Value: false
-      Axis: Z
-      Channel Name: rgb
-      Class: rviz/DepthCloud
-      Color: 100; 255; 255
-      Color Image Topic: /jetson1/sd/image_color_rect
-      Color Transformer: RGB8
-      Color Transport Hint: compressed
-      Decay Time: 0
-      Depth Map Topic: /jetson1/sd/image_depth_rect
-      Depth Map Transport Hint: compressed
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 50; 255; 255
-      Max Intensity: 10
-      Min Color: 20; 55; 55
-      Min Intensity: 3
-      Name: J1-SD-dm-rgb
-      Occlusion Compensation:
-        Occlusion Time-Out: 1
-        Value: false
-      Position Transformer: XYZ
-      Queue Size: 5
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.00999999978
-      Style: Flat Squares
-      Topic Filter: true
-      Use Fixed Frame: false
-      Use rainbow: false
-      Value: true
-    - Alpha: 0.5
-      Auto Size:
-        Auto Size Factor: 1.5
-        Value: false
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 10
-        Min Value: 3.00000024
-        Value: false
-      Axis: Z
-      Channel Name: rgb
-      Class: rviz/DepthCloud
-      Color: 100; 255; 255
-      Color Image Topic: /jetson1/hd/image_color_rect
-      Color Transformer: FlatColor
-      Color Transport Hint: compressed
-      Decay Time: 0
-      Depth Map Topic: /jetson1/hd/image_depth_rect
-      Depth Map Transport Hint: compressed
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 50; 255; 255
-      Max Intensity: 10
-      Min Color: 20; 55; 55
-      Min Intensity: 3
-      Name: J1-SD-dm-rgb-HD
-      Occlusion Compensation:
-        Occlusion Time-Out: 1
-        Value: false
-      Position Transformer: XYZ
-      Queue Size: 5
-      Selectable: true
-      Size (Pixels): 3
-      Size (m): 0.00499999989
-      Style: Flat Squares
-      Topic Filter: true
-      Use Fixed Frame: false
-      Use rainbow: false
-      Value: true
-    - Alpha: 0.5
-      Autocompute Intensity Bounds: false
-      Autocompute Value Bounds:
-        Max Value: 7.92487049
-        Min Value: -5.45414352
-        Value: true
-      Axis: Z
-      Channel Name: z
-      Class: rviz/PointCloud2
-      Color: 255; 255; 255
-      Color Transformer: Intensity
-      Decay Time: 0
-      Enabled: true
-      Invert Rainbow: false
-      Max Color: 255; 150; 150
-      Max Intensity: 10
-      Min Color: 100; 0; 0
-      Min Intensity: 3
-      Name: J1-cloudify
-      Position Transformer: XYZ
-      Queue Size: 1
-      Selectable: true
-      Size (Pixels): 1
-      Size (m): 0.00999999978
-      Style: Flat Squares
-      Topic: /master/jetson1/points
-      Unreliable: false
-      Use Fixed Frame: true
-      Use rainbow: false
-      Value: true
     - Alpha: 0.5
       Autocompute Intensity Bounds: false
       Autocompute Value Bounds:
@@ -4652,7 +4183,7 @@ Visualization Manager:
       Max Intensity: 15
       Min Color: 55; 20; 20
       Min Intensity: 1
-      Name: J1-acc
+      Name: J1-SD
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -4673,16 +4204,124 @@ Visualization Manager:
       Axis: Z
       Channel Name: z
       Class: rviz/PointCloud2
-      Color: 255; 0; 255
-      Color Transformer: FlatColor
+      Color: 255; 255; 255
+      Color Transformer: Intensity
       Decay Time: 0
-      Enabled: true
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J1-SD-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson1/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.699999988
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/hd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson1/hd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-rgb-HD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 0; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
       Invert Rainbow: false
       Max Color: 255; 50; 50
       Max Intensity: 15
       Min Color: 55; 20; 20
       Min Intensity: 1
-      Name: J1-acc-HD
+      Name: J1-HD
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
@@ -4693,7 +4332,7 @@ Visualization Manager:
       Unreliable: false
       Use Fixed Frame: true
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.800000012
       Auto Size:
         Auto Size Factor: 1.5
@@ -4733,6 +4372,299 @@ Visualization Manager:
       Use Fixed Frame: false
       Use rainbow: false
       Value: false
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: overlay
+      Image Topic: /jetson2/hd/image_color_rect
+      Name: J2-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 5
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+      Visibility:
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Camera-HD: true
+        J1-HD: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: false
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J1-rgb-HD: true
+        J2: true
+        J2-HD: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Camera-HD: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: false
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-HD: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J5-sd: true
+        J6: true
+        J6 HD: true
+        J6-Camera-HD: true
+        J6-HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1.5
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 0; 0
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J2-SD
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic: /jetson2/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.300000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 150; 150
+      Max Intensity: 10
+      Min Color: 100; 0; 0
+      Min Intensity: 3
+      Name: J2-SD-cloudify
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /master/jetson2/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 0; 0; 255
+      Color Image Topic: /jetson2/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 0
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.5
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 7.92487049
+        Min Value: -5.45414352
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 0; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 50; 50
+      Max Intensity: 15
+      Min Color: 55; 20; 20
+      Min Intensity: 1
+      Name: J2-HD
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 1
+      Size (m): 0.00300000003
+      Style: Flat Squares
+      Topic: /jetson2/hd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
     - Alpha: 0.5
       Auto Size:
         Auto Size Factor: 1.5
@@ -4749,7 +4681,7 @@ Visualization Manager:
       Color Image Topic: /jetson2/hd/image_color_rect
       Color Transformer: RGB8
       Color Transport Hint: compressed
-      Decay Time: 0
+      Decay Time: 3
       Depth Map Topic: /jetson2/hd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -4758,7 +4690,7 @@ Visualization Manager:
       Max Intensity: 10
       Min Color: 20; 55; 55
       Min Intensity: 3
-      Name: J2-SD-dm-rgb-HD
+      Name: J2-HD
       Occlusion Compensation:
         Occlusion Time-Out: 1
         Value: false
@@ -4766,7 +4698,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00499999989
+      Size (m): 0.00400000019
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -4850,9 +4782,455 @@ Visualization Manager:
       Use Fixed Frame: false
       Use rainbow: false
       Value: false
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: overlay
+      Image Topic: /jetson4/hd/image_color_rect
+      Name: J4-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+      Visibility:
+        "": true
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Camera-HD: true
+        J1-HD: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J1-rgb-HD: true
+        J2: true
+        J2-Camera-HD: true
+        J2-HD: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Camera-HD: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: true
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J6: true
+        J6 HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 155; 155; 120
+      Min Intensity: 1
+      Name: J5-sd
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00999999978
+      Style: Flat Squares
+      Topic: /jetson5/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 5
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 155; 155; 120
+      Min Intensity: 1
+      Name: J5-HD
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00400000019
+      Style: Flat Squares
+      Topic: /jetson5/hd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Class: rviz/Camera
+      Enabled: false
+      Image Rendering: overlay
+      Image Topic: /jetson6/hd/image_color_rect
+      Name: J6-Camera-HD
+      Overlay Alpha: 0.5
+      Queue Size: 2
+      Transport Hint: compressed
+      Unreliable: false
+      Value: false
+      Visibility:
+        A1 dc: true
+        A1 pc2: true
+        Axes: true
+        Camera3: true
+        Camera4: true
+        Grid: true
+        Grid wall XZ: true
+        Grid wall YZ: true
+        Grid wall YZ2: true
+        Grid-H: true
+        Grid2: true
+        Grid2-H: true
+        J1: true
+        J1 dc: true
+        J1-Camera-HD: true
+        J1-HD: true
+        J1-Image: true
+        J1-Image-SD: true
+        J1-Image-SDc: true
+        J1-Image-dHD: true
+        J1-Image-qHD: true
+        J1-QHD-points_acc: true
+        J1-SD: true
+        J1-SD-cloudify: true
+        J1-SD-dm: true
+        J1-SD-dm-acc: true
+        J1-SD-dm-rgb: true
+        J1-SD-dm-rgb-HD: true
+        J1-SD-dm-rgb-acc: true
+        J1-SD-points: true
+        J1-SD-points_acc: true
+        J1-acc: true
+        J1-c: true
+        J1-c-rainbow: true
+        J1-cloudify: true
+        J1-ir: true
+        J1-rgb-HD: true
+        J2: true
+        J2-Camera-HD: true
+        J2-HD: true
+        J2-Image: true
+        J2-Image-SD: true
+        J2-Image-SDc: true
+        J2-Image-dHD: true
+        J2-Image-qHD: true
+        J2-QHD-points_acc: true
+        J2-SD: true
+        J2-SD-cloudify: true
+        J2-SD-dm: true
+        J2-SD-dm-acc: true
+        J2-SD-dm-rgb: true
+        J2-SD-dm-rgb-acc: true
+        J2-SD-points: true
+        J2-SD-points_acc: true
+        J2-acc: true
+        J2-c: true
+        J2-c-rainbow: true
+        J2-cloudify: true
+        J2-ir: true
+        J3: true
+        J3-Image: true
+        J3-Image-SD: true
+        J3-Image-SDc: true
+        J3-Image-dHD: true
+        J3-Image-qHD: true
+        J3-QHD-points_acc: true
+        J3-SD-dm: true
+        J3-SD-dm-acc: true
+        J3-SD-dm-rgb: true
+        J3-SD-dm-rgb-HD: true
+        J3-SD-dm-rgb-acc: true
+        J3-SD-points: true
+        J3-SD-points_acc: true
+        J3-acc: true
+        J3-c: true
+        J3-c-rainbow: true
+        J3-cloudify: true
+        J3-ir: true
+        J4: true
+        J4-Camera-HD: true
+        J4-Image: true
+        J4-Image-SD: true
+        J4-Image-SDc: true
+        J4-Image-dHD: true
+        J4-Image-qHD: true
+        J4-QHD-points_acc: true
+        J4-SD-dm: true
+        J4-SD-dm-acc: true
+        J4-SD-dm-rgb: true
+        J4-SD-dm-rgb-acc: true
+        J4-SD-points: true
+        J4-SD-points_acc: true
+        J4-acc: true
+        J4-c: true
+        J4-c-rainbow: true
+        J4-cloudify: true
+        J4-depth: true
+        J4-ir: true
+        J5: true
+        J5-HD: true
+        J5-Image: true
+        J5-Image-SD: true
+        J5-Image-SDc: true
+        J5-Image-dHD: true
+        J5-Image-qHD: true
+        J5-QHD-points_acc: true
+        J5-SD-dm: true
+        J5-SD-dm-acc: true
+        J5-SD-dm-rgb: true
+        J5-SD-dm-rgb-acc: true
+        J5-SD-points: true
+        J5-SD-points_acc: true
+        J5-acc: true
+        J5-c: true
+        J5-c-rainbow: true
+        J5-cloudify: true
+        J5-ir: true
+        J5-sd: true
+        J6: true
+        J6 HD: true
+        J6-Camera-HD: true
+        J6-HD: true
+        J6-Image: true
+        J6-Image-SD: true
+        J6-Image-SDc: true
+        J6-Image-dHD: true
+        J6-Image-qHD: true
+        J6-QHD-points_acc: true
+        J6-SD: true
+        J6-SD-dm: true
+        J6-SD-dm-acc: true
+        J6-SD-dm-rgb: true
+        J6-SD-dm-rgb-acc: true
+        J6-SD-points: true
+        J6-SD-points_acc: true
+        J6-acc: true
+        J6-c: true
+        J6-c-rainbow: true
+        J6-cloudify: true
+        J6-ir: true
+        K2-SD-points: true
+        K2DepthCloud: true
+        TF: true
+        VLP-16: true
+        Value: true
+        kinec2 IR Image: true
+        kinect2 depth: true
+        multi DepthCloud: true
+        multi PointCloud2: true
+        multi depth: true
+        multi left color: true
+        robot1: true
+        robot1sim: true
+      Zoom Factor: 1
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 155; 155; 120
+      Min Intensity: 1
+      Name: J6-SD
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0120000001
+      Style: Flat Squares
+      Topic: /jetson6/sd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.800000012
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: z
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: RGB8
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 50
+      Max Intensity: 10
+      Min Color: 155; 155; 120
+      Min Intensity: 1
+      Name: J6-HD
+      Position Transformer: XYZ
+      Queue Size: 1
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00400000019
+      Style: Flat Squares
+      Topic: /jetson6/hd/points
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: false
+      Value: false
   Enabled: true
   Global Options:
-    Background Color: 200; 200; 200
+    Background Color: 100; 100; 100
     Default Light: true
     Fixed Frame: world
     Frame Rate: 10
@@ -4875,25 +5253,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.66629291
+      Distance: 6.77921581
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.04173088
-        Y: 4.85382175
-        Z: -0.742443502
+        X: 2.57357693
+        Y: 3.31898904
+        Z: 2.21913505
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.52479637
+      Pitch: 1.11368084
       Target Frame: map
       Value: Orbit (rviz)
-      Yaw: 4.73239803
+      Yaw: 0.100175031
     Saved:
       - Class: rviz/Orbit
         Distance: 8.35884762
@@ -5130,6 +5508,26 @@ Visualization Manager:
         Target Frame: map
         Value: Orbit (rviz)
         Yaw: -1.57079637
+      - Class: rviz/Orbit
+        Distance: 2.14488173
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 6.01128864
+          Y: 3.30342436
+          Z: 0.00476751151
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: Atle-report-20181022
+        Near Clip Distance: 0.00999999978
+        Pitch: 1.56979632
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 5.52198792
 Window Geometry:
   Camera3:
     collapsed: false
@@ -5137,7 +5535,7 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1176
+  Height: 1059
   Hide Left Dock: false
   Hide Right Dock: true
   J1-Camera-HD:
@@ -5208,6 +5606,8 @@ Window Geometry:
     collapsed: false
   J5-ir:
     collapsed: false
+  J6-Camera-HD:
+    collapsed: false
   J6-Image:
     collapsed: false
   J6-Image-SD:
@@ -5220,7 +5620,7 @@ Window Geometry:
     collapsed: false
   J6-ir:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016700000442fc0200000040fc0000003b00000442000000f10100001afa000000010100000003fb0000000a004a0031002d00690072020000017e000001770000016e00000150fb000000100044006900730070006c0061007900730100000000ffffffff0000016700fffffffb0000000a005600690065007700730100000000000001670000010d00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001200530065006c0065006300740069006f006e0000000263000001a50000006100fffffffb00000010004a0031002d0049006d00610067006502000004760000011000000184000000f3fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000028000000640000006100fffffffb00000016004a0032002d0049006d006100670065002d0053004402000001de000000150000019300000140fb0000000a004a0034002d0069007202000002ef0000001e0000018500000158fb0000000a004a0036002d0069007202000002f1000002cc0000017b00000142fb00000016006d0075006c007400690020006400650070007400680200000210000000b7000004be000002bafb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000016004a0034002d0049006d006100670065002d0053004402000003d60000001e0000018200000147fb00000016004a0031002d0049006d006100670065002d0053004402000001de0000015c000001bb00000158fb00000018004a0032002d0049006d006100670065002d00710048004402000001ca000000150000020a00000144fb00000010004a0033002d0049006d00610067006502000004730000020100000189000000f9fb0000001200530065006c0065006300740069006f006e00000001c2000002060000006100fffffffb0000000a004a0035002d0069007202000002ed000001780000018800000152fb00000010004a0034002d0064006500700074006802000001ba000000bc0000042f00000342fb000000120044006900730070006c006100790073003200000002e3000001250000000000000000fb0000000c00430061006d00650072006102000001ee000001450000031c00000220fb0000000e00430061006d006500720061003302000000f9000000b800000407000002fcfb0000001800430061006d00650072006100640065007000740068003302000001f8000000b20000042c0000032bfb0000000e00430061006d006500720061003402000000c9000000ab0000043700000312fb0000000e00430061006d0065007200610033000000019f000000580000000000000000fb00000010004a0034002d0064006500700074006800000001c2000000600000000000000000fb00000018004a0036002d0049006d006100670065002d00710048004402000003e9000002950000021500000157fb0000000a004a0034002d00690072000000021f000000760000000000000000fb0000000a004a0036002d00690072000000025e000000840000000000000000fb0000000a004a0033002d00690072020000017a000002c90000017600000144fb0000000e00430061006d006500720061003400000003ac000000d40000000000000000fb0000001e006b0069006e00650063003200200049005200200049006d00610067006502000001a30000002e000005a90000046afb0000000a0049006d0061006700650000000338000000d00000000000000000fb0000001a006b0069006e0065006300740032002000640065007000740068000000030c000000fc0000001600fffffffb00000018004a0031002d0049006d006100670065002d00640048004402000002eb000000ed0000010e000000b9fb00000018004a0032002d0049006d006100670065002d00640048004402000002e1000000150000010e000000cafb00000018004a0033002d0049006d006100670065002d00640048004402000002e1000001ab0000011f000000c3fb00000018004a0034002d0049006d006100670065002d00640048004402000001e20000002a0000054000000421fb00000018004a0035002d0049006d006100670065002d0064004800440200000400000000e80000013f000000cafb00000018004a0031002d0049006d006100670065002d00710048004402000001c900000150000001f800000148fb00000010004a0032002d0049006d00610067006502000004730000001e00000188000000f1fb00000016004a0033002d0049006d006100670065002d0053004402000001dc000002b7000001b10000015bfb00000018004a0034002d0049006d006100670065002d00710048004402000003ed0000001e0000020e00000148fb00000016004a0035002d0049006d006100670065002d0053004402000003d1000001620000019c0000014dfb00000016004a0036002d0049006d006100670065002d0053004402000003ca000002ae000001ab0000016efb00000010004a0031002d0049006d006100670065030000022d00000136000001d600000155fb00000010004a0032002d0049006d006100670065030000023200000015000001cb00000122fb00000018004a0033002d0049006d006100670065002d00710048004402000001da0000029a000001e700000156fb00000010004a0034002d0049006d00610067006502000005fe0000001e0000017f000000f2fb00000018004a0035002d0049006d006100670065002d00710048004402000003f30000015c0000021200000143fb00000010004a0036002d0049006d00610067006502000005fd0000020300000180000000f3fb0000000a004a0033002d006900720300000121000002d1000001a70000016afb0000000a004a0032002d00690072020000017d0000001e000001710000015bfb00000018004a0031002d0049006d006100670065002d00530044006302000001c00000010d0000015a000000fafb00000018004a0032002d0049006d006100670065002d00530044006302000001bf0000001500000154000000effb00000018004a0033002d0049006d006100670065002d00530044006302000001bf0000020700000152000000f1fb00000018004a0034002d0049006d006100670065002d005300440063020000031b0000001500000126000000f0fb00000018004a0035002d0049006d006100670065002d00530044006302000003130000010d0000012b000000f8fb00000018004a0036002d0049006d006100670065002d0053004400630200000312000002060000012c000000f7fb0000000e00430061006d006500720061003102000002ed0000010a000002ee000001d3fb00000018004a0031002d00430061006d006500720061002d00480044030000017400000029000005b30000046bfb00000018004a0032002d00430061006d006500720061002d0048004402000001a200000020000005de00000478fb00000018004a0034002d00430061006d006500720061002d0048004402000001960000001e000005ea00000478000000010000010f000003bcfc0200000001fb0000001e0054006f006f006c002000500072006f0070006500720074006900650073010000004100000078000000000000000000000002000007470000017efc0100000007fb00000018004a0036002d0049006d006100670065002d00640048004402000001fd0000008c000004f1000003c5fc00000000000007470000000000fffffffa000000000200000002fb00000010004a0036002d0049006d0061006700650300000653000001a80000013b000000bcfb00000010004a0033002d0049006d006100670065030000053a0000019800000119000000a6fb00000010004a0034002d0049006d00610067006503000006590000001e00000105000000b0fb00000020006d0075006c007400690020006c00650066007400200063006f006c006f007202000001ae000000ad000002f3000002f5fb00000010004a0035002d0049006d00610067006502000005fe0000011100000180000000f0fb00000010004a0035002d0049006d0061006700650000000000000007470000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003bfc0100000002fb0000000800540069006d006500000000000000064f000002a400fffffffb0000000800540069006d00650100000000000004500000000000000000000006140000044200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd000000040000000000000167000003cdfc0200000040fc0000003b000002a7000000f10100001afa000000010100000003fb0000000a004a0031002d00690072020000017e000001770000016e00000150fb000000100044006900730070006c0061007900730100000000ffffffff0000016700fffffffb0000000a005600690065007700730100000000000001670000010d00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001200530065006c0065006300740069006f006e01000002e7000001210000006100fffffffb00000010004a0031002d0049006d0061006700650200000413000000ee000002fc00000220fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000028000000640000006100fffffffb00000016004a0032002d0049006d006100670065002d0053004402000001de000000150000019300000140fb0000000a004a0034002d0069007202000002ef0000001e0000018500000158fb0000000a004a0036002d0069007202000002f1000002cc0000017b00000142fb00000016006d0075006c007400690020006400650070007400680200000210000000b7000004be000002bafb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000016004a0034002d0049006d006100670065002d0053004402000003d60000001e0000018200000147fb00000016004a0031002d0049006d006100670065002d0053004402000001de0000015c000001bb00000158fb00000018004a0032002d0049006d006100670065002d00710048004402000001ca000000150000020a00000144fb00000010004a0033002d0049006d0061006700650300001faf0000003c000005c6000003cdfb0000001200530065006c0065006300740069006f006e00000001c2000002060000006100fffffffb0000000a004a0035002d0069007202000002ed000001780000018800000152fb00000010004a0034002d0064006500700074006802000001ba000000bc0000042f00000342fb000000120044006900730070006c006100790073003200000002e3000001250000000000000000fb0000000c00430061006d00650072006102000001ee000001450000031c00000220fb0000000e00430061006d006500720061003302000000f9000000b800000407000002fcfb0000001800430061006d00650072006100640065007000740068003302000001f8000000b20000042c0000032bfb0000000e00430061006d006500720061003402000000c9000000ab0000043700000312fb0000000e00430061006d0065007200610033000000019f000000580000000000000000fb00000010004a0034002d0064006500700074006800000001c2000000600000000000000000fb00000018004a0036002d0049006d006100670065002d00710048004402000003e9000002950000021500000157fb0000000a004a0034002d00690072000000021f000000760000000000000000fb0000000a004a0036002d00690072000000025e000000840000000000000000fb0000000a004a0033002d0069007202000008e300000039000005f9000003c9fb0000000e00430061006d006500720061003400000003ac000000d40000000000000000fb0000001e006b0069006e00650063003200200049005200200049006d00610067006502000001a300000000000005a900000438fb0000000a0049006d0061006700650000000338000000d00000000000000000fb0000001a006b0069006e0065006300740032002000640065007000740068000000030c000000fc0000001600fffffffb00000018004a0031002d0049006d006100670065002d00640048004402000002eb000000ed0000010e000000b9fb00000018004a0032002d0049006d006100670065002d00640048004402000002e1000000150000010e000000cafb00000018004a0033002d0049006d006100670065002d00640048004402000002e1000001ab0000011f000000c3fb00000018004a0034002d0049006d006100670065002d00640048004402000001e2000000170000054000000421fb00000018004a0035002d0049006d006100670065002d0064004800440200000400000000e80000013f000000cafb00000018004a0031002d0049006d006100670065002d00710048004402000001c900000150000001f800000148fb00000016004a0033002d0049006d006100670065002d0053004402000001dc000002b7000001b10000015bfb00000018004a0034002d0049006d006100670065002d00710048004402000003ed0000001e0000020e00000148fb00000016004a0035002d0049006d006100670065002d0053004402000003d1000001620000019c0000014dfb00000016004a0036002d0049006d006100670065002d0053004402000003ca000002ae000001ab0000016efb00000010004a0031002d0049006d006100670065030000022d00000136000001d600000155fb00000010004a0032002d0049006d006100670065020000023200000015000001cb00000122fb00000018004a0033002d0049006d006100670065002d00710048004402000001da0000029a000001e700000156fb00000010004a0034002d0049006d006100670065020000047c000001310000017f000000f2fb00000018004a0035002d0049006d006100670065002d00710048004402000003f30000015c0000021200000143fb00000010004a0036002d0049006d006100670065020000047a0000004000000180000000f3fb0000000a004a0033002d006900720300000121000002d1000001a70000016afb0000000a004a0032002d00690072020000017d0000001e000001710000015bfb00000018004a0031002d0049006d006100670065002d0053004400630300000165000000d60000034f000002d4fb00000018004a0032002d0049006d006100670065002d0053004400630300000421000000d00000035c000002ccfb00000018004a0033002d0049006d006100670065002d00530044006302000001bf0000020700000152000000f1fb00000018004a0034002d0049006d006100670065002d005300440063020000031b0000001500000126000000f0fb00000018004a0035002d0049006d006100670065002d00530044006303000003130000010d0000012b000000f8fb00000018004a0036002d0049006d006100670065002d00530044006303000002400000014f0000018000000110fb0000000e00430061006d006500720061003102000002ed0000010a000002ee000001d3fb00000018004a0031002d00430061006d006500720061002d00480044020000017400000015000005b300000423fb00000018004a0032002d00430061006d006500720061002d0048004402000001a200000015000005de00000423fb00000018004a0034002d00430061006d006500720061002d00480044020000019600000000000005ea00000438fb00000018004a0036002d00430061006d006500720061002d00480044020000019e0000003500000597000003e3000000010000010f000003bcfc0200000001fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000000000020000075c0000017efc0100000008fb00000010004a0032002d0049006d00610067006502000004d6000001a8000002aa0000017efb00000018004a0036002d0049006d006100670065002d00640048004402000001fd00000073000004f1000003c5fc00000000000007470000000000fffffffa000000000200000002fb00000010004a0036002d0049006d0061006700650300000653000001a80000013b000000bcfb00000010004a0033002d0049006d006100670065030000053a0000019800000119000000a6fb00000010004a0034002d0049006d00610067006503000006590000001e00000105000000b0fb00000020006d0075006c007400690020006c00650066007400200063006f006c006f007202000001ae000000ad000002f3000002f5fb00000010004a0035002d0049006d00610067006502000005fd0000004300000180000000f0fb00000010004a0035002d0049006d0061006700650000000000000007470000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003bfc0100000002fb0000000800540069006d006500000000000000064f000002a400fffffffb0000000800540069006d00650100000000000004500000000000000000000005f0000003cd00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -5229,9 +5629,9 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 1920
-  Y: 24
+  Width: 1884
+  X: 36
+  Y: 21
   kinec2 IR Image:
     collapsed: false
   kinect2 depth:

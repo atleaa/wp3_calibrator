@@ -1,4 +1,5 @@
 #include "wp3_calibrator/arucoprocessor.h"
+#include "wp3_calibrator/defines.h"
 
 
 
@@ -170,7 +171,6 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
     }
   }
 }
-
 pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 {
   return croppedCloud_;
@@ -188,10 +188,21 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   std::string filename_inputPicture = "Input Picture" + camera_name;
   std::string filename_crop1 = "cropped image 1" + camera_name;
   std::string filename_crop2 = "cropped image 2" + camera_name;
-  std::string rgb_intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_color.yaml";
+//  std::string rgb_intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_color.yaml";
+//  std::string ir_intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_ir.yaml";
   std::string filename_crop3 = "cropped image 3" + camera_name;
 
-  std::cout << rgb_intrinsics_dir << std::endl;
+  std::string intrinsics_dir;
+  if(inputImage.cols<=512)
+  {
+     intrinsics_dir= package_path + "kinect_calibrations" + camera_name + "/calib_ir.yaml";
+  }
+  else
+  {
+    intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_color.yaml";
+  }
+
+//  ROS_DEBUG_STREAM("Intrinsic file: " << intrinsics_dir << std::endl);
 
 
 
@@ -225,20 +236,38 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   bool invalid_points = true;
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Cam. coeff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  cv::Mat cameraMatrix;
-  cv::Mat dist_coeffs;
+  cv::Mat cameraMatrixRGB;
+  cv::Mat cameraMatrixIR;
+  cv::Mat dist_coeffsRGB;
+  cv::Mat dist_coeffsIR;
 
-  cv::FileStorage fs_calibration(rgb_intrinsics_dir, cv::FileStorage::READ);
-  fs_calibration["cameraMatrix"] >> cameraMatrix;
-  fs_calibration["distortionCoefficients"] >> dist_coeffs;
-  fs_calibration.release();
+  // RGB
+//  cv::FileStorage fs_calibrationRGB(rgb_intrinsics_dir, cv::FileStorage::READ);
+//  fs_calibrationRGB["cameraMatrix"] >> cameraMatrixRGB;
+//  fs_calibrationRGB["distortionCoefficients"] >> dist_coeffsRGB;
+//  fs_calibrationRGB.release();
 
-  std::cout << rgb_intrinsics_dir << std::endl << "camera matrix aruco : " << cameraMatrix << std::endl << "distortion coeffs: " << dist_coeffs << std::endl;
+//  ROS_DEBUG_STREAM(rgb_intrinsics_dir << std::endl
+//                   << "camera matrix aruco : " << std::endl
+//                   << cameraMatrixRGB << std::endl
+//                   << "distortion coeffs: " << dist_coeffsRGB << std::endl);
 
-      ir_params(0,0) = cameraMatrix.at<double>(0,0);
-      ir_params(1,1) = cameraMatrix.at<double>(1,1);
-      ir_params(0,2) = cameraMatrix.at<double>(0,2);
-      ir_params(1,2) = cameraMatrix.at<double>(1,2);
+  // IR
+  cv::FileStorage fs_calibrationIR(intrinsics_dir, cv::FileStorage::READ);
+  fs_calibrationIR["cameraMatrix"] >> cameraMatrixIR;
+  fs_calibrationIR["distortionCoefficients"] >> dist_coeffsIR;
+  fs_calibrationIR.release();
+
+  ROS_DEBUG_STREAM("Reading: " << intrinsics_dir << std::endl
+                   << "camera matrix aruco : " << std::endl
+                   << cameraMatrixIR << std::endl
+                   << "distortion coeffs: " << dist_coeffsIR << std::endl);
+
+
+      ir_params(0,0) = cameraMatrixIR.at<double>(0,0);
+      ir_params(1,1) = cameraMatrixIR.at<double>(1,1);
+      ir_params(0,2) = cameraMatrixIR.at<double>(0,2);
+      ir_params(1,2) = cameraMatrixIR.at<double>(1,2);
 
   //		cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
   //		cameraMatrix.at<double>(0,0) = 1057.932708427644;
@@ -268,7 +297,8 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Marker Detection ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   //	r_mutex.lock();
   cv::aruco::detectMarkers(inputImage,markerDictionary,markerCorners,markerIds, params);
-  cv::aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrix, dist_coeffs, rotationVectors, translationVectors);
+//  cv::aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrixRGB, dist_coeffsRGB, rotationVectors, translationVectors);
+  cv::aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrixIR, dist_coeffsIR, rotationVectors, translationVectors);
   //		if (markerIds.size() != number_of_aruco)
   //		{
   //			return;
@@ -288,7 +318,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   {
 //    if (markerIds[i] == 1)
 //    {
-      cv::aruco::drawAxis(inputImage, cameraMatrix, dist_coeffs, rotationVectors[i], translationVectors[i], 0.1);
+      cv::aruco::drawAxis(inputImage, cameraMatrixIR, dist_coeffsIR, rotationVectors[i], translationVectors[i], 0.5);
 
 
       switch(crop)
@@ -296,7 +326,6 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
       case Rect:
       {
         max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
-        //				std::cout << "invalid points? " << markerCorners[i] << std::endl;
         if (!invalid_points)
         {
           cv::Rect myROI(botx,boty,topx-botx, topy-boty);
@@ -334,33 +363,21 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
 
       case Mask:
       {
-        // Create ROI by creating mask for the parallelogram ------------------------
-//        cv::Mat mask = cvCreateMat(1920, 1080, CV_8UC1);
-//        cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
-//        // Create black image with the same size as the original
-//        for(int j=0; j<mask.cols; j++)
-//          for(int k=0; k<mask.rows; k++)
-//            mask.at<uchar>(cv::Point(j,k)) = 0;
-
         cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
         mask = 0;
-
-//        cv::contourArea(markerCorners[i],true);
 
         // Calculate corners of padded aruco
         markerCornersPadded = markerCorners;
         float padScale=0.0;
-        padScale = 7.0/6.0-1.0; // padding is aruco square width * 0.5
+        padScale = 7.0/6.0-1.0; // new size/old size
+        // extrapolate the padded corner position using distance between the diagonal corners
         for(int j=0 ; j<4 ; j++)
         {
           cv::Point2f corner;
-          corner.x = markerCorners[i][j].x + ( markerCorners[i][j].x - markerCorners[i][(j+2)%4].x ) * padScale;
-          corner.y = markerCorners[i][j].y + ( markerCorners[i][j].y - markerCorners[i][(j+2)%4].y ) * padScale;
-//          markerCornersPadded[i].push_back(corner);
+          corner.x = markerCorners[i][j].x + ( markerCorners[i][j].x - markerCorners[i][(j+2)%4].x ) * padScale*0.5;
+          corner.y = markerCorners[i][j].y + ( markerCorners[i][j].y - markerCorners[i][(j+2)%4].y ) * padScale*0.5;
           markerCornersPadded[i][j] = corner;
         }
-
-
 
         // Create Polygon from vertices
         std::vector<cv::Point> ROI_Poly;
@@ -368,12 +385,10 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
         std::vector<cv::Point> ROI_PolyPadded;
         cv::approxPolyDP(markerCornersPadded[i], ROI_PolyPadded, 1.0, true);
 
-
-
         // Fill polygon white
         cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
 
-//        // TEST ----------
+//        // TEST MASK ----------
 //        std::ostringstream stream;
 //        stream << "mask-" <<  camera_name << "." << i;
 //        std::string str = stream.str();
@@ -384,20 +399,9 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
         cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
         croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
 
-
-//        cv::Mat croppedImage(1080, 1920, CV_8UC3);
-//        cv::Mat croppedImage = cvCreateMat(1920, 1080, CV_8UC3);
-
         // Cut out ROI and store it in imageDest
         inputImage.copyTo(croppedImage, mask);
 
-//        cv::Mat maskRGB=cv::cvtColor(mask,cv::COLOR_GRAY2BGR); //change mask to a 3 channel image
-//        croppedImage = cv::subtract(croppedImage,maskRGB);
-
-//        cv::subtract(inputImage,mask,croppedImage);
-
-
-//        cv::Mat croppedImage = inputImage(mask);
         // mask end -----------------------------------------------------------------
 
 
@@ -426,7 +430,8 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
           // TEST END----------
 
 //          std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-                  std::vector<float> aruco_cornerpoints = {0,0,1920,1080};
+//                  std::vector<float> aruco_cornerpoints = {0,0,1920,1080};
+                  std::vector<float> aruco_cornerpoints = {0,0,inputDepth.cols, inputDepth.rows};
 
 //          float bot_row = c_ext[0];
 //          float top_row = c_ext[2];
@@ -449,11 +454,9 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
           transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
           transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
 
-        };
+        }; // end case Mask
 
-      }
-
-
+      } // end switch(crop)
 
   }
 //  transformMap_ = transform4x4;

@@ -28,7 +28,7 @@ imageConverter::imageConverter(const std::string& inputName, const std::string& 
 imageConverter::~imageConverter()
 {
   image_sub_.shutdown();
-  std::cout << "ROS stopped Topic Subscription of " << topic_type_ <<  std::endl;
+  ROS_DEBUG_STREAM("ROS stopped Topic Subscription of " << topic_type_);
 }
 
 
@@ -38,7 +38,7 @@ void imageConverter::getCurrentImage(cv::Mat *input_image)
     usleep(2000);
     ros::spinOnce();
   }
-  std::cout << "got new timestamp_ " <<  std::endl;
+  ROS_DEBUG_STREAM("got new timestamp_ ");
   i_mutex.lock();
   *input_image = src_image_;
   last_frame = timestamp_;
@@ -138,7 +138,7 @@ depthProcessor::depthProcessor(const std::string& inputNameA)
 depthProcessor::~depthProcessor()
 {
   depth_subA_.shutdown();
-  std::cout << "ROS stopped Depth Import" << std::endl;
+  ROS_DEBUG_STREAM("ROS stopped Depth Import");
 }
 
 

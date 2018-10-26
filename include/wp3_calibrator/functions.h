@@ -1,7 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
+#include "wp3_calibrator/defines.h"
 #include "wp3_calibrator/sensor.h"
+#include "wp3_calibrator/visualization.h"
 
 // STD
 //#include <stdio.h>
@@ -86,7 +88,7 @@ void readTopics(std::string nodeA,
 void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
                 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_target_xyz_org,
                 Eigen::Affine3f & transform_ICP,
-                bool & converge_flag, float distThresh, double & fitnessScore);
+                bool & converge_flag, float distThresh, int iter, double & fitnessScore);
 
 void cloudPassthroughFilter(pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud,
                             pcl::PointCloud<pcl::PointXYZ>::Ptr & cloud_filtered,
@@ -100,9 +102,20 @@ void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::
 
 void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat);
 
+
+
+
+#ifdef VIEW_ICP
+void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
+                   Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore,
+//                   pcl::visualization::PCLVisualizer viewerICP);
+                   Visualization &viewer);
+#else
 void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
                    Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print);
+#endif
 
 Eigen::Quaternionf getAverageQuaternion(const std::vector<Eigen::Quaternionf> &quaternions,
                                         const std::vector<float> &weights);

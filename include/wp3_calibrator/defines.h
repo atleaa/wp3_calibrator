@@ -3,6 +3,14 @@
 
 #include <string>
 
+#define VIEW_ICP // create a viewer to see ICP process.
+#define ACCUMULATE 10
+
+#define ICP_MAX_CORR_DIST 0.4 //
+#define ICP_CONVERGE 0.00001
+#define ICP_ITERATIONS 10 // ICP iterations
+#define ICP_TRANS_EPSILON 1e-8
+
 enum Cropping {Rect, Mask};
 
 namespace wp3 {
@@ -25,7 +33,8 @@ const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 //#include <thread>
 //#include <vector>
 
-//// ROS
+// ROS
+#include <ros/console.h>  // http://wiki.ros.org/roscpp/Overview/Logging
 //#include <ros/ros.h>
 //#include <ros/package.h>
 //#include <sensor_msgs/PointCloud2.h>
