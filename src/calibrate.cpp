@@ -17,7 +17,7 @@
 // begin main  --------------------------------------------------------------------------------------------
 int main (int argc, char** argv)
 {
-  //Set logging level
+  //Set logging level: (DEBUG, INFO, WARN, ERROR, FATAL)
   if( ros::console::set_logger_level(ROSCONSOLE_DEFAULT_NAME, ros::console::levels::Debug) ) {
     ros::console::notifyLoggerLevelsChanged();
   }
@@ -54,6 +54,7 @@ int main (int argc, char** argv)
   sleep(3); // ensure that main is initialized before initing ROS
   // ROS messaging init
   ROS_INFO_STREAM("Starting: "<<  std::endl);
+
   // initialize ROS node
   ros::init(argc, argv, "wp3_calibrator");
   ros::NodeHandle nh;
@@ -81,56 +82,57 @@ int main (int argc, char** argv)
 
   std::map<std::string, Eigen::Matrix4f> transMap;
 
-  std::string reference_node = "1";
-  std::string calibration_order_initial[] = {"2", "2", "5", "3", "1"};
+  std::string reference_node = "6";
+  std::string calibration_order_initial[] = {"5", "2", "5", "3", "1"};
 
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
 
-//  std::cout << calibration_order_initial[0] << std::endl;
+  // Read some parameters from launch file:
+  //  nh.param(read, write, default);
+//  std::string camera_info_topic;
+//  nh.param("camera_info_topic", camera_info_topic, std::string("/jetson6/sd/camera_info"));
 
-  // TODO: make node vector
-  wp3::Sensor nodeA("jetson1_SD");
-  nodeA.setImageTopic("/jetson1/sd/image_color_rect");
-  nodeA.setDepthTopic("/jetson1/sd/image_depth_rect");
+  // Subscribers:
+//  ros::Subscriber camera_info_sub = nh.subscribe(camera_info_topic, 1, cameraInfoCallback);
+
+  // Publishers:
+  static tf::TransformBroadcaster transform_publisher;
+
+
+  // TODO: make node vector and replace strings with config file or parameters (nh.param)
+  wp3::Sensor nodeA("jetson6");
+  nodeA.setCamera_info_topic("/jetson6/sd/camera_info");
+  nodeA.setImageTopic("/jetson6/sd/image_color_rect");
+  nodeA.setDepthTopic("/jetson6/sd/image_depth_rect");
 //  nodeA.setCloudTopic("/master/jetson1/points");
-    nodeA.setCloudTopic("/jetson1/sd/points");
-//    nodeA.setImageTopic("/jetson1/hd/image_color_rect");
-//    nodeA.setDepthTopic("/jetson1/hd/image_depth_rect");
-//  //  nodeA.setCloudTopic("/master/jetson1/points");
-//      nodeA.setCloudTopic("/jetson1/hd/points");
+  nodeA.setCloudTopic("/jetson6/sd/points");
 
-
-  wp3::Sensor nodeB("jetson2_SD");
-  nodeB.setImageTopic("/jetson2/sd/image_color_rect");
-  nodeB.setDepthTopic("/jetson2/sd/image_depth_rect");
+  wp3::Sensor nodeB("jetson5");
+  nodeB.setCamera_info_topic("/jetson5/sd/camera_info");
+  nodeB.setImageTopic("/jetson5/sd/image_color_rect");
+  nodeB.setDepthTopic("/jetson5/sd/image_depth_rect");
 //  nodeB.setCloudTopic("/master/jetson2/points");
-    nodeB.setCloudTopic("/jetson2/sd/points");
-//    nodeB.setImageTopic("/jetson2/hd/image_color_rect");
-//    nodeB.setDepthTopic("/jetson2/hd/image_depth_rect");
-//  //  nodeB.setCloudTopic("/master/jetson2/points");
-//    nodeB.setCloudTopic("/jetson2/hd/points");
-
-//  wp3::Sensor nodeA("jetson4");
-//  nodeA.setImageTopic("/jetson4/hd/image_color_rect");
-//  nodeA.setDepthTopic("/jetson4/hd/image_depth_rect");
-//  nodeA.setCloudTopic("/master/jetson4/points");
-
-//  wp3::Sensor nodeB("jetson6");
-//  nodeB.setImageTopic("/jetson6/hd/image_color_rect");
-//  nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
-//  nodeB.setCloudTopic("/master/jetson6/points");
+  nodeB.setCloudTopic("/jetson5/sd/points");
 
 
   wp3::init_reference(reference_node); // create first initial transformation
 
   r_mutex2.lock();
   int key = cv::waitKey(30);
+//  bool init = false;  // don't autostart
   bool init = true;
   size_t calib_counter = 0;
   size_t viz_counter = 0;
 
   wp3::openGlobalReference(transform_reference_global, reference_node);
+
+  // init ROS spinner
+//  ros::Rate loopRate(ROS_LOOPRATE);
+//  ros::AsyncSpinner spinner(8);
+//  spinner.start();
+
+  usleep(1000000); // give the spinner some time to start (1000 ms)
 
   //  begin main while ------------------------------------------------------------------------------------------
   while ((key != 27) && ros::ok())  // not ESC
@@ -144,8 +146,8 @@ int main (int argc, char** argv)
       init = false;
       aruco_A.clearAll();
       aruco_B.clearAll();
-//      nodeA.clear();
-//      nodeB.clear();
+      nodeA.clear();
+      nodeB.clear();
 
       ROS_INFO_STREAM("Reading topics and detecting markers to accumulate data.");
       for(int i=0;i<ACCUMULATE;i++) // accumulate point clouds
@@ -155,8 +157,8 @@ int main (int argc, char** argv)
         nodeB.readTopics(true);
 
         // detect and accumulate cropped clouds
-        aruco_A.detectMarkers(nodeA.imageMat_, nodeA.depthMat_, transformMap_A, reference_node, Mask);
-        aruco_B.detectMarkers(nodeB.imageMat_, nodeB.depthMat_, transformMap_B, calibration_order_initial[calib_counter], Mask);
+        aruco_A.detectMarkers(nodeA, transformMap_A, reference_node, Mask);
+        aruco_B.detectMarkers(nodeB, transformMap_B, calibration_order_initial[calib_counter], Mask);
 
         // Accumulate full clouds
         nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
@@ -254,9 +256,6 @@ int main (int argc, char** argv)
       viewerArucoCropped.runSingle(cloud_vector_1, transMap);
       // view all results
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
-
-
-
     }
 
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
@@ -285,7 +284,32 @@ int main (int argc, char** argv)
 #ifdef VIEW_ICP
 //    viewerICP.spinOnce();
 #endif
-  }
+
+    // TF PUBLISHERS
+    // TF - Manual world reference
+    tf::Transform worldToReference_tf; //(rot,trans)
+    tf::Quaternion q;
+//    worldToReference_tf.setOrigin( tf::Vector3(7.6, 0.7, 4.2) ); // j1
+    worldToReference_tf.setOrigin( tf::Vector3(0.1, 4.8, 4.2) ); // j4
+//    q.setRPY(-2.44, 0, 0.7);  // j1
+    q.setRPY(-2.50, 0, -1.571);  // j4
+    worldToReference_tf.setRotation(q);
+//    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", nodeA.name_+"_ir_optical_frame") );
+
+
+    // TF - A to B
+    Eigen::Matrix4f transform_m4f = transform_ICP1_print.inverse(); // Matrix to convert
+    Eigen::Matrix4d transform_m4d(transform_m4f.cast <double>());
+    Eigen::Affine3d transform_affine(transform_m4d);
+    tf::Transform transform_tf;
+    tf::transformEigenToTF(transform_affine, transform_tf);
+    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), nodeA.name_+"_ir_optical_frame", nodeB.name_+"_ir_optical_frame") );
+    ros::spinOnce();
+
+
+////    sleep ROS spinner
+//    loopRate.sleep();
+  } // end while
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   r_mutex2.unlock();

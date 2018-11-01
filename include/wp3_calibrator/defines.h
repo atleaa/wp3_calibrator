@@ -3,13 +3,17 @@
 
 #include <string>
 
-#define VIEW_ICP // create a viewer to see ICP process.
-#define ACCUMULATE 10
+#define ROS_LOOPRATE 10
 
-#define ICP_MAX_CORR_DIST 0.4 //
-#define ICP_CONVERGE 0.00001
-#define ICP_ITERATIONS 10 // ICP iterations
-#define ICP_TRANS_EPSILON 1e-8
+#define VIEW_ICP // create a viewer to see ICP process.
+#define ACCUMULATE 5
+#define ICP_MAX_CORR_DIST 0.6 //
+//#define ICP_CONVERGE 0.00001  // good
+#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
+//#define ICP_CONVERGE 1e+30  // TULL fast
+#define ICP_ITERATIONS 100 // ICP iterations
+#define ICP_TRANS_EPSILON 1e-14 //1e-11
+//#define ICP_TRANS_EPSILON 1e-7 // TULL faster
 
 enum Cropping {Rect, Mask};
 
@@ -42,7 +46,10 @@ const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 //#include <image_transport/image_transport.h>
 //#include <sensor_msgs/image_encodings.h>
 //#include <cv_bridge/cv_bridge.h>
-////#include <tf/transform_Broadcaster.h>
+#include <tf/tf.h>
+#include <tf/transform_listener.h>
+#include <tf/transform_broadcaster.h>
+#include <tf_conversions/tf_eigen.h>
 //#include <geometry_msgs/Pose.h>
 //#include <geometry_msgs/PointStamped.h>
 //#include <visualization_msgs/MarkerArray.h>

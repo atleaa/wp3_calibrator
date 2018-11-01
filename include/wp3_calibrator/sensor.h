@@ -1,6 +1,9 @@
 #ifndef SENSOR_H
 #define SENSOR_H
 
+#include "wp3_calibrator/imageconverter.h"
+#include "wp3_calibrator/defines.h"
+
 // STD
 //#include <stdio.h>
 //#include <stdlib.h>
@@ -20,6 +23,9 @@
 //#include <opencv2/aruco.hpp>
 #include "opencv2/opencv.hpp"
 //#include <opencv2/imgproc/imgproc.hpp>
+
+// ROS
+#include <sensor_msgs/CameraInfo.h>
 
 // PCL
 //#include <pcl_ros/point_cloud.h>
@@ -82,6 +88,8 @@ public:
 //                  pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
 //                  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
 //                  bool update);
+  void cameraInfoCallback (const sensor_msgs::CameraInfo::ConstPtr & msg);
+
   void readTopics(bool update);
 
   void appendClouds();
@@ -110,6 +118,7 @@ public:
   //move to private?
   cv::Mat imageMat_;  // original color image
   cv::Mat depthMat_;  // original depth image
+  std::vector<cv::Mat> imageMatVec_;  // original color images in a vector
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudPtr_;      // original point cloud
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudAccPtr_;   // original point cloud
@@ -125,10 +134,23 @@ public:
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3CrPtr_;   // cropped point cloud after 3 transformations
 
 
+  void setCamera_info_topic(const std::string &camera_info_topic);
+
+  Eigen::Matrix3d getIntrinsics_matrix() const;
+
+  std::vector<double> getDistCoeffs() const;
+
 private:
+  ros::NodeHandle nh_;
   std::string depthTopic_;
   std::string imageTopic_;
   std::string cloudTopic_;
+  std::string camera_info_topic_;
+  bool intrinsics_set_;
+  Eigen::Matrix3d intrinsics_matrix_;
+//  Eigen::MatrixXd distCoeffs_;
+  std::vector<double> distCoeffs_;
+//  sensor_msgs::CameraInfo::_D_type distCoeffs_;
 
 //  cv::Mat imageMat_;
 //  cv::Mat depthMat_;

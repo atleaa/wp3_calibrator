@@ -19,6 +19,8 @@ find_package(catkin REQUIRED COMPONENTS
   cv_bridge
   aruco
   rosconsole
+  eigen_conversions
+  tf_conversions
 )
 
 ## System dependencies are found with CMake's conventions
@@ -26,6 +28,7 @@ find_package(Boost REQUIRED COMPONENTS thread)
 find_package(OpenCV REQUIRED)
 #find_package(PCL 1.8 REQUIRED COMPONENTS common io visualization filters keypoints features segmentation) # REMOVE?
 find_package(freenect2 REQUIRED)
+#find_package(Eigen REQUIRED)
 
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
@@ -116,6 +119,9 @@ catkin_package(
   INCLUDE_DIRS include
 #  LIBRARIES jetson_node
   CATKIN_DEPENDS pcl_ros
+  CATKIN_DEPENDS eigen_conversions
+  CATKIN_DEPENDS tf_conversions
+#  DEPENDS Eigen
 #  DEPENDS system_lib
 )
 
@@ -129,6 +135,7 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${boost_INCLUDE_DIRS}
+#  ${Eigen_INCLUDE_DIRS}
 )
 
 ## Declare a C++ library

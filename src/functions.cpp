@@ -83,126 +83,126 @@ void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_nu
 }
 
 
-void readTopics(std::string nodeA,
-                std::string nodeB,
-                cv::Mat* rgb_A,
-                cv::Mat* depth_A,
-                cv::Mat* rgb_B,
-                cv::Mat* depth_B,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
-                bool update = false)
-{
-  // Create char arrays
-  std::string depthMatA = "/jetson" + nodeA + "/hd/image_depth_rect";
-  //    std::string depthMatA = "/jetson" + nodeA + "/sd/image_depth_rect"; // TULL
-  std::string rgbA = "/jetson" + nodeA + "/hd/image_color_rect";
-  std::string point_cloud_A = "/master/jetson" + nodeA + "/points";
+//void readTopics(std::string nodeA,
+//                std::string nodeB,
+//                cv::Mat* rgb_A,
+//                cv::Mat* depth_A,
+//                cv::Mat* rgb_B,
+//                cv::Mat* depth_B,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
+//                bool update = false)
+//{
+//  // Create char arrays
+//  std::string depthMatA = "/jetson" + nodeA + "/hd/image_depth_rect";
+//  //    std::string depthMatA = "/jetson" + nodeA + "/sd/image_depth_rect"; // TULL
+//  std::string rgbA = "/jetson" + nodeA + "/hd/image_color_rect";
+//  std::string point_cloud_A = "/master/jetson" + nodeA + "/points";
 
-  std::string depthMatB = "/jetson" + nodeB + "/hd/image_depth_rect";
-  //    std::string depthMatB = "/jetson" + nodeB + "/sd/image_depth_rect"; // TULL
-  std::string rgbB = "/jetson" + nodeB + "/hd/image_color_rect";
-  std::string point_cloud_B = "/master/jetson" + nodeB + "/points";
+//  std::string depthMatB = "/jetson" + nodeB + "/hd/image_depth_rect";
+//  //    std::string depthMatB = "/jetson" + nodeB + "/sd/image_depth_rect"; // TULL
+//  std::string rgbB = "/jetson" + nodeB + "/hd/image_color_rect";
+//  std::string point_cloud_B = "/master/jetson" + nodeB + "/points";
 
-  std::cout << "pointA_name: " << point_cloud_A << std::endl;  //eg: /master/jetson1/points
-  std::cout << "pointB_name: " << point_cloud_B << std::endl;
+//  std::cout << "pointA_name: " << point_cloud_A << std::endl;  //eg: /master/jetson1/points
+//  std::cout << "pointB_name: " << point_cloud_B << std::endl;
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  wp3::imageConverter IC_Depth_A(depthMatA, "depth");
-  //        std::cout << depthMatA << " converted" << std::endl; //TULL
-  wp3::imageConverter IC_RGB_A(rgbA, "color");
-  //        std::cout << rgbA << " converted" << std::endl; //TULL
+//  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  wp3::imageConverter IC_Depth_A(depthMatA, "depth");
+//  //        std::cout << depthMatA << " converted" << std::endl; //TULL
+//  wp3::imageConverter IC_RGB_A(rgbA, "color");
+//  //        std::cout << rgbA << " converted" << std::endl; //TULL
 
-  imageConverter IC_Depth_B(depthMatB, "depth");
-  //        std::cout << depthMatB << " converted" << std::endl; //TULL
-  imageConverter IC_RGB_B(rgbB, "color"); // didnt use rect on clor image before
-  //        std::cout << rgbB << " converted" << std::endl; //TULL
+//  imageConverter IC_Depth_B(depthMatB, "depth");
+//  //        std::cout << depthMatB << " converted" << std::endl; //TULL
+//  imageConverter IC_RGB_B(rgbB, "color"); // didnt use rect on clor image before
+//  //        std::cout << rgbB << " converted" << std::endl; //TULL
 
-  depthProcessor dp_A = depthProcessor(point_cloud_A); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
-  depthProcessor dp_B = depthProcessor(point_cloud_B); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
+//  depthProcessor dp_A = depthProcessor(point_cloud_A); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
+//  depthProcessor dp_B = depthProcessor(point_cloud_B); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
 
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  //// World data from Atle
-  //
-  //	//0.185 7.360 5.07 -1.590 0 -2.59
-  //	Eigen::Matrix4f world_to_reference = Eigen::Matrix4f::Identity();
-  //	Eigen::Matrix4f world_to_B;
-  //	Eigen::Matrix4f world_to_B_inverse;
-  //	Eigen::Affine3f tf4cb = Eigen::Affine3f::Identity();
-  //	tf4cb.translation() << 0.138, 7.437, 4.930;
-  //	tf4cb.rotate (Eigen::AngleAxisf (-1.565, Eigen::Vector3f::UnitZ()));
-  //	tf4cb.rotate (Eigen::AngleAxisf (0, Eigen::Vector3f::UnitY()));
-  //	tf4cb.rotate (Eigen::AngleAxisf (-2.590, Eigen::Vector3f::UnitX()));
-  //	world_to_reference = tf4cb.matrix();
-  //	kinect6_to_4 =  world_to_reference.inverse()* global_pose_kinect6;
-  //	kinect3_to_4 =  world_to_reference.inverse()* global_pose_kinect3;
-  //	kinect5_to_4 =  world_to_reference.inverse()* global_pose_kinect5;
-  //	kinect2_to_4 =  world_to_reference.inverse()* global_pose_kinect2;
-  //
-  //
-  //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Data acquisition ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  //	bool reading_complete_a;
-  if (update)
-  {
-    rgb_A->release();
-    depth_A->release();
-    rgb_B->release();
-    depth_B->release();
-    current_cloud_A->clear();
-    current_cloud_B->clear();
-    src_cloudA_cropTotal->clear();
-    src_cloudB_cropTotal->clear();
+//  //// World data from Atle
+//  //
+//  //	//0.185 7.360 5.07 -1.590 0 -2.59
+//  //	Eigen::Matrix4f world_to_reference = Eigen::Matrix4f::Identity();
+//  //	Eigen::Matrix4f world_to_B;
+//  //	Eigen::Matrix4f world_to_B_inverse;
+//  //	Eigen::Affine3f tf4cb = Eigen::Affine3f::Identity();
+//  //	tf4cb.translation() << 0.138, 7.437, 4.930;
+//  //	tf4cb.rotate (Eigen::AngleAxisf (-1.565, Eigen::Vector3f::UnitZ()));
+//  //	tf4cb.rotate (Eigen::AngleAxisf (0, Eigen::Vector3f::UnitY()));
+//  //	tf4cb.rotate (Eigen::AngleAxisf (-2.590, Eigen::Vector3f::UnitX()));
+//  //	world_to_reference = tf4cb.matrix();
+//  //	kinect6_to_4 =  world_to_reference.inverse()* global_pose_kinect6;
+//  //	kinect3_to_4 =  world_to_reference.inverse()* global_pose_kinect3;
+//  //	kinect5_to_4 =  world_to_reference.inverse()* global_pose_kinect5;
+//  //	kinect2_to_4 =  world_to_reference.inverse()* global_pose_kinect2;
+//  //
+//  //
+//  //// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Data acquisition ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  //	bool reading_complete_a;
+//  if (update)
+//  {
+//    rgb_A->release();
+//    depth_A->release();
+//    rgb_B->release();
+//    depth_B->release();
+//    current_cloud_A->clear();
+//    current_cloud_B->clear();
+//    src_cloudA_cropTotal->clear();
+//    src_cloudB_cropTotal->clear();
 
-    std::cout << "emptied cloud, size now: " << current_cloud_A->size() << std::endl;
-  }
-  std::cout << "Reading RGB image A... "<< std::flush;
-  while(rgb_A->empty())
-  {
-    IC_RGB_A.getCurrentImage(rgb_A);
+//    std::cout << "emptied cloud, size now: " << current_cloud_A->size() << std::endl;
+//  }
+//  std::cout << "Reading RGB image A... "<< std::flush;
+//  while(rgb_A->empty())
+//  {
+//    IC_RGB_A.getCurrentImage(rgb_A);
 
-  }
-  std::cout << "done" << std::endl;
+//  }
+//  std::cout << "done" << std::endl;
 
-  std::cout << "Reading Depth image A... "<< std::flush;
-  while(depth_A->empty())
-  {
-    IC_Depth_A.getCurrentDepthMap(depth_A);
-  }
-  std::cout << "done " << std::endl;
+//  std::cout << "Reading Depth image A... "<< std::flush;
+//  while(depth_A->empty())
+//  {
+//    IC_Depth_A.getCurrentDepthMap(depth_A);
+//  }
+//  std::cout << "done " << std::endl;
 
-  std::cout << "Reading RGB image B... "<< std::flush;
-  while(rgb_B->empty())
-  {
-    IC_RGB_B.getCurrentImage(rgb_B);
-  }
-  std::cout << "done" << std::endl;
+//  std::cout << "Reading RGB image B... "<< std::flush;
+//  while(rgb_B->empty())
+//  {
+//    IC_RGB_B.getCurrentImage(rgb_B);
+//  }
+//  std::cout << "done" << std::endl;
 
-  std::cout << "Reading Depth image B... "<< std::flush;
-  while(depth_B->empty())
-  {
-    IC_Depth_B.getCurrentDepthMap(depth_B);
-  }
-  std::cout << "done" << std::endl;
+//  std::cout << "Reading Depth image B... "<< std::flush;
+//  while(depth_B->empty())
+//  {
+//    IC_Depth_B.getCurrentDepthMap(depth_B);
+//  }
+//  std::cout << "done" << std::endl;
 
-  std::cout << "Reading cloud A... "<< std::flush;
-  while( current_cloud_A->size() == 0)
-  {
-    dp_A.get_filtered_PCL_cloud(current_cloud_A);
-  }
-  std::cout << "done" << std::endl;
+//  std::cout << "Reading cloud A... "<< std::flush;
+//  while( current_cloud_A->size() == 0)
+//  {
+//    dp_A.get_filtered_PCL_cloud(current_cloud_A);
+//  }
+//  std::cout << "done" << std::endl;
 
-  std::cout << "Reading cloud B... "<< std::flush;
-  while( current_cloud_B->size() == 0)
-  {
-    dp_B.get_filtered_PCL_cloud(current_cloud_B);
-  }
-  std::cout << "done" << std::endl;
+//  std::cout << "Reading cloud B... "<< std::flush;
+//  while( current_cloud_B->size() == 0)
+//  {
+//    dp_B.get_filtered_PCL_cloud(current_cloud_B);
+//  }
+//  std::cout << "done" << std::endl;
 
-  //    std::cout << "Reading point clouds from A and B 5 times... "<< std::endl;
-}
+//  //    std::cout << "Reading point clouds from A and B 5 times... "<< std::endl;
+//}
 
 
 void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
@@ -377,7 +377,7 @@ void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
 #ifdef VIEW_ICP
 void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
-                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore,
+                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & trans_AtoB, double & fitnessScore,
 //                   pcl::visualization::PCLVisualizer viewerICP)
                    wp3::Visualization & viewer)
 #else
@@ -426,7 +426,7 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
       *tmpCloud = *tmpCloud2;
 
 //      fitnessChange = std::abs(fitnessScore1-fitnessScore2)/fitnessScore1;
-      fitnessChange = std::abs(fitnessScore-fitnessScore2);
+      fitnessChange = std::abs(fitnessScore-fitnessScore2)/fitnessScore; // relative change
       fitnessScore2 = fitnessScore;
       round++;
 //      iterations = iterations*2;
@@ -463,7 +463,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
   sensorA.cloud2CrPtr_ = tmpCloud;
 //  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
   pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
-  world_to_B = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
+//  trans_AtoB = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
+  trans_AtoB = transform_AtoB_ICP; // value to be written
   //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
   //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
   //		std::cout << "world_to b: "<< world_to_B << std::endl;

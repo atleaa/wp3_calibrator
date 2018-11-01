@@ -88,15 +88,17 @@ void arucoProcessor::max4points(std::vector<cv::Point2f> cornerPoints, float & t
 
 
 void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
-                               Eigen::Matrix3f& depth_intrinsics,
+                               Eigen::Matrix3d& depth_intrinsics,
                                pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
                                bool crop = false,
-                               std::vector<float> c_ext = {},
+                               std::vector<int> c_ext = {},
                                cv::Mat depth_aruco_dummy = {})
 {
   // For point clouds XYZ
-  float depth_focal_inverted_x = 1/depth_intrinsics(0,0);  // 1/fx
-  float depth_focal_inverted_y = 1/depth_intrinsics(1,1);  // 1/fy
+//  float depth_focal_inverted_x = 1/depth_intrinsics(0,0);  // 1/fx
+//  float depth_focal_inverted_y = 1/depth_intrinsics(1,1);  // 1/fy
+  double depth_focal_inverted_x = 1/depth_intrinsics(0,0);  // 1/fx
+  double depth_focal_inverted_y = 1/depth_intrinsics(1,1);  // 1/fy
 
   pcl::PointXYZ new_point;
 
@@ -140,10 +142,10 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
     output_cloud->width = depth_aruco_dummy.cols;
     output_cloud->height = depth_aruco_dummy.rows;
     output_cloud->is_dense = false;
-    float bot_row = c_ext[0];
-    float top_row = c_ext[2];
-    float bot_col = c_ext[1];
-    float top_col = c_ext[3];
+    int bot_row = c_ext[0];
+    int top_row = c_ext[2];
+    int bot_col = c_ext[1];
+    int top_col = c_ext[3];
 
     for (int k=bot_col;k<top_col;k++)
     {
@@ -177,58 +179,19 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 }
 
 
-//void arucoProcessor::detectMarkers(cv::Mat &inputImage,cv::Mat &inputDepth, Eigen::Matrix4f & transform4x4, std::string kinect_number)
-void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
+void arucoProcessor::detectMarkers(wp3::Sensor & node,
                                    MarkerMapType &transform4x4,
                                    std::string kinect_number,
                                    Cropping crop)
 {
+  cv::Mat inputImage = node.getImageMat();
+  cv::Mat inputDepth = node.getDepthMat();
 
-  std::string camera_name = "/kinect" + kinect_number;
-  std::string filename_inputPicture = "Input Picture" + camera_name;
-  std::string filename_crop1 = "cropped image 1" + camera_name;
-  std::string filename_crop2 = "cropped image 2" + camera_name;
-//  std::string rgb_intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_color.yaml";
-//  std::string ir_intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_ir.yaml";
-  std::string filename_crop3 = "cropped image 3" + camera_name;
-
-  std::string intrinsics_dir;
-  if(inputImage.cols<=512)
-  {
-     intrinsics_dir= package_path + "kinect_calibrations" + camera_name + "/calib_ir.yaml";
-  }
-  else
-  {
-    intrinsics_dir = package_path + "kinect_calibrations" + camera_name + "/calib_color.yaml";
-  }
-
-//  ROS_DEBUG_STREAM("Intrinsic file: " << intrinsics_dir << std::endl);
-
-
-
-  // TULL, use custom parameters!?
-  // Default RGB parameters -> will be used in rectified depthMatrix since it is mapped onto RGB
-  // Try to upscale IR intrinsics to RGB size--> use them to transform depth map to point cloud
-//  float const fx_default = 1081.37;
-//  float const fy_default = 1081.37;
-//  float const cx_default = 959.5;
-//  float const cy_default = 539.5;
-
-// parameters from jetson1
-//  float const fx_default = 1067.586;
-//  float const fy_default = 1068.404;
-//  float const cx_default = 919.821;
-//  float const cy_default = 548.260;
-
-  Eigen::Matrix3f ir_params;
-//  ir_params(0,0) = fx_default;
-//  ir_params(1,1) = fy_default;
-//  ir_params(0,2) = cx_default;
-//  ir_params(1,2) = cy_default;
-
-//  src_cloud_crop1_->clear();
-//  src_cloud_crop2_->clear();
-//  src_cloud_crop3_->clear();
+  std::string camera_name = node.name_;
+  std::string filename_inputPicture = "Input Picture " + camera_name;
+  std::string filename_crop1 = "cropped image 1 " + camera_name;
+  std::string filename_crop2 = "cropped image 2 " + camera_name;
+  std::string filename_crop3 = "cropped image 3 " + camera_name;
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
@@ -236,48 +199,14 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
   bool invalid_points = true;
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Cam. coeff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  cv::Mat cameraMatrixRGB;
+
+  std::vector<double> dist_coeffs_vec = node.getDistCoeffs();
+  cv::Mat dist_coeffsIR(dist_coeffs_vec);
+
   cv::Mat cameraMatrixIR;
-  cv::Mat dist_coeffsRGB;
-  cv::Mat dist_coeffsIR;
-
-  // RGB
-//  cv::FileStorage fs_calibrationRGB(rgb_intrinsics_dir, cv::FileStorage::READ);
-//  fs_calibrationRGB["cameraMatrix"] >> cameraMatrixRGB;
-//  fs_calibrationRGB["distortionCoefficients"] >> dist_coeffsRGB;
-//  fs_calibrationRGB.release();
-
-//  ROS_DEBUG_STREAM(rgb_intrinsics_dir << std::endl
-//                   << "camera matrix aruco : " << std::endl
-//                   << cameraMatrixRGB << std::endl
-//                   << "distortion coeffs: " << dist_coeffsRGB << std::endl);
-
-  // IR
-  cv::FileStorage fs_calibrationIR(intrinsics_dir, cv::FileStorage::READ);
-  fs_calibrationIR["cameraMatrix"] >> cameraMatrixIR;
-  fs_calibrationIR["distortionCoefficients"] >> dist_coeffsIR;
-  fs_calibrationIR.release();
-
-  ROS_DEBUG_STREAM("Reading: " << intrinsics_dir << std::endl
-                   << "camera matrix aruco : " << std::endl
-                   << cameraMatrixIR << std::endl
-                   << "distortion coeffs: " << dist_coeffsIR << std::endl);
-
-
-      ir_params(0,0) = cameraMatrixIR.at<double>(0,0);
-      ir_params(1,1) = cameraMatrixIR.at<double>(1,1);
-      ir_params(0,2) = cameraMatrixIR.at<double>(0,2);
-      ir_params(1,2) = cameraMatrixIR.at<double>(1,2);
-
-  //		cameraMatrix = cv::Mat::eye(3, 3, CV_64F);
-  //		cameraMatrix.at<double>(0,0) = 1057.932708427644;
-  //		cameraMatrix.at<double>(1,1) = 1061.07748780408;
-  //		cameraMatrix.at<double>(0,2) = 975.901271112996;
-  //		cameraMatrix.at<double>(1,2) = 524.072951512137;
-  //		dist_coeffs = (cv::Mat_<double>(5,1) <<  0.0548992182401387,-0.0805160815549322,
-  //				-0.000938325112541061, 0.00181830067859300, 0.0290103875818698);
-  //		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-
+  Eigen::Matrix3d intrinsic_matrix;
+  intrinsic_matrix = node.getIntrinsics_matrix();
+  cv::eigen2cv(intrinsic_matrix, cameraMatrixIR);
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ aruco param. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   double arucoSquareDimension = 0.60; // in meters
@@ -341,8 +270,9 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
           cv::Mat depthMatCropped = inputDepth(myROI);
   //        current_depthMat_A_crop1_ = inputDepth(myROI);
 
-          std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-          pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+          std::vector<int> rectCrop = {(int)(botx+0.5), (int)(boty+0.5), (int)(topx+0.5), (int)(topy+0.5)};
+          pointcloudFromDepthImage(inputDepth, intrinsic_matrix, src_cloud_crop, true, rectCrop, depthMatCropped);
+
 
           // TODO: change from defined clouds to a std::map with string and cloud
           if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
@@ -370,6 +300,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
         markerCornersPadded = markerCorners;
         float padScale=0.0;
         padScale = 7.0/6.0-1.0; // new size/old size
+
         // extrapolate the padded corner position using distance between the diagonal corners
         for(int j=0 ; j<4 ; j++)
         {
@@ -387,13 +318,6 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
 
         // Fill polygon white
         cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
-
-//        // TEST MASK ----------
-//        std::ostringstream stream;
-//        stream << "mask-" <<  camera_name << "." << i;
-//        std::string str = stream.str();
-//        cv::imshow(str,mask);
-//        // TEST END----------
 
         // Create new image for result storage
         cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
@@ -419,7 +343,7 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
 //          depthMatCropped = inputDepth(myROI);
   //        current_depthMat_A_crop1_ = inputDepth(myROI);
 
-          // TEST ----------
+          // Show cropped depth image----------
           cv::Mat depthMatCroppedView;
           depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
           std::ostringstream stream;
@@ -427,18 +351,11 @@ void arucoProcessor::detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
           std::string str = stream.str();
           cv::imshow(str,depthMatCroppedView);
           cv::waitKey(30);
-          // TEST END----------
+          // Show cropped depth image end----------
 
-//          std::vector<float> aruco_cornerpoints = {botx, boty, topx, topy};
-//                  std::vector<float> aruco_cornerpoints = {0,0,1920,1080};
-                  std::vector<float> aruco_cornerpoints = {0,0,inputDepth.cols, inputDepth.rows};
+          std::vector<int> rectCrop = {0,0,inputDepth.cols, inputDepth.rows};
 
-//          float bot_row = c_ext[0];
-//          float top_row = c_ext[2];
-//          float bot_col = c_ext[1];
-//          float top_col = c_ext[3];
-//          pointcloudFromDepthImage(inputDepth, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
-          pointcloudFromDepthImage(depthMatCropped, ir_params, src_cloud_crop, true, aruco_cornerpoints, depthMatCropped);
+          pointcloudFromDepthImage(depthMatCropped, intrinsic_matrix, src_cloud_crop, true, rectCrop, depthMatCropped);
 
           // TODO: change from defined clouds to a std::map with string and cloud
           if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
@@ -559,32 +476,6 @@ void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, std
   transMat_avg.block<3, 1>(0, 3) = pos_avg;
 //  return transMat_avgA;
 
-
-//  // calculate average quaternion
-//  Eigen::Quaternionf q1(transformMap_.at(1).block<3,3>(0,0));
-//  Eigen::Quaternionf q2(transformMap_.at(13).block<3,3>(0,0));
-//  Eigen::Quaternionf q3(transformMap_.at(40).block<3,3>(0,0));
-//  Eigen::Vector3f weight = {1, 1, 1};
-//  std::vector<Eigen::Quaternionf> quaternions;
-//  quaternions.clear();
-//  quaternions.push_back(q1);
-//  quaternions.push_back(q2);
-//  quaternions.push_back(q3);
-//  Eigen::Quaternionf q_avg(wp3::getAverageQuaternion(quaternions, weight));
-//  Eigen::Matrix3f R_avg = q_avg.toRotationMatrix();
-
-//  // calculate average position
-//  Eigen::Vector3f pos={0,0,0}, pos_avg;
-//  pos = pos + weight[0]*transformMap_.at(1).block<3, 1>(0, 3);
-//  pos = pos + weight[1]*transformMap_.at(13).block<3, 1>(0, 3);
-//  pos = pos + weight[2]*transformMap_.at(40).block<3, 1>(0, 3);
-//  pos_avg = (1.0 / (weight[0]+weight[1]+weight[2])) * pos;
-
-//  // insert transform
-//  Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
-//  transMat_avgA.block<3, 3>(0, 0) = R_avg;
-//  transMat_avgA.block<3, 1>(0, 3) = pos_avg;
-//  return transMat_avgA;
 }
 
 } // end namespace wp3

@@ -12,6 +12,7 @@
 #include <opencv2/aruco.hpp>
 #include "opencv2/opencv.hpp"
 #include <opencv2/imgproc/imgproc.hpp>
+#include <opencv2/core/eigen.hpp>
 
 // PCL
 //#include <pcl_ros/point_cloud.h>
@@ -48,10 +49,10 @@ public:
 
   void clearAll();
 
-  void detectMarkers(cv::Mat & inputImage, cv::Mat & inputDepth,
-                                     MarkerMapType &transform4x4,
-                                     std::string kinect_number,
-                                     Cropping crop);
+  void detectMarkers(Sensor &node,
+                     MarkerMapType &transform4x4,
+                     std::string kinect_number,
+                     Cropping crop);
 
   void makeCroppedCloud();
 
@@ -67,10 +68,10 @@ private:
   void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
 
   void pointcloudFromDepthImage (cv::Mat& depth_image,
-                                 Eigen::Matrix3f& depth_intrinsics,
+                                 Eigen::Matrix3d &depth_intrinsics,
                                  pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
                                  bool crop,
-                                 std::vector<float> c_ext,
+                                 std::vector<int> c_ext,
                                  cv::Mat depth_aruco_dummy);
 
   // TODO, create vectors

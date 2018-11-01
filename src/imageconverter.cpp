@@ -38,7 +38,6 @@ void imageConverter::getCurrentImage(cv::Mat *input_image)
     usleep(2000);
     ros::spinOnce();
   }
-  ROS_DEBUG_STREAM("got new timestamp_ ");
   i_mutex.lock();
   *input_image = src_image_;
   last_frame = timestamp_;

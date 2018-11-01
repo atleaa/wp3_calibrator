@@ -72,18 +72,18 @@ void init_reference(std::string kinect_number);
 
 void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_number);
 
-//void readTopics(std::string nodeA, std::string nodeB, cv::Mat* rgb_A, cv::Mat* depth_A, cv::Mat* rgb_B, cv::Mat* depth_B, bool update);
-void readTopics(std::string nodeA,
-                std::string nodeB,
-                cv::Mat* rgb_A,
-                cv::Mat* depth_A,
-                cv::Mat* rgb_B,
-                cv::Mat* depth_B,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
-                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
-                bool update);
+////void readTopics(std::string nodeA, std::string nodeB, cv::Mat* rgb_A, cv::Mat* depth_A, cv::Mat* rgb_B, cv::Mat* depth_B, bool update);
+//void readTopics(std::string nodeA,
+//                std::string nodeB,
+//                cv::Mat* rgb_A,
+//                cv::Mat* depth_A,
+//                cv::Mat* rgb_B,
+//                cv::Mat* depth_B,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_A,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr current_cloud_B,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudA_cropTotal,
+//                pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloudB_cropTotal,
+//                bool update);
 
 void ICP_allign(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_source_xyz_org,
                 pcl::PointCloud<pcl::PointXYZ>::Ptr cloud_target_xyz_org,
