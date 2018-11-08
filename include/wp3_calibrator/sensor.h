@@ -119,6 +119,7 @@ public:
   cv::Mat imageMat_;  // original color image
   cv::Mat depthMat_;  // original depth image
   std::vector<cv::Mat> imageMatVec_;  // original color images in a vector
+  std::vector<cv::Mat> depthMatVec_;  // original depth image in a vector
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudPtr_;      // original point cloud
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudAccPtr_;   // original point cloud
@@ -140,12 +141,20 @@ public:
 
   std::vector<double> getDistCoeffs() const;
 
+  std::vector<cv::Mat> getImageMatVec() const;
+
+  std::vector<cv::Mat> getDepthMatVec() const;
+
+  std::string getTfTopic() const;
+  void setTfTopic(const std::string &tfTopic);
+
 private:
   ros::NodeHandle nh_;
   std::string depthTopic_;
   std::string imageTopic_;
   std::string cloudTopic_;
   std::string camera_info_topic_;
+  std::string tfTopic_;
   bool intrinsics_set_;
   Eigen::Matrix3d intrinsics_matrix_;
 //  Eigen::MatrixXd distCoeffs_;

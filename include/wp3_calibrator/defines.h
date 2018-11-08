@@ -4,15 +4,18 @@
 #include <string>
 
 #define ROS_LOOPRATE 10
+#define ARUCODIMENSION 0.60 // Side length of Aruco markers
 
 #define VIEW_ICP // create a viewer to see ICP process.
-#define ACCUMULATE 5
+#define ACCUMULATE 10
 #define ICP_MAX_CORR_DIST 0.6 //
 //#define ICP_CONVERGE 0.00001  // good
+//#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
 #define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
+#define ICP_MAX_ROUNDS 30  // second end criteria
 //#define ICP_CONVERGE 1e+30  // TULL fast
-#define ICP_ITERATIONS 100 // ICP iterations
-#define ICP_TRANS_EPSILON 1e-14 //1e-11
+#define ICP_ITERATIONS 100 // ICP iterations (multiplied with round number)
+#define ICP_TRANS_EPSILON 1e-11 //1e-11
 //#define ICP_TRANS_EPSILON 1e-7 // TULL faster
 
 enum Cropping {Rect, Mask};

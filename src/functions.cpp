@@ -412,7 +412,7 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 //  for(int i=0 ; i<10; i++)
   int round = 1;
   int iterations = ICP_ITERATIONS;
-  while(fitnessChange>ICP_CONVERGE) // fitness change used as converge criteria
+  while(fitnessChange>ICP_CONVERGE && round<=ICP_MAX_ROUNDS) // fitness change used as converge criteria
   {
 //    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
 //    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8/(2^round), fitnessScore1);

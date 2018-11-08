@@ -184,14 +184,12 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
                                    std::string kinect_number,
                                    Cropping crop)
 {
-  cv::Mat inputImage = node.getImageMat();
-  cv::Mat inputDepth = node.getDepthMat();
+  cv::Mat inputImage = node.getImageMat(); // get last image
+  std::vector<cv::Mat> inputImageVec = node.getImageMatVec(); // get all recorded images
+  cv::Mat inputDepth = node.getDepthMat(); // get last image
+  std::vector<cv::Mat> inputDepthVec = node.getDepthMatVec(); // get all recorded images
 
-  std::string camera_name = node.name_;
-  std::string filename_inputPicture = "Input Picture " + camera_name;
-  std::string filename_crop1 = "cropped image 1 " + camera_name;
-  std::string filename_crop2 = "cropped image 2 " + camera_name;
-  std::string filename_crop3 = "cropped image 3 " + camera_name;
+  std::string imageName, maskName, imageCroppedName, imageCropDepthName;
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
@@ -200,185 +198,306 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Cam. coeff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
-  std::vector<double> dist_coeffs_vec = node.getDistCoeffs();
-  cv::Mat dist_coeffsIR(dist_coeffs_vec);
+  std::vector<double> distortionVec = node.getDistCoeffs();
+  cv::Mat distortionMat(distortionVec);
 
-  cv::Mat cameraMatrixIR;
-  Eigen::Matrix3d intrinsic_matrix;
-  intrinsic_matrix = node.getIntrinsics_matrix();
-  cv::eigen2cv(intrinsic_matrix, cameraMatrixIR);
+  cv::Mat intrinsicMat;
+  Eigen::Matrix3d intrinsicMatrix;
+  intrinsicMatrix = node.getIntrinsics_matrix();
+  cv::eigen2cv(intrinsicMatrix, intrinsicMat);
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ aruco param. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  double arucoSquareDimension = 0.60; // in meters
-  std::vector<int> markerIds; // markerIds.size() = number of Ids found
-  std::vector<std::vector<cv::Point2f>> markerCorners, markerCornersPadded, rejectCandidates;
+  double arucoSquareDimension = ARUCODIMENSION; // in meters
+  std::vector<int> markerIds, markerIdsAll, markerIdsMean; // markerIds.size() = number of Ids found
+  typedef std::vector<cv::Point2f> Vec2f;
+  typedef std::vector<std::vector<cv::Point2f>> VecVec2f;
+  VecVec2f markerCorners, markerCornersAll, markerCornersMean, markerCornersPadded, rejectedCandidates, rejectedCandidatesAll;
+  std::vector<cv::Vec3d> rotVecs, transVecs;
+
+  std::vector<std::vector<int>> markerIdsVec; // markerIds.size() = number of Ids found
+  std::vector<VecVec2f> rejectedCandidatesVec;
+  std::vector<std::vector<cv::Vec3d>> rotVecsVec, transVecsVec;
+
   cv::Ptr<cv::aruco::DetectorParameters> params = cv::aruco::DetectorParameters::create();
-  //		params->doCornerRefinement = true;
+  //      params->doCornerRefinement = true;
+  params->cornerRefinementMethod = cv::aruco::CORNER_REFINE_SUBPIX;
   params->cornerRefinementWinSize = 5;
   params->cornerRefinementMaxIterations = 2000;
   params->adaptiveThreshConstant = true;
   params->cornerRefinementMinAccuracy = 0.001f;
-  std::vector<cv::Vec3d> rotationVectors, translationVectors;
+
+  //---testing parameters
+  //params->cornerRefinementMinAccuracy = 0.1f;
+  //  params->adaptiveThreshWinSizeStep = 5;
+  //  params->adaptiveThreshConstant = 3;
+  //  params->errorCorrectionRate = 0.9f;
+  //  params->maxErroneousBitsInBorderRate = 0.9f;
+  //---
+
   cv::Ptr<cv::aruco::Dictionary> markerDictionary = cv::aruco::getPredefinedDictionary(cv::aruco::PREDEFINED_DICTIONARY_NAME::DICT_4X4_50);	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
 
+
+  //  std::vector<int> markerIds; //
+  std::multimap<int, Vec2f> markerCornersMap;
+  typedef std::multimap<int, Vec2f>::iterator MMAPIterator;
+  //  std::vector<std::vector<cv::Point2f>> markerCorners;
+  //  std::vector<cv::Vec3d> rotVecs, transVecs;
+
+
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Marker Detection ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  //	r_mutex.lock();
-  cv::aruco::detectMarkers(inputImage,markerDictionary,markerCorners,markerIds, params);
-//  cv::aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrixRGB, dist_coeffsRGB, rotationVectors, translationVectors);
-  cv::aruco::estimatePoseSingleMarkers(markerCorners, arucoSquareDimension, cameraMatrixIR, dist_coeffsIR, rotationVectors, translationVectors);
-  //		if (markerIds.size() != number_of_aruco)
-  //		{
-  //			return;
-  //		}
-  //	r_mutex.unlock();
+  //  markerCornersVec.clear();
+  markerIdsVec.clear();
+  for(size_t i=0; i<inputImageVec.size(); i++)
+  {
+    // detect markers
+    cv::aruco::detectMarkers(inputImageVec[i],markerDictionary,markerCorners,markerIds, params, rejectedCandidates);
+
+    // insert vectors
+    //    markerCornersVec.push_back(markerCorners);  // Vector of corner vectors
+    markerIdsVec.push_back(markerIds);          // Vector of Id vectors
+    rejectedCandidatesVec.push_back(rejectedCandidates);          // Vector of rejected candidates vectors
+    //    rotVecsVec.push_back(rotVecs);              // Vector of rotation vectors
+    //    transVecsVec.push_back(transVecs);          // Vector of transformation vectors
+
+    // insert Maps
+    std::stringstream markerStream;
+    //    for (auto i = markerIds.begin(); i != markerIds.end(); ++i)
+    for (size_t i=0 ; i< markerIds.size(); i++)
+    {
+      //      markerStream << *i << ' ';
+      markerStream << markerIds[i] << ' ';
+      //      markerCornersMap.insert(std::pair<int, Vec2f>(*i, markerCorners[0]));
+      markerCornersMap.insert(std::pair<int, Vec2f>(markerIds[i], markerCorners[i]) );
+    }
+    // show detected markers for debugging
+    //    ROS_DEBUG_STREAM(node.name_ << " ID's detected:\t" << markerStream.str());
+
+
+
+    // merge all Ids and Corners
+    markerIdsAll.insert( markerIdsAll.end(), markerIds.begin(), markerIds.end() );
+    markerCornersAll.insert( markerCornersAll.end(), markerCorners.begin(), markerCorners.end() );
+    rejectedCandidatesAll.insert( rejectedCandidatesAll.end(), rejectedCandidates.begin(), rejectedCandidates.end() );
+  }
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Marker Visualization ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  cv::aruco::drawDetectedMarkers(inputImage,markerCorners, markerIds);
-  imshow(filename_inputPicture,inputImage);
 
-  transform4x4.clear(); // clear transformations
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Average Marker Calc ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+  // It returns a pair representing the range of elements with key equal to '1'
+  std::pair<MMAPIterator, MMAPIterator> result_1 = markerCornersMap.equal_range(1);
+  std::pair<MMAPIterator, MMAPIterator> result_13 = markerCornersMap.equal_range(13);
+  std::pair<MMAPIterator, MMAPIterator> result_40 = markerCornersMap.equal_range(40);
 
+  // Iterate over the range
+  markerCornersMean.clear();
+  Vec2f cornersCurr(4), cornersMean(4);
+
+  // Total Elements in the range
+  int count1 = std::distance(result_1.first, result_1.second);
+  ROS_DEBUG_STREAM(node.name_ << " detection rate Id 1:\t" << count1*100/ACCUMULATE << "%");
+  if(count1*100/ACCUMULATE<30)
+    ROS_ERROR_STREAM(node.name_ << " Id '1' detection rate is: " << count1*100/ACCUMULATE
+                     << "%. Consider moving marker or recalibrating sensor intrinsics.");
+
+  int count13 = std::distance(result_13.first, result_13.second);
+  ROS_DEBUG_STREAM(node.name_ << " detection rate Id 13:\t" << count13*100/ACCUMULATE << "%");
+  if(count13*100/ACCUMULATE<30)
+    ROS_ERROR_STREAM(node.name_ << " Id '13' detection rate is: " << count13*100/ACCUMULATE
+                     << "%. Consider moving marker or recalibrating sensor intrinsics.");
+
+  int count40 = std::distance(result_40.first, result_40.second);
+  ROS_DEBUG_STREAM(node.name_ << " detection rate Id 40:\t" << count40*100/ACCUMULATE << "%");
+  if(count40*100/ACCUMULATE<30)
+    ROS_ERROR_STREAM(node.name_ << " Id '40' detection rate is: " << count40*100/ACCUMULATE
+                     << "%. Consider moving marker or recalibrating sensor intrinsics.");
+
+  // Find average corners of marker 1
+  //  cornersMean.clear();
+  for (MMAPIterator it = result_1.first; it != result_1.second; it++)
+  {
+    cornersCurr = it->second;
+    for (int j = 0; j<4; j++)
+    {
+      cornersMean[j].x += cornersCurr[j].x/count1;
+      cornersMean[j].y += cornersCurr[j].y/count1;
+    }
+  }
+  ROS_DEBUG_STREAM(node.name_ << " Id: 1 averaged corners:" << std::endl << cornersMean);
+  if(count1>0)
+  {
+    markerIdsMean.push_back(1);
+    markerCornersMean.push_back(cornersMean);
+  }
+
+  // Find average corners of marker 13
+  cornersMean = Vec2f(4);
+  for (MMAPIterator it = result_13.first; it != result_13.second; it++)
+  {
+    cornersCurr = it->second;
+    for (int j = 0; j<4; j++)
+    {
+      cornersMean[j].x += cornersCurr[j].x/count13;
+      cornersMean[j].y += cornersCurr[j].y/count13;
+    }
+  }
+  ROS_DEBUG_STREAM(node.name_ << " Id: 13 averaged corners:" << std::endl << cornersMean);
+  if(count13>0)
+  {
+    markerCornersMean.push_back(cornersMean);
+    markerIdsMean.push_back(13);
+  }
+
+  // Find average corners of marker 40
+  cornersMean = Vec2f(4);
+  for (MMAPIterator it = result_40.first; it != result_40.second; it++)
+  {
+    cornersCurr = it->second;
+    for (int j = 0; j<4; j++)
+    {
+      cornersMean[j].x += cornersCurr[j].x/count40;
+      cornersMean[j].y += cornersCurr[j].y/count40;
+    }
+  }
+  ROS_DEBUG_STREAM(node.name_ << " Id: 40 averaged corners:" << std::endl << cornersMean);
+  if(count40>0)
+  {
+    markerCornersMean.push_back(cornersMean);
+    markerIdsMean.push_back(40);
+  }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+
+
+
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Create cropping mask~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+  cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
+  std::vector<cv::Mat> maskVec(markerIdsMean.size());
+
+  for (size_t i = 0; i < markerIdsMean.size(); i++)
+  {
+    // init color
+    mask.setTo(cv::Scalar(0) );
+
+    // Calculate corners of padded aruco
+    markerCornersPadded = markerCornersMean;
+    float padScale=0.0;
+    padScale = 7.0/6.0-1.0; // new size/old size
+
+    // extrapolate the padded corner position using distance between the diagonal corners
+    for(int j=0 ; j<4 ; j++)
+    {
+      cv::Point2f corner;
+      corner.x = markerCornersMean[i][j].x + ( markerCornersMean[i][j].x - markerCornersMean[i][(j+2)%4].x ) * padScale*0.5;
+      corner.y = markerCornersMean[i][j].y + ( markerCornersMean[i][j].y - markerCornersMean[i][(j+2)%4].y ) * padScale*0.5;
+      markerCornersPadded[i][j] = corner;
+    }
+
+    // Create Polygon from vertices
+    std::vector<cv::Point> ROI_Poly;
+    cv::approxPolyDP(markerCornersMean[i], ROI_Poly, 1.0, true);
+    std::vector<cv::Point> ROI_PolyPadded;
+    cv::approxPolyDP(markerCornersPadded[i], ROI_PolyPadded, 1.0, true);
+
+    // Fill polygon white
+    cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
+
+    // Save mask of markerId i
+    maskVec[i] = mask.clone();
+
+    // Show current mask
+    //    maskName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " mask";
+    //    cv::imshow(maskName,maskVec[i]);
+    //    cv::waitKey(30);
+  }
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+
+  // DEBUG
+  //  cv::Mat dst;
+  //  cv::bitwise_xor(maskVec[0], maskVec[1], dst);
+  //  if(cv::countNonZero(dst) > 0) //check non-0 pixels
+  //     std::cout << "mask 0 is different from mask1" << std::endl;
+  //  else
+  //    std::cout << "mask 0 = mask1" << std::endl;
+
+
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Crop depth images ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+  cv::Mat depthMatCropped(inputDepthVec[0].rows, inputDepthVec[0].cols,CV_32F); // change type to visualize?
   pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop (new pcl::PointCloud<pcl::PointXYZ>);
 
-  for (size_t i = 0; i < markerIds.size(); i++)
+  for(size_t j=0; j<inputDepthVec.size(); j++)
   {
-//    if (markerIds[i] == 1)
-//    {
-      cv::aruco::drawAxis(inputImage, cameraMatrixIR, dist_coeffsIR, rotationVectors[i], translationVectors[i], 0.5);
+    for (size_t i = 0; i < markerIdsMean.size(); i++)
+    {
+      depthMatCropped.setTo(cv::Scalar(0)); // initialize depth to 0
+      inputDepthVec[j].copyTo(depthMatCropped, maskVec[i]);
+
+      pointcloudFromDepthImage(depthMatCropped, intrinsicMatrix, src_cloud_crop);
+      //    pointcloudFromDepthImage(depthMatCropped, intrinsicMatrix, src_cloud_crop, true, rectCrop, depthMatCropped);
+
+      // add cropped source to accumulated marker cloud
+      if (markerIdsMean[i] == 1)  *src_cloud_crop1_ += *src_cloud_crop;
+      if (markerIdsMean[i] == 13) *src_cloud_crop2_ += *src_cloud_crop;
+      if (markerIdsMean[i] == 40) *src_cloud_crop3_ += *src_cloud_crop;
+
+      // add cropped source to combined cloud
+      *croppedCloud_ += *src_cloud_crop;
+    } // end for markerIdsMean.
+  } //end for inputDepthVec
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
 
-      switch(crop)
-      {
-      case Rect:
-      {
-        max4points(markerCorners[i], topx, topy, botx, boty, invalid_points);
-        if (!invalid_points)
-        {
-          cv::Rect myROI(botx,boty,topx-botx, topy-boty);
-          cv::Mat croppedImage = inputImage(myROI);
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Transform ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+  Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
+  transform4x4.clear(); // clear transformations
 
-          // TODO: change from defined clouds to a std::map with string and cloud
-          if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
-          if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
-          if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
-  //        cv::imshow(filename_crop1,croppedImage);
-          cv::waitKey(30);
+  // calculate pose based on average corners
+  cv::aruco::estimatePoseSingleMarkers(markerCornersMean, arucoSquareDimension, intrinsicMat, distortionMat, rotVecs, transVecs);
 
-          cv::Mat depthMatCropped = inputDepth(myROI);
-  //        current_depthMat_A_crop1_ = inputDepth(myROI);
-
-          std::vector<int> rectCrop = {(int)(botx+0.5), (int)(boty+0.5), (int)(topx+0.5), (int)(topy+0.5)};
-          pointcloudFromDepthImage(inputDepth, intrinsic_matrix, src_cloud_crop, true, rectCrop, depthMatCropped);
-
-
-          // TODO: change from defined clouds to a std::map with string and cloud
-          if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
-          if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
-          if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
-
-          // add cropped source to combined cloud
-          *croppedCloud_ += *src_cloud_crop;
-
-          Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
-          createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
-
-          transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
-          transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
-
-        }
-      };
-
-      case Mask:
-      {
-        cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
-        mask = 0;
-
-        // Calculate corners of padded aruco
-        markerCornersPadded = markerCorners;
-        float padScale=0.0;
-        padScale = 7.0/6.0-1.0; // new size/old size
-
-        // extrapolate the padded corner position using distance between the diagonal corners
-        for(int j=0 ; j<4 ; j++)
-        {
-          cv::Point2f corner;
-          corner.x = markerCorners[i][j].x + ( markerCorners[i][j].x - markerCorners[i][(j+2)%4].x ) * padScale*0.5;
-          corner.y = markerCorners[i][j].y + ( markerCorners[i][j].y - markerCorners[i][(j+2)%4].y ) * padScale*0.5;
-          markerCornersPadded[i][j] = corner;
-        }
-
-        // Create Polygon from vertices
-        std::vector<cv::Point> ROI_Poly;
-        cv::approxPolyDP(markerCorners[i], ROI_Poly, 1.0, true);
-        std::vector<cv::Point> ROI_PolyPadded;
-        cv::approxPolyDP(markerCornersPadded[i], ROI_PolyPadded, 1.0, true);
-
-        // Fill polygon white
-        cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
-
-        // Create new image for result storage
-        cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
-        croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
-
-        // Cut out ROI and store it in imageDest
-        inputImage.copyTo(croppedImage, mask);
-
-        // mask end -----------------------------------------------------------------
-
-
-          // TODO: change from defined clouds to a std::map with string and cloud
-          if (markerIds[i] == 1) cv::imshow(filename_crop1,croppedImage);
-          if (markerIds[i] == 13) cv::imshow(filename_crop2,croppedImage);
-          if (markerIds[i] == 40) cv::imshow(filename_crop3,croppedImage);
-  //        cv::imshow(filename_crop1,croppedImage);
-          cv::waitKey(30);
-
-//          cv::Mat depthMatCropped(inputDepth.rows, inputDepth.cols,CV_8UC3);
-          cv::Mat depthMatCropped(inputDepth.rows, inputDepth.cols,CV_32F); // change type to visualize?
-          depthMatCropped.setTo(cv::Scalar(0)); // initialize depth to 0
-          inputDepth.copyTo(depthMatCropped, mask);
-//          depthMatCropped = inputDepth(myROI);
-  //        current_depthMat_A_crop1_ = inputDepth(myROI);
-
-          // Show cropped depth image----------
-          cv::Mat depthMatCroppedView;
-          depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
-          std::ostringstream stream;
-          stream << "depthcropped-" <<  camera_name << "." << markerIds[i];
-          std::string str = stream.str();
-          cv::imshow(str,depthMatCroppedView);
-          cv::waitKey(30);
-          // Show cropped depth image end----------
-
-          std::vector<int> rectCrop = {0,0,inputDepth.cols, inputDepth.rows};
-
-          pointcloudFromDepthImage(depthMatCropped, intrinsic_matrix, src_cloud_crop, true, rectCrop, depthMatCropped);
-
-          // TODO: change from defined clouds to a std::map with string and cloud
-          if (markerIds[i] == 1) src_cloud_crop1_ = src_cloud_crop;
-          if (markerIds[i] == 13) src_cloud_crop2_ = src_cloud_crop;
-          if (markerIds[i] == 40) src_cloud_crop3_ = src_cloud_crop;
-
-          // add cropped source to combined cloud
-          *croppedCloud_ += *src_cloud_crop;
-
-          Eigen::Matrix4f tmatTemp = Eigen::Matrix4f::Identity();
-          createTransMatrix(rotationVectors[i],translationVectors[i], tmatTemp);
-
-          transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
-          transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIds[i]+100*acc_,tmatTemp ));
-
-        }; // end case Mask
-
-      } // end switch(crop)
-
+  for(size_t i = 0; i < markerIdsMean.size(); i++)
+  {
+    createTransMatrix(rotVecs[i],transVecs[i], tmatTemp);
+    transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean[i]+100*acc_,tmatTemp ));
+    transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean[i]+100*acc_,tmatTemp ));
   }
-//  transformMap_ = transform4x4;
-//    transformMap_.insert(transform4x4.begin(),transform4x4.end());
-    acc_++;
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+
+
+  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
+  // show full color image
+  imageName = node.name_ + " Input";
+  //cv::aruco::drawDetectedMarkers(inputImage,rejectedCandidatesAll, cv::noArray(), cv::Scalar(100, 0, 255) );
+  //cv::aruco::drawDetectedMarkers(inputImage,markerCornersAll, cv::noArray(), cv::Scalar(200, 255, 200) );
+  cv::aruco::drawDetectedMarkers(inputImage,markerCornersMean, markerIdsMean);
+  for(size_t i = 0; i < rotVecs.size(); i++)
+  {
+    cv::aruco::drawAxis(inputImage, intrinsicMat, distortionMat, rotVecs[i], transVecs[i], 0.3);
+  }
+  cv::imshow(imageName,inputImage);
+  cv::waitKey(30);
+
+
+  for (size_t i = 0; i < markerIdsMean.size(); i++)
+  {
+    // show cropped color image
+    imageCroppedName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " cropped";
+    cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
+    croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
+    inputImage.copyTo(croppedImage, maskVec[i]); // Cut out ROI and store it in imageDest
+    cv::imshow(imageCroppedName,croppedImage);
+    cv::waitKey(30);
+
+    // Show cropped depth image----------
+    imageCropDepthName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " cropped depth";
+    cv::Mat depthMatCroppedView;
+    depthMatCropped.setTo(cv::Scalar(0) ); // initialize color
+    inputDepthVec[inputDepthVec.size()-1].copyTo(depthMatCropped, maskVec[i]);
+    depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
+    cv::imshow(imageCropDepthName, depthMatCroppedView);
+    cv::waitKey(30);
+
+  } // end for markerIds
+  acc_++;
 }
 
 void arucoProcessor::makeCroppedCloud()
@@ -431,8 +550,9 @@ void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, std
   /*std::map<int, Eigen::Matrix4f> transMapUsed*/;
   transMapUsed.clear();
 
-  for(int i=0 ; i<acc_ ; i++)
+  for(int i=0 ; i<acc_ ; i++) // loop all images
   {
+    // if all markers are found
     if(transformMap_.count(1+100*i)>0 && transformMap_.count(13+100*i)>0 && transformMap_.count(40+100*i)>0)
     {
 //      std::cout << "found all IDs for acc= " << i << std:: endl;

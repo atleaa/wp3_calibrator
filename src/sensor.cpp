@@ -57,6 +57,26 @@ void Sensor::setDepthMat(const cv::Mat &depthMat){depthMat_ = depthMat;}
 pcl::PointCloud<pcl::PointXYZ>::Ptr Sensor::getCloud() const{return cloudPtr_;}
 void Sensor::setCloud(const pcl::PointCloud<pcl::PointXYZ>::Ptr &cloud){cloudPtr_ = cloud;}
 
+std::vector<cv::Mat> Sensor::getDepthMatVec() const
+{
+  return depthMatVec_;
+}
+
+std::string Sensor::getTfTopic() const
+{
+  return tfTopic_;
+}
+
+void Sensor::setTfTopic(const std::string &tfTopic)
+{
+  tfTopic_ = tfTopic;
+}
+
+std::vector<cv::Mat> Sensor::getImageMatVec() const
+{
+  return imageMatVec_;
+}
+
 void Sensor::setCamera_info_topic(const std::string &camera_info_topic)
 {
   camera_info_topic_ = camera_info_topic;
@@ -109,18 +129,13 @@ void Sensor::cameraInfoCallback (const sensor_msgs::CameraInfo::ConstPtr & msg)
 void Sensor::readTopics(bool update = false)
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  wp3::imageConverter IC_Depth_A(depthTopic_, "depth");
-  //        std::cout << depthMatA << " converted" << std::endl; //TULL
-  wp3::imageConverter IC_RGB_A(imageTopic_, "color");
-  //        std::cout << rgbA << " converted" << std::endl; //TULL
+  wp3::imageConverter ic_depth(depthTopic_, "depth");
+  wp3::imageConverter ic_color(imageTopic_, "color");
 
-  depthProcessor dp_A = depthProcessor(cloudTopic_); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
+  depthProcessor dp = depthProcessor(cloudTopic_); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
 
-//  ros::NodeHandle nh;
   ros::NodeHandle n("~");
-//  ros::Subscriber camera_info_sub = n.subscribe(camera_info_topic_, 1, cameraInfoCallback);
   ros::Subscriber camera_info_sub = n.subscribe(camera_info_topic_, 1, &Sensor::cameraInfoCallback, this);
-//  ros::Subscriber camera_info_sub = n.subscribe(  "/jetson4/sd/camera_info", 1, &Sensor::cameraInfoCallback, this);
 
 
   if (update)
@@ -128,43 +143,50 @@ void Sensor::readTopics(bool update = false)
     imageMat_.release();
     depthMat_.release();
     cloudPtr_->clear();
-//    cloudPtr_.reset();
-
-//    std::cout << "emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;
-    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
+    imageMatVec_.clear();
+//    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
   }
 
   // get color image
   ROS_DEBUG_STREAM("Reading " << imageTopic_ << " ... "<< std::flush);
-  while(imageMat_.empty())
+  for(int i=0;i<ACCUMULATE;i++)
   {
-    IC_RGB_A.getCurrentImage(&imageMat_);
+    imageMat_.release();
+    while(imageMat_.empty())
+    {
+      ic_color.getCurrentImage(&imageMat_);
+    }
+    imageMatVec_.push_back(imageMat_);
   }
-  ROS_DEBUG_STREAM("done" << std::endl);
+  ROS_DEBUG_STREAM("Done reading " << imageTopic_ << std::endl);
 
   // get depth image
   ROS_DEBUG_STREAM("Reading " << depthTopic_ << " ... "<< std::flush);
-  while(depthMat_.empty())
+  for(int i=0;i<ACCUMULATE;i++)
   {
-    IC_Depth_A.getCurrentDepthMap(&depthMat_);
+    depthMat_.release();
+    while(depthMat_.empty())
+    {
+      ic_depth.getCurrentDepthMap(&depthMat_);
+    }
+    depthMatVec_.push_back(depthMat_);
   }
-  ROS_DEBUG_STREAM("done " << std::endl);
+
+  ROS_DEBUG_STREAM("Done reading " << depthTopic_ << std::endl);
 
   // get cloud
   ROS_DEBUG_STREAM("Reading " << cloudTopic_ << " ... "<< std::flush);
   while( cloudPtr_->size() == 0)
   {
-    dp_A.get_filtered_PCL_cloud(cloudPtr_);
+    dp.get_filtered_PCL_cloud(cloudPtr_);
   }
-  ROS_DEBUG_STREAM("done" << std::endl);
+  ROS_DEBUG_STREAM("Done reading " << cloudTopic_ << std::endl);
 } // end readTopics
 
 void Sensor::appendClouds()
 {
   *cloudAccPtr_ += *cloudPtr_;
   *cloud1AccPtr_ += *cloud1Ptr_;
-//  *cloud2AccPtr_ += *cloud2Ptr_;
-//  *cloud3AccPtr_ += *cloud3Ptr_;
 }
 
 
