@@ -49,6 +49,43 @@ void init_reference(std::string kinect_number)
   std::cout << "done" << std::endl;
 }
 
+void loadSensors(ros::NodeHandle & node_handle, std::vector<wp3::Sensor::Ptr> & sensorVec)
+{
+  int num_sensors;
+  node_handle.param("num_sensors", num_sensors, 0);
+
+  for (int i = 0; i < num_sensors; ++i)
+  {
+    std::string tmpString;
+
+    tmpString = "sensor_" + std::to_string(i) + "/name";
+    node_handle.param(tmpString, tmpString, tmpString);
+    wp3::Sensor::Ptr sensorNode = boost::make_shared<wp3::Sensor>(tmpString, node_handle);
+
+    tmpString = "sensor_" + std::to_string(i) + "/camera_info";
+    node_handle.param(tmpString, tmpString, tmpString);
+    sensorNode->setCamera_info_topic(tmpString);
+
+    tmpString = "sensor_" + std::to_string(i) + "/color";
+    node_handle.param(tmpString, tmpString, tmpString);
+    sensorNode->setImageTopic(tmpString);
+
+    tmpString = "sensor_" + std::to_string(i) + "/depth";
+    node_handle.param(tmpString, tmpString, tmpString);
+    sensorNode->setDepthTopic(tmpString);
+
+    tmpString = "sensor_" + std::to_string(i) + "/cloud";
+    node_handle.param(tmpString, tmpString, tmpString);
+    sensorNode->setCloudTopic(tmpString);
+
+    tmpString = "sensor_" + std::to_string(i) + "/tf";
+    node_handle.param(tmpString, tmpString, tmpString);
+    sensorNode->setTfTopic(tmpString);
+
+    sensorVec.push_back(sensorNode);
+  }
+}
+
 
 void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_number)
 {

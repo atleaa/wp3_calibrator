@@ -52,7 +52,10 @@ namespace wp3 {
 class imageConverter
 {
 public:
-  imageConverter(const std::string& inputName, const std::string&  type);
+  imageConverter(const std::string& inputName,
+                 const std::string&  type,
+                 image_transport::ImageTransport &image_transport_nh,
+                 ros::NodeHandle &nodehandle);
 
   ~imageConverter();
 
@@ -68,7 +71,7 @@ private:
   //  std::string topicName_;
   cv::Mat src_image_, src_depth_;
   ros::NodeHandle nh_;
-  image_transport::ImageTransport it_;
+//  image_transport::ImageTransport it_;
   image_transport::Subscriber image_sub_;
   std::string topic_type_;
   ros::Time timestamp_;

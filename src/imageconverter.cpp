@@ -6,19 +6,27 @@ namespace wp3 {
 
 // imageconverter -----------------------------------------------
 // Constructor
-imageConverter::imageConverter(const std::string& inputName, const std::string&  type) : it_(nh_)
+imageConverter::imageConverter(const std::string& inputName,
+                               const std::string&  type,
+                               image_transport::ImageTransport & image_transport_nh,
+                               ros::NodeHandle & nodehandle)
+//  nh_(nodehandle),
+//  it_(nodehandle)
 {
-  //subscribe to the input video stream "/kinect2/hd/image_color"
   //r_mutex.lock();
   topic_type_ = inputName;
   if (type == "depth")
   {
-    image_sub_ = it_.subscribe(inputName, 1, &imageConverter::callback_depth, this, image_transport::TransportHints("compressed"));
+    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_depth, this, image_transport::TransportHints("compressed"));
+//    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_depth, this);
+    ROS_DEBUG_STREAM("Subscribing to " << inputName);
   }
 
   else if (type == "color")
   {
-    image_sub_ = it_.subscribe(inputName, 1, &imageConverter::callback_color, this, image_transport::TransportHints("compressed"));
+    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_color, this, image_transport::TransportHints("compressed"));
+//    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_color, this);
+    ROS_DEBUG_STREAM("Subscribing to " << inputName);
   }
   //r_mutex.unlock();
 }
@@ -35,7 +43,7 @@ imageConverter::~imageConverter()
 void imageConverter::getCurrentImage(cv::Mat *input_image)
 {
   while((timestamp_.toSec() - last_frame.toSec()) <= 0) {
-    usleep(2000);
+    usleep(50); // changed from 2000
     ros::spinOnce();
   }
   i_mutex.lock();
@@ -60,8 +68,9 @@ void imageConverter::getCurrentDepthMap(cv::Mat *input_image)
 
 void imageConverter::callback_depth(const sensor_msgs::ImageConstPtr& msg)
 {
-  ros::Time frame_time = ros::Time::now();
-  timestamp_ = frame_time;
+//  ros::Time frame_time = ros::Time::now();
+//  timestamp_ = frame_time;
+  timestamp_ = msg->header.stamp;
   cv_bridge::CvImageConstPtr pCvImage;
 
   //                std::cout << "D1";
@@ -96,11 +105,10 @@ void imageConverter::callback_depth(const sensor_msgs::ImageConstPtr& msg)
 
 void imageConverter::callback_color(const sensor_msgs::ImageConstPtr& msg)
 {
-  ros::Time frame_time = ros::Time::now();
-  timestamp_ = frame_time;
+//  ros::Time frame_time = ros::Time::now();
+//  timestamp_ = frame_time;
+  timestamp_ = msg->header.stamp;
   cv_bridge::CvImagePtr cv_ptr;
-
-  //                std::cout << "C1";
 
   try
   {

@@ -15,6 +15,8 @@
 
 
 // begin main  --------------------------------------------------------------------------------------------
+
+
 int main (int argc, char** argv)
 {
   //Set logging level: (DEBUG, INFO, WARN, ERROR, FATAL)
@@ -56,8 +58,9 @@ int main (int argc, char** argv)
   ROS_INFO_STREAM("Starting: "<<  std::endl);
 
   // initialize ROS node
-  ros::init(argc, argv, "wp3_calibrator");
-  ros::NodeHandle nh;
+//  ros::init(argc, argv, "wp3_calibrator");
+  ros::init(argc, argv, "calibrate");
+  ros::NodeHandle node_handle("~"); // private node handle
   ros::spinOnce();
 
   // TODO: move creation of arucoprocessor?
@@ -88,11 +91,6 @@ int main (int argc, char** argv)
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
 
-  // Read some parameters from launch file:
-  //  nh.param(read, write, default);
-//  std::string camera_info_topic;
-//  nh.param("camera_info_topic", camera_info_topic, std::string("/jetson6/sd/camera_info"));
-
   // Subscribers:
 //  ros::Subscriber camera_info_sub = nh.subscribe(camera_info_topic, 1, cameraInfoCallback);
 
@@ -100,38 +98,12 @@ int main (int argc, char** argv)
   static tf::TransformBroadcaster transform_publisher;
 
 
-  // TODO: make node vector and replace strings with config file or parameters (nh.param)
-//  wp3::Sensor nodeA("jetson1");
-//  nodeA.setCamera_info_topic("/jetson1/hd/camera_info");
-//  nodeA.setTfTopic("jetson1_rgb_optical_frame");
-//  nodeA.setImageTopic("/jetson1/hd/image_color_rect");
-//  nodeA.setDepthTopic("/jetson1/hd/image_depth_rect");
-////  nodeA.setCloudTopic("/master/jetson1/points");
-//  nodeA.setCloudTopic("/jetson1/hd/points");
-
-//  wp3::Sensor nodeB("jetson6");
-//  nodeB.setCamera_info_topic("/jetson6/hd/camera_info");
-//  nodeA.setTfTopic("jetson6_rgb_optical_frame");
-//  nodeB.setImageTopic("/jetson6/hd/image_color_rect");
-//  nodeB.setDepthTopic("/jetson6/hd/image_depth_rect");
-////  nodeB.setCloudTopic("/master/jetson2/points");
-//  nodeB.setCloudTopic("/jetson6/hd/points");
-
-  wp3::Sensor nodeA("jetson1");
-  nodeA.setCamera_info_topic("/jetson1/sd/camera_info");
-  nodeA.setTfTopic("jetson1_ir_optical_frame");
-  nodeA.setImageTopic("/jetson1/sd/image_color_rect");
-  nodeA.setDepthTopic("/jetson1/sd/image_depth_rect");
-//  nodeA.setCloudTopic("/master/jetson1/points");
-  nodeA.setCloudTopic("/jetson1/sd/points");
-
-  wp3::Sensor nodeB("jetson6");
-  nodeB.setCamera_info_topic("/jetson6/sd/camera_info");
-  nodeA.setTfTopic("jetson6_ir_optical_frame");
-  nodeB.setImageTopic("/jetson6/sd/image_color_rect");
-  nodeB.setDepthTopic("/jetson6/sd/image_depth_rect");
-//  nodeB.setCloudTopic("/master/jetson2/points");
-  nodeB.setCloudTopic("/jetson6/sd/points");
+  // Init sensors from launch file ---------------------------
+  std::vector<wp3::Sensor::Ptr> sensorVec;
+  wp3::loadSensors(node_handle, sensorVec);
+  wp3::Sensor nodeA = *sensorVec[0];
+  wp3::Sensor nodeB = *sensorVec[1];
+// Init sensors from launch file ---------------------------
 
 
   wp3::init_reference(reference_node); // create first initial transformation
@@ -316,8 +288,8 @@ int main (int argc, char** argv)
     q.setRPY(-2.44, 0, 0.7);  // j1
 //    q.setRPY(-2.50, 0, -1.571);  // j4
     worldToReference_tf.setRotation(q);
-//    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", nodeA.getTfTopic() ) );
-    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", "jetson1_ir_optical_frame" ) );
+    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", nodeA.getTfTopic() ) );
+//    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", "jetson1_ir_optical_frame" ) );
 
 
     // TF - A to B
@@ -326,8 +298,8 @@ int main (int argc, char** argv)
     Eigen::Affine3d transform_affine(transform_m4d);
     tf::Transform transform_tf;
     tf::transformEigenToTF(transform_affine, transform_tf);
-//    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), nodeA.getTfTopic(), nodeB.getTfTopic() ) );
-    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson1_ir_optical_frame", "jetson6_ir_optical_frame" ) );
+    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), nodeA.getTfTopic(), nodeB.getTfTopic() ) );
+//    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson1_ir_optical_frame", "jetson6_ir_optical_frame" ) );
     ros::spinOnce();
 
 

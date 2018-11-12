@@ -2,9 +2,12 @@
 
 
 namespace wp3{
+//namespace calibrate{
 
 // Constructor
-Sensor::Sensor(std::string name) :
+Sensor::Sensor(std::string name, ros::NodeHandle & nodehandle) :
+  nh_(nodehandle),
+  it_(nodehandle),
   cloudPtr_(new pcl::PointCloud<pcl::PointXYZ>),
   cloudCrPtr_(new pcl::PointCloud<pcl::PointXYZ>),
   cloud1Ptr_(new pcl::PointCloud<pcl::PointXYZ>),
@@ -129,13 +132,13 @@ void Sensor::cameraInfoCallback (const sensor_msgs::CameraInfo::ConstPtr & msg)
 void Sensor::readTopics(bool update = false)
 {
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  wp3::imageConverter ic_depth(depthTopic_, "depth");
-  wp3::imageConverter ic_color(imageTopic_, "color");
+  wp3::imageConverter ic_depth(depthTopic_, "depth", it_, nh_);
+  wp3::imageConverter ic_color(imageTopic_, "color", it_, nh_);
 
   depthProcessor dp = depthProcessor(cloudTopic_); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
 
-  ros::NodeHandle n("~");
-  ros::Subscriber camera_info_sub = n.subscribe(camera_info_topic_, 1, &Sensor::cameraInfoCallback, this);
+//  ros::NodeHandle n("~");
+  ros::Subscriber camera_info_sub = nh_.subscribe(camera_info_topic_, 1, &Sensor::cameraInfoCallback, this);
 
 
   if (update)
@@ -189,5 +192,5 @@ void Sensor::appendClouds()
   *cloud1AccPtr_ += *cloud1Ptr_;
 }
 
-
+//} // end namespace calibrate
 } // end namespace wp3

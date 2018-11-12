@@ -26,6 +26,8 @@
 
 // ROS
 #include <sensor_msgs/CameraInfo.h>
+#include <image_transport/image_transport.h>
+
 
 // PCL
 //#include <pcl_ros/point_cloud.h>
@@ -70,15 +72,21 @@
 
 namespace wp3
 {
+//namespace calibrate
+//{
 
 class Sensor
 {
 public:
   // Contructor
-  Sensor(std::string name);
+  Sensor(std::string name, ros::NodeHandle & nodehandle);
 
   // Destructor
   ~Sensor();
+
+  // boost pointer
+  typedef boost::shared_ptr<Sensor> Ptr;
+
 
   void clear();
 
@@ -150,6 +158,7 @@ public:
 
 private:
   ros::NodeHandle nh_;
+  image_transport::ImageTransport it_;
   std::string depthTopic_;
   std::string imageTopic_;
   std::string cloudTopic_;
@@ -170,5 +179,6 @@ private:
 
 }; // end class Sensor
 
+//} // end namespace calibrate
 } // end namespace wp3
 #endif // SENSOR_H

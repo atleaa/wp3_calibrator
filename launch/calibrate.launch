@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<!--
+  Used to load the calibrate RGB-D camera nodes.
+
+  Usage:
+    roslaunch wp3_calibrator calibrate.launch
+-->
+
+<launch>
+<!-- Calibration parameters -->
+<arg name="num_sensors"   default="3" />
+
+<arg name="sensor_0_id"   default="jetson1" />
+<!--<arg name="sensor_0_name" default="$(arg sensor_0_id)" />-->
+<arg name="sensor_1_id"   default="jetson3" />
+<!--<arg name="sensor_1_name" default="$(arg sensor_1_id)" />-->
+<arg name="sensor_2_id"   default="jetson6" />
+<!--<arg name="sensor_2_name" default="$(arg sensor_2_id)" />-->
+
+
+<!-- Opening Rviz for visualization -->
+<!--<node name="rviz" pkg="rviz" type="rviz" args="-d $(find wp3_calibrator)/visualization_config.rviz" />-->
+
+<!-- Launching calibration -->
+<node pkg="wp3_calibrator" type="calibrate" name="calibrate" output="screen">
+
+<!--  <param unless="$(arg lock_world_frame)" name="world_computation" value="last_checkerboard" />-->
+<!--  <param     if="$(arg lock_world_frame)" name="world_computation" value="update" />-->
+<!--  <param     if="$(arg lock_world_frame)" name="fixed_sensor/name" value="/$(arg fixed_sensor_id)" />-->
+
+<param name="num_sensors"           value="$(arg num_sensors)" />
+
+<param name= "sensor_0/name"        value= "$(arg sensor_0_id)" />
+<param name="~sensor_0/color"       value="/$(arg sensor_0_id)/sd/image_color_rect" />
+<param name="~sensor_0/depth"       value="/$(arg sensor_0_id)/sd/image_depth_rect" />
+<param name="~sensor_0/cloud"       value="/$(arg sensor_0_id)/sd/points" />
+<param name="~sensor_0/camera_info" value="/$(arg sensor_0_id)/sd/camera_info" />
+<param name="~sensor_0/tf"          value= "$(arg sensor_0_id)_ir_optical_frame" />
+
+<param name= "sensor_1/name"        value= "$(arg sensor_1_id)" />
+<param name="~sensor_1/color"       value="/$(arg sensor_1_id)/sd/image_color_rect" />
+<param name="~sensor_1/depth"       value="/$(arg sensor_1_id)/sd/image_depth_rect" />
+<param name="~sensor_1/cloud"       value="/$(arg sensor_1_id)/sd/points" />
+<param name="~sensor_1/camera_info" value="/$(arg sensor_1_id)/sd/camera_info" />
+<param name="~sensor_1/tf"          value= "$(arg sensor_1_id)_ir_optical_frame" />
+
+<param name= "sensor_2/name"        value= "$(arg sensor_2_id)" />
+<param name="~sensor_2/color"       value="/$(arg sensor_2_id)/sd/image_color_rect" />
+<param name="~sensor_2/depth"       value="/$(arg sensor_2_id)/sd/image_depth_rect" />
+<param name="~sensor_2/cloud"       value="/$(arg sensor_2_id)/sd/points" />
+<param name="~sensor_2/camera_info" value="/$(arg sensor_2_id)/sd/camera_info" />
+<param name="~sensor_2/tf"          value= "$(arg sensor_2_id)_ir_optical_frame" />
+
+
+<!--<param name="sensor_1/camera_info" value=   "/$(arg sensor_1_id)/sd/camera_info" />
+<param name="sensor_1/color"       value=   "/$(arg sensor_1_id)/sd/image_color_rect" />
+<param name="sensor_1/depth"       value=   "/$(arg sensor_1_id)/sd/image_depth_rect" />-->
+
+<!--
+wp3::Sensor nodeA("jetson1");
+nodeA.setCamera_info_topic("/jetson1/sd/camera_info");
+nodeA.setTfTopic("jetson1_ir_optical_frame");
+nodeA.setImageTopic("/jetson1/sd/image_color_rect");
+nodeA.setDepthTopic("/jetson1/sd/image_depth_rect");
+//  nodeA.setCloudTopic("/master/jetson1/points");
+nodeA.setCloudTopic("/jetson1/sd/points");
+
+wp3::Sensor nodeB("jetson6");
+nodeB.setCamera_info_topic("/jetson6/sd/camera_info");
+nodeA.setTfTopic("jetson6_ir_optical_frame");
+nodeB.setImageTopic("/jetson6/sd/image_color_rect");
+nodeB.setDepthTopic("/jetson6/sd/image_depth_rect");
+//  nodeB.setCloudTopic("/master/jetson2/points");
+nodeB.setCloudTopic("/jetson6/sd/points");
+
+-->
+
+<!--<param name="rows"                  value="$(arg rows)" />
+<param name="cols"                  value="$(arg cols)" />
+<param name="cell_width"            value="$(arg cell_width)" />
+<param name="cell_height"           value="$(arg cell_height)" />-->
+
+
+
+</node>
+
+
+<!--
+  <group ns="robot1">
+    <param name="tf_prefix" value="robot1_tf" />
+    <include file="$(find wp3_robots)/launch/load_tirb4400.launch">
+      <arg name="robot_name"     default="robot1" />
+      <arg name="robot_ip"	      default="10.225.120.201" />
+      <arg name="J23_coupled"    default="true" />
+    </include>
+  </group>-->
+</launch>
