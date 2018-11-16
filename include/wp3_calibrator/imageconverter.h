@@ -84,7 +84,8 @@ private:
 class depthProcessor
 {
 public:
-  depthProcessor(const std::string& inputNameA);
+  depthProcessor(const std::string& inputNameA,
+                 ros::NodeHandle &nodehandle);
 
   ~depthProcessor();
 
@@ -95,7 +96,7 @@ public:
 private:
   pcl::PointCloud<pcl::PointXYZ> tmp_cloud_read_;
   ros::Subscriber depth_subA_;
-  ros::NodeHandle nh_depthA_;
+  ros::NodeHandle nh_;
   ros::Time timestamp_depth_;
   ros::Time last_frame_depth_;
 

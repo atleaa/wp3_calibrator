@@ -7,6 +7,8 @@
 #include "wp3_calibrator/imageconverter.h"
 #include "wp3_calibrator/sensor.h"
 
+
+
 // Global variables:
 //std::vector<cv::Vec3f> camera_colors;     // vector containing colors to use to identify cameras in the network
 //std::map<std::string, int> color_map;     // map between camera frame_id and color
@@ -25,6 +27,7 @@ int main (int argc, char** argv)
   }
 
   std::recursive_mutex r_mutex2;
+  boost::mutex mtx;
 
   // init cloud vectors for visualizer
   std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6;
@@ -38,9 +41,8 @@ int main (int argc, char** argv)
   MarkerMapType transformMap_B;
 
 
-  Eigen::Matrix4f transform_ICP1_print = Eigen::Matrix4f::Identity();
-  Eigen::Matrix4f transform_reference_global = Eigen::Matrix4f::Identity();
-  std::vector<Eigen::Matrix4f> transformVec;
+  Eigen::Matrix4f transform_ICP1_print = Eigen::Matrix4f::Identity();  Eigen::Matrix4f transform_reference_global = Eigen::Matrix4f::Identity();
+//  std::vector<Eigen::Matrix4f> transformVec;
 
   // init variables
   double ICP1_fitness_to_print;
@@ -62,10 +64,6 @@ int main (int argc, char** argv)
   ros::init(argc, argv, "calibrate");
   ros::NodeHandle node_handle("~"); // private node handle
   ros::spinOnce();
-
-  // TODO: move creation of arucoprocessor?
-  wp3::arucoProcessor aruco_A;
-  wp3::arucoProcessor aruco_B;
 
   // init pcl viewer
   wp3::Visualization viewerAruco;
@@ -98,17 +96,32 @@ int main (int argc, char** argv)
   static tf::TransformBroadcaster transform_publisher;
 
 
-  // Init sensors from launch file ---------------------------
+  // Init sensors from launch file
   std::vector<wp3::Sensor::Ptr> sensorVec;
-  wp3::loadSensors(node_handle, sensorVec);
-  wp3::Sensor nodeA = *sensorVec[0];
-  wp3::Sensor nodeB = *sensorVec[1];
-// Init sensors from launch file ---------------------------
+  int num_sensors;
+  wp3::loadSensors(node_handle, sensorVec, num_sensors);
 
+  // Init vector of transformations to identity
+  std::vector<Eigen::Matrix4f> transformVec(num_sensors, Eigen::Matrix4f::Identity() );
+  std::vector<MarkerMapType> tfMapVec(num_sensors);
+
+  // Init aruco processor
+//  std::vector<wp3::arucoProcessor::Ptr> apVec; // vector of arucoProcessor
+//  wp3::arucoProcessor ap;
+  wp3::arucoProcessor aruco_A;
+  wp3::arucoProcessor aruco_B;
+//  wp3::arucoProcessor::Ptr ap = boost::make_shared<wp3::arucoProcessor>();
+//  std::vector<wp3::arucoProcessor::Ptr> apVec(num_sensors, ap); // vector of arucoProcessor
+//  wp3::arucoProcessor ap;
+//  std::vector<wp3::arucoProcessor> apVec(num_sensors, ap); // vector of arucoProcessor
+  std::vector<wp3::arucoProcessor> apVec(num_sensors); // vector of arucoProcessor
+//  std::vector<wp3::arucoProcessor> apVec; // vector of arucoProcessor
+//  for(int i=0; i<num_sensors; i++)
+//    apVec.push_back(ap);
 
   wp3::init_reference(reference_node); // create first initial transformation
 
-  r_mutex2.lock();
+//  r_mutex2.lock();
   int key = cv::waitKey(30);
 //  bool init = false;  // don't autostart
   bool init = true;
@@ -124,6 +137,10 @@ int main (int argc, char** argv)
 
   usleep(1000000); // give the spinner some time to start (1000 ms)
 
+
+  // Init threads
+//  boost::thread threads[num_sensors];
+
   //  begin main while ------------------------------------------------------------------------------------------
   while ((key != 27) && ros::ok())  // not ESC
   {
@@ -132,56 +149,77 @@ int main (int argc, char** argv)
     // the process below is performed initially and updated every time the user presses the "n" key on the RGB image
     if (key == 110 || init == true) // n
     {
-      ROS_INFO_STREAM("Starting calibration routine" << std::endl);
       init = false;
-      aruco_A.clearAll();
-      aruco_B.clearAll();
-      nodeA.clear();
-      nodeB.clear();
+      ROS_INFO_STREAM("Starting calibration routine" << std::endl);
 
-//      ROS_INFO_STREAM("Reading topics and detecting markers to accumulate data.");
-//      for(int i=0;i<ACCUMULATE;i++) // accumulate point clouds
-//      {
-        // reading topics
+      // reading topics
       ROS_INFO_STREAM("Recording topics...");
-        nodeA.readTopics(true);
-        nodeB.readTopics(true);
-        ROS_INFO_STREAM("Recording complete");
+      // threads for each worker
+      boost::thread_group threadGroup;
+      for(int i=0 ; i < num_sensors ; i++)
+      {
+        threadGroup.create_thread( boost::bind( &wp3::Sensor::readTopics, sensorVec[i], true ) );
+      }
+      // wait for threads to join
+      threadGroup.join_all();
+      ROS_INFO_STREAM("Recording complete");
 
-        // detect and accumulate cropped clouds
-        ROS_INFO_STREAM("Processing recorded data...");
-        aruco_A.detectMarkers(nodeA, transformMap_A, reference_node, Mask);
-        aruco_B.detectMarkers(nodeB, transformMap_B, calibration_order_initial[calib_counter], Mask);
-        ROS_INFO_STREAM("Processing complete");
+      // detect and accumulate cropped clouds
+      ROS_INFO_STREAM("Processing recorded data...");
 
-        // Accumulate full clouds
-        nodeA.cloudCrPtr_ = aruco_A.getCroppedCloud();
-        nodeB.cloudCrPtr_ = aruco_B.getCroppedCloud();
-//        nodeA.appendClouds();
-//        nodeB.appendClouds();
-//      }
+//      boost::thread_group threadGroup2;
+      for(int i=0 ; i < num_sensors ; i++)
+      {
+        apVec[i].clearAll();
+        apVec[i].detectMarkers(*sensorVec[i], tfMapVec[i]);
+//        threadGroup2.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, apVec[i], *sensorVec[i], tfMapVec[i] ) );
+      }
+//      threadGroup2.join_all();
+      ROS_INFO_STREAM("Processing complete");
 
-//      transform_A = transformMap_A.at(101); // Available id's: 1, 13, 40
-//      transform_B = transformMap_B.at(101);
 
+      // View detected images
+      for(int i=0 ; i < num_sensors ; i++)
+        apVec[i].viewImages(*sensorVec[i]);
+//            viewImages(node, imageName, maskVec, distortionMat, markerIdsMean, imageCroppedName, inputImage, rotVecs, intrinsicMat, markerCornersMean, transVecs); // end for markerIds
+
+
+      // Save cropped accumulated clouds
+      for(int i=0 ; i < num_sensors ; i++)
+        sensorVec[i]->cloudCrPtr_ = apVec[i].getCroppedCloud();
+
+      // get averaged transformation based on aruco markers
       //TODO: map intersection,  https://stackoverflow.com/questions/3772664/intersection-of-two-stl-maps
-      Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
-      std::map<int, Eigen::Matrix4f> transMapUsed_A;
-      aruco_A.getAverageTransformation(transMat_avgA, transMapUsed_A);
+      std::vector<Eigen::Matrix4f> transAvgVec(num_sensors, Eigen::Matrix4f::Identity());
+      std::vector<MarkerMapType> transMapUsedVec(num_sensors);
+      for(int i=0 ; i<num_sensors ; i++)
+        apVec[i].getAverageTransformation(transAvgVec[i], transMapUsedVec[i]);
 
-      Eigen::Matrix4f transMat_avgB = Eigen::Matrix4f::Identity();
-      std::map<int, Eigen::Matrix4f> transMapUsed_B;
-      aruco_B.getAverageTransformation(transMat_avgB, transMapUsed_B);
-      // TODO: make function/loop for average Aruco pose
+      std::vector<Eigen::Matrix4f> camPoseVec(num_sensors, Eigen::Matrix4f::Identity() );
+      for(int i=0 ; i<num_sensors ; i++)
+        camPoseVec[i] = transAvgVec[i].inverse();
 
-//      Eigen::Matrix4f camA = transform_B*transform_A.inverse();
-      Eigen::Matrix4f camA = transMat_avgB*transMat_avgA.inverse();
-      Eigen::Matrix4f camB = Eigen::Matrix4f::Identity();
 
-      ROS_INFO_STREAM("Performing ICP between " << nodeA.name_ << " and " << nodeB.name_);
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//      Eigen::Matrix4f transform_ATOb;
+
+//      transform_ATOb = transform_B*transform_A.inverse();
+      for(int i=0 ; i < num_sensors ; i++)
+        pcl::transformPointCloud (*sensorVec[i]->cloudCrPtr_, *sensorVec[i]->cloud1CrPtr_, camPoseVec[i] );
+
+//      pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
+//      pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+//      ROS_INFO_STREAM("Performing ICP between " << nodeA.name_ << " and " << nodeB.name_);
+      ROS_INFO_STREAM("Performing ICP between " << sensorVec[0]->name_ << " and " << sensorVec[1]->name_);
+
 //      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 #ifdef VIEW_ICP
-      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print, viewerICP);
+//      wp3::calcTransMats(*sensorVec[0], *sensorVec[1], transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print, viewerICP);
 #else
       wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 #endif
@@ -196,52 +234,61 @@ int main (int argc, char** argv)
       //      std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1,
       // cropped clouds
       cloud_vector_1.clear();
-      cloud_vector_1.push_back(nodeA.cloud1CrPtr_); // step 1
-      cloud_vector_1.push_back(nodeB.cloudCrPtr_);
+      for(int i=0 ; i<num_sensors ; i++)
+        cloud_vector_1.push_back(sensorVec[i]->cloud1CrPtr_); // step 1
+//      cloud_vector_1.push_back(sensorVec[0]->cloud1CrPtr_); // step 1
+//      cloud_vector_1.push_back(sensorVec[1]->cloudCrPtr_);
       cloud_vector_2.clear();
-      cloud_vector_2.push_back(nodeA.cloud2CrPtr_); // step 2
-      cloud_vector_2.push_back(nodeB.cloudCrPtr_);
+      cloud_vector_2.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
+      cloud_vector_2.push_back(sensorVec[1]->cloudCrPtr_);
       cloud_vector_3.clear();
-      cloud_vector_3.push_back(nodeA.cloud3CrPtr_); // step 3
-      cloud_vector_3.push_back(nodeB.cloudCrPtr_);
+      cloud_vector_3.push_back(sensorVec[0]->cloud3CrPtr_); // step 3
+      cloud_vector_3.push_back(sensorVec[1]->cloudCrPtr_);
 
       // full clouds
       cloud_vector_4.clear();
-      cloud_vector_4.push_back(nodeA.cloud1Ptr_); // step 1
-      cloud_vector_4.push_back(nodeB.cloudPtr_);
+      cloud_vector_4.push_back(sensorVec[0]->cloud1Ptr_); // step 1
+      cloud_vector_4.push_back(sensorVec[1]->cloudPtr_);
       cloud_vector_5.clear();
-      cloud_vector_5.push_back(nodeA.cloud2Ptr_); // step 2
-      cloud_vector_5.push_back(nodeB.cloudPtr_);
+      cloud_vector_5.push_back(sensorVec[0]->cloud2Ptr_); // step 2
+      cloud_vector_5.push_back(sensorVec[1]->cloudPtr_);
       cloud_vector_6.clear();
-//      cloud_vector_6.push_back(nodeA.cloud3Ptr_); // step 3
-      cloud_vector_6.push_back(nodeB.cloudPtr_);
+//      cloud_vector_6.push_back(sensorVec[0]->cloud3Ptr_); // step 3
+      cloud_vector_6.push_back(sensorVec[1]->cloudPtr_);
       // additional clouds TMP
-//      cloud_vector_6.push_back(nodeA.cloud2Ptr_); // step 2
-//      cloud_vector_6.push_back(nodeA.cloud2CrPtr_); // step 2
-      cloud_vector_6.push_back(nodeB.cloudCrPtr_);
+//      cloud_vector_6.push_back(sensorVec[0]->cloud2Ptr_); // step 2
+//      cloud_vector_6.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
+      cloud_vector_6.push_back(sensorVec[1]->cloudCrPtr_);
 
 
 
       transMap.clear();
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeA.name_,camA ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (nodeB.name_,camB ));
+      for(int i=0 ; i<num_sensors ; i++)
+      {
+        // insert camera pose
+        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[i]->name_,camPoseVec[i]) );
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[0]->name_,camA ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[1]->name_,camB ));
 
-      // Arucos
-      std::map<int, Eigen::Matrix4f>::iterator it;
-      for ( it = transMapUsed_A.begin(); it != transMapUsed_A.end(); it++ )
-        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-"+std::to_string(it->first), camA*it->second ));
-      for ( it = transMapUsed_B.begin(); it != transMapUsed_B.end(); it++ )
-        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-"+std::to_string(it->first), camB*it->second ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-1", camB*transformMap_B.at(1) ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-13", camB*transformMap_B.at(13) ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-40", camB*transformMap_B.at(40) ));
+        // insert pose of induvidual markers
+        for(auto j : transMapUsedVec[i])
+          transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[i]->name_+"-"+std::to_string(j.first), camPoseVec[i]*j.second ));
 
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-1", camA*transformMap_A.at(1) ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-13", camA*transformMap_A.at(13) ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-40", camA*transformMap_A.at(40) ));
+        // insert averaged marker pose
+        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[i]->name_+"-avg",camPoseVec[i]*transAvgVec[i] )); //camPoseVec[i]*transAvgVec[i]= identity
 
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeA.name_+"-avg",camA*transMat_avgA ));
-      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+nodeB.name_+"-avg",camB*transMat_avgB ));
+      }
+
+//      // Arucos
+//      std::map<int, Eigen::Matrix4f>::iterator it;
+//      for ( it = transMapUsed_A.begin(); it != transMapUsed_A.end(); it++ )
+//        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[0]->name_+"-"+std::to_string(it->first), camA*it->second ));
+
+//      for ( it = transMapUsed_B.begin(); it != transMapUsed_B.end(); it++ )
+//        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[1]->name_+"-"+std::to_string(it->first), camB*it->second ));
+
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[0]->name_+"-avg",camA*transMat_avgA ));
+//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[1]->name_+"-avg",camB*transMat_avgB ));
 
 
       // view Aruco only
@@ -288,7 +335,7 @@ int main (int argc, char** argv)
     q.setRPY(-2.44, 0, 0.7);  // j1
 //    q.setRPY(-2.50, 0, -1.571);  // j4
     worldToReference_tf.setRotation(q);
-    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", nodeA.getTfTopic() ) );
+    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", sensorVec[0]->getTfTopic() ) );
 //    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", "jetson1_ir_optical_frame" ) );
 
 
@@ -298,7 +345,7 @@ int main (int argc, char** argv)
     Eigen::Affine3d transform_affine(transform_m4d);
     tf::Transform transform_tf;
     tf::transformEigenToTF(transform_affine, transform_tf);
-    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), nodeA.getTfTopic(), nodeB.getTfTopic() ) );
+    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), sensorVec[0]->getTfTopic(), sensorVec[1]->getTfTopic() ) );
 //    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson1_ir_optical_frame", "jetson6_ir_optical_frame" ) );
     ros::spinOnce();
 
@@ -308,5 +355,5 @@ int main (int argc, char** argv)
   } // end while
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  r_mutex2.unlock();
+//  r_mutex2.unlock();
 } // end main

@@ -135,7 +135,7 @@ void Sensor::readTopics(bool update = false)
   wp3::imageConverter ic_depth(depthTopic_, "depth", it_, nh_);
   wp3::imageConverter ic_color(imageTopic_, "color", it_, nh_);
 
-  depthProcessor dp = depthProcessor(cloudTopic_); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
+  depthProcessor dp = depthProcessor(cloudTopic_, nh_); // to fix: src_cloud in this class is single-linked in callback, quick fix-> create two src_clouds
 
 //  ros::NodeHandle n("~");
   ros::Subscriber camera_info_sub = nh_.subscribe(camera_info_topic_, 1, &Sensor::cameraInfoCallback, this);

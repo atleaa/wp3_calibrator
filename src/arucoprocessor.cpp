@@ -179,17 +179,60 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 }
 
 
-void arucoProcessor::detectMarkers(wp3::Sensor & node,
-                                   MarkerMapType &transform4x4,
-                                   std::string kinect_number,
-                                   Cropping crop)
+void arucoProcessor::viewImages(wp3::Sensor& node)
 {
-  cv::Mat inputImage = node.getImageMat(); // get last image
+  std::string imageName, maskName, imageCroppedName, imageCropDepthName;
+    // show full color image
+  imageName = node.name_ + " Input";
+  //cv::aruco::drawDetectedMarkers(inputImage,rejectedCandidatesAll, cv::noArray(), cv::Scalar(100, 0, 255) );
+  //cv::aruco::drawDetectedMarkers(inputImage,markerCornersAll, cv::noArray(), cv::Scalar(200, 255, 200) );
+  cv::aruco::drawDetectedMarkers(inputImage_,markerCornersMean_, markerIdsMean_);
+  for(size_t i = 0; i < rotVecs_.size(); i++)
+  {
+    cv::aruco::drawAxis(inputImage_, intrinsicMat_, distortionMat_, rotVecs_[i], transVecs_[i], 0.3);
+  }
+  cv::imshow(imageName,inputImage_);
+  cv::waitKey(30);
+
+  cv::Mat depthMatCropped(inputDepth_.rows, inputDepth_.cols,CV_32F);
+  for (size_t i = 0; i < markerIdsMean_.size(); i++)
+  {
+    // show cropped color image
+    imageCroppedName = node.name_ + " Id:" + std::to_string(markerIdsMean_[i]) + " cropped";
+    cv::Mat croppedImage(inputImage_.rows, inputImage_.cols,CV_8UC3);
+    croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
+    inputImage_.copyTo(croppedImage, maskVec_[i]); // Cut out ROI and store it in imageDest
+    cv::imshow(imageCroppedName,croppedImage);
+    cv::waitKey(30);
+
+    // Show cropped depth image----------
+#ifdef SHOWDEPTH
+    imageCropDepthName = node.name_ + " Id:" + std::to_string(markerIdsMean_[i]) + " cropped depth";
+    cv::Mat depthMatCroppedView;
+    depthMatCropped.setTo(cv::Scalar(0) ); // initialize color
+    inputDepth_.copyTo(depthMatCropped, maskVec_[i]);
+    depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
+    cv::imshow(imageCropDepthName, depthMatCroppedView);
+    cv::waitKey(30);
+#endif
+
+  }
+}
+
+void arucoProcessor::detectMarkers(wp3::Sensor & node,
+                                   MarkerMapType &transform4x4)
+//                                   std::string kinect_number,
+//                                   Cropping crop)
+{
+//  cv::Mat inputImage = node.getImageMat(); // get last image
+  inputImage_ = node.getImageMat(); // get last image
   std::vector<cv::Mat> inputImageVec = node.getImageMatVec(); // get all recorded images
-  cv::Mat inputDepth = node.getDepthMat(); // get last image
+//  cv::Mat inputDepth = node.getDepthMat(); // get last image
+  inputDepth_ = node.getDepthMat(); // get last image
   std::vector<cv::Mat> inputDepthVec = node.getDepthMatVec(); // get all recorded images
 
-  std::string imageName, maskName, imageCroppedName, imageCropDepthName;
+
+
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Parameters ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
@@ -199,20 +242,24 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Cam. coeff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
   std::vector<double> distortionVec = node.getDistCoeffs();
-  cv::Mat distortionMat(distortionVec);
+  std::cout << "distortionVec" << std::endl;
+  for(auto i : distortionVec)
+    std::cout << i << " " << std::endl;
+//  cv::Mat distortionMat(distortionVec);
+  distortionMat_ =   cv::Mat (distortionVec);
+  std::cout << "distortionMat_" << std::endl << distortionMat_ << std::endl;
 
-  cv::Mat intrinsicMat;
+//  cv::Mat intrinsicMat;
   Eigen::Matrix3d intrinsicMatrix;
   intrinsicMatrix = node.getIntrinsics_matrix();
-  cv::eigen2cv(intrinsicMatrix, intrinsicMat);
+  cv::eigen2cv(intrinsicMatrix, intrinsicMat_);
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ aruco param. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   double arucoSquareDimension = ARUCODIMENSION; // in meters
-  std::vector<int> markerIds, markerIdsAll, markerIdsMean; // markerIds.size() = number of Ids found
-  typedef std::vector<cv::Point2f> Vec2f;
-  typedef std::vector<std::vector<cv::Point2f>> VecVec2f;
-  VecVec2f markerCorners, markerCornersAll, markerCornersMean, markerCornersPadded, rejectedCandidates, rejectedCandidatesAll;
-  std::vector<cv::Vec3d> rotVecs, transVecs;
+  std::vector<int> markerIds, markerIdsAll; //, markerIdsMean; // markerIds.size() = number of Ids found
+
+  VecVec2f markerCorners, markerCornersAll, markerCornersPadded, rejectedCandidates, rejectedCandidatesAll;
+//  std::vector<cv::Vec3d> rotVecs, transVecs;
 
   std::vector<std::vector<int>> markerIdsVec; // markerIds.size() = number of Ids found
   std::vector<VecVec2f> rejectedCandidatesVec;
@@ -291,26 +338,26 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   std::pair<MMAPIterator, MMAPIterator> result_40 = markerCornersMap.equal_range(40);
 
   // Iterate over the range
-  markerCornersMean.clear();
+  markerCornersMean_.clear();
   Vec2f cornersCurr(4), cornersMean(4);
 
   // Total Elements in the range
   int count1 = std::distance(result_1.first, result_1.second);
   ROS_DEBUG_STREAM(node.name_ << " detection rate Id 1:\t" << count1*100/ACCUMULATE << "%");
   if(count1*100/ACCUMULATE<30)
-    ROS_ERROR_STREAM(node.name_ << " Id '1' detection rate is: " << count1*100/ACCUMULATE
+    ROS_ERROR_STREAM(node.name_ << " Id '1' detection rate is " << count1*100/ACCUMULATE
                      << "%. Consider moving marker or recalibrating sensor intrinsics.");
 
   int count13 = std::distance(result_13.first, result_13.second);
   ROS_DEBUG_STREAM(node.name_ << " detection rate Id 13:\t" << count13*100/ACCUMULATE << "%");
   if(count13*100/ACCUMULATE<30)
-    ROS_ERROR_STREAM(node.name_ << " Id '13' detection rate is: " << count13*100/ACCUMULATE
+    ROS_ERROR_STREAM(node.name_ << " Id '13' detection rate is " << count13*100/ACCUMULATE
                      << "%. Consider moving marker or recalibrating sensor intrinsics.");
 
   int count40 = std::distance(result_40.first, result_40.second);
   ROS_DEBUG_STREAM(node.name_ << " detection rate Id 40:\t" << count40*100/ACCUMULATE << "%");
   if(count40*100/ACCUMULATE<30)
-    ROS_ERROR_STREAM(node.name_ << " Id '40' detection rate is: " << count40*100/ACCUMULATE
+    ROS_ERROR_STREAM(node.name_ << " Id '40' detection rate is " << count40*100/ACCUMULATE
                      << "%. Consider moving marker or recalibrating sensor intrinsics.");
 
   // Find average corners of marker 1
@@ -327,8 +374,8 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   ROS_DEBUG_STREAM(node.name_ << " Id: 1 averaged corners:" << std::endl << cornersMean);
   if(count1>0)
   {
-    markerIdsMean.push_back(1);
-    markerCornersMean.push_back(cornersMean);
+    markerIdsMean_.push_back(1);
+    markerCornersMean_.push_back(cornersMean);
   }
 
   // Find average corners of marker 13
@@ -345,8 +392,8 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   ROS_DEBUG_STREAM(node.name_ << " Id: 13 averaged corners:" << std::endl << cornersMean);
   if(count13>0)
   {
-    markerCornersMean.push_back(cornersMean);
-    markerIdsMean.push_back(13);
+    markerCornersMean_.push_back(cornersMean);
+    markerIdsMean_.push_back(13);
   }
 
   // Find average corners of marker 40
@@ -363,24 +410,26 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   ROS_DEBUG_STREAM(node.name_ << " Id: 40 averaged corners:" << std::endl << cornersMean);
   if(count40>0)
   {
-    markerCornersMean.push_back(cornersMean);
-    markerIdsMean.push_back(40);
+    markerCornersMean_.push_back(cornersMean);
+    markerIdsMean_.push_back(40);
   }
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
 
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Create cropping mask~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  cv::Mat mask(inputImage.rows, inputImage.cols,CV_8UC1);
-  std::vector<cv::Mat> maskVec(markerIdsMean.size());
+  cv::Mat mask(inputImage_.rows, inputImage_.cols,CV_8UC1);
+//  std::vector<cv::Mat> maskVec(markerIdsMean.size());
+  maskVec_.resize(markerIdsMean_.size());
 
-  for (size_t i = 0; i < markerIdsMean.size(); i++)
+
+  for (size_t i = 0; i < markerIdsMean_.size(); i++)
   {
     // init color
     mask.setTo(cv::Scalar(0) );
 
     // Calculate corners of padded aruco
-    markerCornersPadded = markerCornersMean;
+    markerCornersPadded = markerCornersMean_;
     float padScale=0.0;
     padScale = 7.0/6.0-1.0; // new size/old size
 
@@ -388,14 +437,14 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
     for(int j=0 ; j<4 ; j++)
     {
       cv::Point2f corner;
-      corner.x = markerCornersMean[i][j].x + ( markerCornersMean[i][j].x - markerCornersMean[i][(j+2)%4].x ) * padScale*0.5;
-      corner.y = markerCornersMean[i][j].y + ( markerCornersMean[i][j].y - markerCornersMean[i][(j+2)%4].y ) * padScale*0.5;
+      corner.x = markerCornersMean_[i][j].x + ( markerCornersMean_[i][j].x - markerCornersMean_[i][(j+2)%4].x ) * padScale*0.5;
+      corner.y = markerCornersMean_[i][j].y + ( markerCornersMean_[i][j].y - markerCornersMean_[i][(j+2)%4].y ) * padScale*0.5;
       markerCornersPadded[i][j] = corner;
     }
 
     // Create Polygon from vertices
     std::vector<cv::Point> ROI_Poly;
-    cv::approxPolyDP(markerCornersMean[i], ROI_Poly, 1.0, true);
+    cv::approxPolyDP(markerCornersMean_[i], ROI_Poly, 1.0, true);
     std::vector<cv::Point> ROI_PolyPadded;
     cv::approxPolyDP(markerCornersPadded[i], ROI_PolyPadded, 1.0, true);
 
@@ -403,7 +452,7 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
     cv::fillConvexPoly(mask, &ROI_PolyPadded[0], ROI_PolyPadded.size(), 255, 8, 0);
 
     // Save mask of markerId i
-    maskVec[i] = mask.clone();
+    maskVec_[i] = mask.clone();
 
     // Show current mask
     //    maskName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " mask";
@@ -427,18 +476,18 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
 
   for(size_t j=0; j<inputDepthVec.size(); j++)
   {
-    for (size_t i = 0; i < markerIdsMean.size(); i++)
+    for (size_t i = 0; i < markerIdsMean_.size(); i++)
     {
       depthMatCropped.setTo(cv::Scalar(0)); // initialize depth to 0
-      inputDepthVec[j].copyTo(depthMatCropped, maskVec[i]);
+      inputDepthVec[j].copyTo(depthMatCropped, maskVec_[i]);
 
       pointcloudFromDepthImage(depthMatCropped, intrinsicMatrix, src_cloud_crop);
       //    pointcloudFromDepthImage(depthMatCropped, intrinsicMatrix, src_cloud_crop, true, rectCrop, depthMatCropped);
 
       // add cropped source to accumulated marker cloud
-      if (markerIdsMean[i] == 1)  *src_cloud_crop1_ += *src_cloud_crop;
-      if (markerIdsMean[i] == 13) *src_cloud_crop2_ += *src_cloud_crop;
-      if (markerIdsMean[i] == 40) *src_cloud_crop3_ += *src_cloud_crop;
+      if (markerIdsMean_[i] == 1)  *src_cloud_crop1_ += *src_cloud_crop;
+      if (markerIdsMean_[i] == 13) *src_cloud_crop2_ += *src_cloud_crop;
+      if (markerIdsMean_[i] == 40) *src_cloud_crop3_ += *src_cloud_crop;
 
       // add cropped source to combined cloud
       *croppedCloud_ += *src_cloud_crop;
@@ -452,51 +501,16 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   transform4x4.clear(); // clear transformations
 
   // calculate pose based on average corners
-  cv::aruco::estimatePoseSingleMarkers(markerCornersMean, arucoSquareDimension, intrinsicMat, distortionMat, rotVecs, transVecs);
+  cv::aruco::estimatePoseSingleMarkers(markerCornersMean_, arucoSquareDimension, intrinsicMat_, distortionMat_, rotVecs_, transVecs_);
 
-  for(size_t i = 0; i < markerIdsMean.size(); i++)
+  for(size_t i = 0; i < markerIdsMean_.size(); i++)
   {
-    createTransMatrix(rotVecs[i],transVecs[i], tmatTemp);
-    transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean[i]+100*acc_,tmatTemp ));
-    transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean[i]+100*acc_,tmatTemp ));
+    createTransMatrix(rotVecs_[i],transVecs_[i], tmatTemp);
+    transform4x4.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean_[i]+100*acc_,tmatTemp ));
+    transformMap_.insert (std::pair<int, Eigen::Matrix4f> (markerIdsMean_[i]+100*acc_,tmatTemp ));
   }
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
-
-  //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ VIEW ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
-  // show full color image
-  imageName = node.name_ + " Input";
-  //cv::aruco::drawDetectedMarkers(inputImage,rejectedCandidatesAll, cv::noArray(), cv::Scalar(100, 0, 255) );
-  //cv::aruco::drawDetectedMarkers(inputImage,markerCornersAll, cv::noArray(), cv::Scalar(200, 255, 200) );
-  cv::aruco::drawDetectedMarkers(inputImage,markerCornersMean, markerIdsMean);
-  for(size_t i = 0; i < rotVecs.size(); i++)
-  {
-    cv::aruco::drawAxis(inputImage, intrinsicMat, distortionMat, rotVecs[i], transVecs[i], 0.3);
-  }
-  cv::imshow(imageName,inputImage);
-  cv::waitKey(30);
-
-
-  for (size_t i = 0; i < markerIdsMean.size(); i++)
-  {
-    // show cropped color image
-    imageCroppedName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " cropped";
-    cv::Mat croppedImage(inputImage.rows, inputImage.cols,CV_8UC3);
-    croppedImage.setTo(cv::Scalar(0,0,0)); // initialize color
-    inputImage.copyTo(croppedImage, maskVec[i]); // Cut out ROI and store it in imageDest
-    cv::imshow(imageCroppedName,croppedImage);
-    cv::waitKey(30);
-
-    // Show cropped depth image----------
-    imageCropDepthName = node.name_ + " Id:" + std::to_string(markerIdsMean[i]) + " cropped depth";
-    cv::Mat depthMatCroppedView;
-    depthMatCropped.setTo(cv::Scalar(0) ); // initialize color
-    inputDepthVec[inputDepthVec.size()-1].copyTo(depthMatCropped, maskVec[i]);
-    depthMatCropped.convertTo(depthMatCroppedView,CV_8UC1,33,0);
-    cv::imshow(imageCropDepthName, depthMatCroppedView);
-    cv::waitKey(30);
-
-  } // end for markerIds
   acc_++;
 }
 
@@ -521,6 +535,12 @@ void arucoProcessor::createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d tran
   // Create the transformation matrix
   cv::Mat rotation3x3 = cv::Mat::eye(3, 3, CV_64F);
   cv::Rodrigues(rotationVectors, rotation3x3);
+
+  if(not wp3::isRotationMatrix(rotation3x3))
+    ROS_ERROR_STREAM("Invalid aruco pose detected" << std::endl
+                     << "Rot:\t" << rotationVectors);
+
+
   tMat(0,0) = rotation3x3.at<double>(0,0);
   tMat(1,0) = rotation3x3.at<double>(1,0);
   tMat(2,0) = rotation3x3.at<double>(2,0);
@@ -538,7 +558,7 @@ void arucoProcessor::createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d tran
 }
 
 //Eigen::Matrix4f arucoProcessor::getAverageTransformation()
-void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, std::map<int, Eigen::Matrix4f>& transMapUsed)
+void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, MarkerMapType &transMapUsed)
 {
   int validCount=0;
 //  Eigen::Vector3f weight = {1, 1, 1};

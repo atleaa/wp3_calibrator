@@ -313,6 +313,7 @@ void Visualization::runSingle(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >&
       //      if(!viewer_.updateCoordinateSystemPose(tmpId, tmpAffine))
       viewer_.removeCoordinateSystem(tmpId);
       viewer_.addCoordinateSystem (0.5, tmpAffine, tmpId);
+//      viewer_.addCoordinateSystem (0.1, tmpAffine, tmpId);
 
       pcl::PointXYZ point;
       point.x = tmpMatrix(0,3);

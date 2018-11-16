@@ -8,14 +8,14 @@
 
 <launch>
 <!-- Calibration parameters -->
-<arg name="num_sensors"   default="3" />
+<arg name="num_sensors"   default="5" />
 
 <arg name="sensor_0_id"   default="jetson1" />
-<!--<arg name="sensor_0_name" default="$(arg sensor_0_id)" />-->
 <arg name="sensor_1_id"   default="jetson3" />
-<!--<arg name="sensor_1_name" default="$(arg sensor_1_id)" />-->
-<arg name="sensor_2_id"   default="jetson6" />
-<!--<arg name="sensor_2_name" default="$(arg sensor_2_id)" />-->
+<arg name="sensor_2_id"   default="jetson4" />
+<arg name="sensor_3_id"   default="jetson5" />
+<arg name="sensor_4_id"   default="jetson6" />
+
 
 
 <!-- Opening Rviz for visualization -->
@@ -51,6 +51,19 @@
 <param name="~sensor_2/camera_info" value="/$(arg sensor_2_id)/sd/camera_info" />
 <param name="~sensor_2/tf"          value= "$(arg sensor_2_id)_ir_optical_frame" />
 
+<param name= "sensor_3/name"        value= "$(arg sensor_3_id)" />
+<param name="~sensor_3/color"       value="/$(arg sensor_3_id)/sd/image_color_rect" />
+<param name="~sensor_3/depth"       value="/$(arg sensor_3_id)/sd/image_depth_rect" />
+<param name="~sensor_3/cloud"       value="/$(arg sensor_3_id)/sd/points" />
+<param name="~sensor_3/camera_info" value="/$(arg sensor_3_id)/sd/camera_info" />
+<param name="~sensor_3/tf"          value= "$(arg sensor_3_id)_ir_optical_frame" />
+
+<param name= "sensor_4/name"        value= "$(arg sensor_4_id)" />
+<param name="~sensor_4/color"       value="/$(arg sensor_4_id)/sd/image_color_rect" />
+<param name="~sensor_4/depth"       value="/$(arg sensor_4_id)/sd/image_depth_rect" />
+<param name="~sensor_4/cloud"       value="/$(arg sensor_4_id)/sd/points" />
+<param name="~sensor_4/camera_info" value="/$(arg sensor_4_id)/sd/camera_info" />
+<param name="~sensor_4/tf"          value= "$(arg sensor_4_id)_ir_optical_frame" />
 
 <!--<param name="sensor_1/camera_info" value=   "/$(arg sensor_1_id)/sd/camera_info" />
 <param name="sensor_1/color"       value=   "/$(arg sensor_1_id)/sd/image_color_rect" />

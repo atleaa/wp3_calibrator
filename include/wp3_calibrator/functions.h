@@ -70,7 +70,7 @@ namespace wp3
 {
 void init_reference(std::string kinect_number);
 
-void loadSensors(ros::NodeHandle & node_handle, std::vector<Sensor::Ptr> &sensorVec);
+void loadSensors(ros::NodeHandle & node_handle, std::vector<Sensor::Ptr> &sensorVec, int &num_sensors);
 
 void openGlobalReference(Eigen::Matrix4f & transf_to_open, std::string kinect_number);
 

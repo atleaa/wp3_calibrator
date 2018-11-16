@@ -7,6 +7,7 @@
 #define ARUCODIMENSION 0.60 // Side length of Aruco markers
 
 #define VIEW_ICP // create a viewer to see ICP process.
+#define SHOWDEPTH // view cropped depth images
 #define ACCUMULATE 10
 #define ICP_MAX_CORR_DIST 0.6 //
 //#define ICP_CONVERGE 0.00001  // good
@@ -14,8 +15,10 @@
 #define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
 #define ICP_MAX_ROUNDS 30  // second end criteria
 //#define ICP_CONVERGE 1e+30  // TULL fast
-#define ICP_ITERATIONS 100 // ICP iterations (multiplied with round number)
-#define ICP_TRANS_EPSILON 1e-11 //1e-11
+//#define ICP_ITERATIONS 100 // ICP iterations (multiplied with round number)
+#define ICP_ITERATIONS 10 // QUICK TEST
+//#define ICP_TRANS_EPSILON 1e-11 //1e-11
+#define ICP_TRANS_EPSILON 1e-6 // QUICK TEST
 //#define ICP_TRANS_EPSILON 1e-7 // TULL faster
 
 enum Cropping {Rect, Mask};
@@ -25,7 +28,9 @@ namespace wp3 {
 const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 } // end namespace wp3
 
-#endif // DEFINES_H
+
+
+
 
 
 //// STD
@@ -109,3 +114,14 @@ const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 
 //// Libfreenect2
 //#include <libfreenect2/registration.h>
+
+// openCV for image processing
+//#include <opencv2/highgui/highgui.hpp>
+//#include <opencv2/aruco.hpp>
+#include "opencv2/opencv.hpp"
+//#include <opencv2/imgproc/imgproc.hpp>
+//#include <opencv2/core/eigen.hpp>
+
+typedef std::vector<cv::Point2f> Vec2f;
+typedef std::vector<std::vector<cv::Point2f>> VecVec2f;
+#endif // DEFINES_H

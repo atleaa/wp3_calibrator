@@ -49,9 +49,9 @@ void init_reference(std::string kinect_number)
   std::cout << "done" << std::endl;
 }
 
-void loadSensors(ros::NodeHandle & node_handle, std::vector<wp3::Sensor::Ptr> & sensorVec)
+void loadSensors(ros::NodeHandle & node_handle, std::vector<wp3::Sensor::Ptr> & sensorVec, int & num_sensors)
 {
-  int num_sensors;
+//  int num_sensors;
   node_handle.param("num_sensors", num_sensors, 0);
 
   for (int i = 0; i < num_sensors; ++i)
@@ -59,7 +59,10 @@ void loadSensors(ros::NodeHandle & node_handle, std::vector<wp3::Sensor::Ptr> & 
     std::string tmpString;
 
     tmpString = "sensor_" + std::to_string(i) + "/name";
-    node_handle.param(tmpString, tmpString, tmpString);
+    if (node_handle.param(tmpString, tmpString, tmpString))
+      ROS_DEBUG_STREAM("Loading parameters for " <<  tmpString);
+    else
+      ROS_FATAL_STREAM("No name parameter found for " << tmpString);
     wp3::Sensor::Ptr sensorNode = boost::make_shared<wp3::Sensor>(tmpString, node_handle);
 
     tmpString = "sensor_" + std::to_string(i) + "/camera_info";
@@ -316,9 +319,9 @@ bool isRotationMatrix(cv::Mat &R)
   cv::Mat Rt;
   cv::transpose(R, Rt);
   cv::Mat shouldBeIdentity = Rt * R;
-  std::cout << "should be identity: " << shouldBeIdentity << std::endl;
+//  std::cout << "should be identity: " << shouldBeIdentity << std::endl;
   cv::Mat I = cv::Mat::eye(3,3, shouldBeIdentity.type());
-
+//  std::cout << "norm: " << std::endl << norm(I, shouldBeIdentity) << std::endl;
   return  norm(I, shouldBeIdentity) < 1e-6;
 }
 

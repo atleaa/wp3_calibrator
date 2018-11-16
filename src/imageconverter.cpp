@@ -134,9 +134,11 @@ void imageConverter::callback_color(const sensor_msgs::ImageConstPtr& msg)
 
 // depthprocessor ----------------------------------------------
 // Constructor
-depthProcessor::depthProcessor(const std::string& inputNameA)
+depthProcessor::depthProcessor(const std::string& inputNameA,
+                                ros::NodeHandle & nodehandle)
+  : nh_(nodehandle)
 {
-  depth_subA_ = nh_depthA_.subscribe(inputNameA, 1, &depthProcessor::callback_cloudA, this);
+  depth_subA_ = nh_.subscribe(inputNameA, 1, &depthProcessor::callback_cloudA, this);
   // this refers to the non static object  (here: a depthProcessor object used in main)
 }
 
