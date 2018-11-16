@@ -45,6 +45,7 @@ const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 //#include <thread>
 //#include <vector>
 
+//#include <curses.h> // keyboard input
 // ROS
 #include <ros/console.h>  // http://wiki.ros.org/roscpp/Overview/Logging
 //#include <ros/ros.h>

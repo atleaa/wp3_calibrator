@@ -54,8 +54,8 @@ public:
 
   void detectMarkers(Sensor &node,
                      MarkerMapType &transform4x4);
-//                     std::string kinect_number,
-//                     Cropping crop);
+//  void detectMarkers(boost::ref(Sensor),
+//                     MarkerMapType &transform4x4);
 
   void makeCroppedCloud();
 

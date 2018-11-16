@@ -221,8 +221,8 @@ void arucoProcessor::viewImages(wp3::Sensor& node)
 
 void arucoProcessor::detectMarkers(wp3::Sensor & node,
                                    MarkerMapType &transform4x4)
-//                                   std::string kinect_number,
-//                                   Cropping crop)
+//void arucoProcessor::detectMarkers(boost::ref(wp3::Sensor node),
+//                                   MarkerMapType &transform4x4)
 {
 //  cv::Mat inputImage = node.getImageMat(); // get last image
   inputImage_ = node.getImageMat(); // get last image
@@ -242,12 +242,13 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Cam. coeff. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
   std::vector<double> distortionVec = node.getDistCoeffs();
-  std::cout << "distortionVec" << std::endl;
-  for(auto i : distortionVec)
-    std::cout << i << " " << std::endl;
-//  cv::Mat distortionMat(distortionVec);
+//  std::cout << "distortionVec" << std::endl;
+//  for(auto i : distortionVec)
+//    std::cout << i << " " << std::endl;
+
+  //  cv::Mat distortionMat(distortionVec);
   distortionMat_ =   cv::Mat (distortionVec);
-  std::cout << "distortionMat_" << std::endl << distortionMat_ << std::endl;
+//  std::cout << "distortionMat_" << std::endl << distortionMat_ << std::endl;
 
 //  cv::Mat intrinsicMat;
   Eigen::Matrix3d intrinsicMatrix;
@@ -257,6 +258,7 @@ void arucoProcessor::detectMarkers(wp3::Sensor & node,
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ aruco param. ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   double arucoSquareDimension = ARUCODIMENSION; // in meters
   std::vector<int> markerIds, markerIdsAll; //, markerIdsMean; // markerIds.size() = number of Ids found
+  markerIdsMean_.clear();
 
   VecVec2f markerCorners, markerCornersAll, markerCornersPadded, rejectedCandidates, rejectedCandidatesAll;
 //  std::vector<cv::Vec3d> rotVecs, transVecs;

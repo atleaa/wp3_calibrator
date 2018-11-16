@@ -65,6 +65,8 @@ int main (int argc, char** argv)
   ros::NodeHandle node_handle("~"); // private node handle
   ros::spinOnce();
 
+  sleep(3); // wait for ROS debugger
+
   // init pcl viewer
   wp3::Visualization viewerAruco;
   viewerAruco.initializeSingle();
@@ -152,6 +154,12 @@ int main (int argc, char** argv)
       init = false;
       ROS_INFO_STREAM("Starting calibration routine" << std::endl);
 
+      // clear image buffers
+      for(int i=0 ; i < num_sensors ; i++)
+      {
+
+      }
+
       // reading topics
       ROS_INFO_STREAM("Recording topics...");
       // threads for each worker
@@ -162,26 +170,30 @@ int main (int argc, char** argv)
       }
       // wait for threads to join
       threadGroup.join_all();
-      ROS_INFO_STREAM("Recording complete");
+      ROS_INFO_STREAM("Recording complete" << std::endl);
+
 
       // detect and accumulate cropped clouds
       ROS_INFO_STREAM("Processing recorded data...");
-
 //      boost::thread_group threadGroup2;
       for(int i=0 ; i < num_sensors ; i++)
       {
-        apVec[i].clearAll();
-        apVec[i].detectMarkers(*sensorVec[i], tfMapVec[i]);
+//        apVec[i].clearAll();
+//        apVec[i].detectMarkers(*sensorVec[i], tfMapVec[i]);
+
+        threadGroup.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, boost::ref(apVec[i]), *sensorVec[i], tfMapVec[i] ) );
 //        threadGroup2.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, apVec[i], *sensorVec[i], tfMapVec[i] ) );
       }
-//      threadGroup2.join_all();
-      ROS_INFO_STREAM("Processing complete");
+      threadGroup.join_all();
+      ROS_INFO_STREAM("Processing complete" << std::endl);
 
 
-      // View detected images
-      for(int i=0 ; i < num_sensors ; i++)
-        apVec[i].viewImages(*sensorVec[i]);
-//            viewImages(node, imageName, maskVec, distortionMat, markerIdsMean, imageCroppedName, inputImage, rotVecs, intrinsicMat, markerCornersMean, transVecs); // end for markerIds
+      // View detected images all nodes
+//      for(int i=0 ; i < num_sensors ; i++)
+//        apVec[i].viewImages(*sensorVec[i]);
+
+      // View detected images single node
+        apVec[0].viewImages(*sensorVec[0]);
 
 
       // Save cropped accumulated clouds

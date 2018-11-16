@@ -147,6 +147,7 @@ void Sensor::readTopics(bool update = false)
     depthMat_.release();
     cloudPtr_->clear();
     imageMatVec_.clear();
+    depthMatVec_.clear();
 //    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
   }
 
