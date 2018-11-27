@@ -150,6 +150,7 @@ public:
   std::vector<double> getDistCoeffs() const;
 
   std::vector<cv::Mat> getImageMatVec() const;
+  void clearImageMatVec();
 
   std::vector<cv::Mat> getDepthMatVec() const;
 

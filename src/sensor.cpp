@@ -80,6 +80,11 @@ std::vector<cv::Mat> Sensor::getImageMatVec() const
   return imageMatVec_;
 }
 
+void Sensor::clearImageMatVec()
+{
+  imageMatVec_.clear();
+}
+
 void Sensor::setCamera_info_topic(const std::string &camera_info_topic)
 {
   camera_info_topic_ = camera_info_topic;

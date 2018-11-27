@@ -57,7 +57,7 @@ public:
 //  void detectMarkers(boost::ref(Sensor),
 //                     MarkerMapType &transform4x4);
 
-  void makeCroppedCloud();
+//  void makeCroppedCloud();
 
 //  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
@@ -68,6 +68,13 @@ public:
   pcl::PointCloud<pcl::PointXYZ>::Ptr getCroppedCloud() const;
 
   void viewImages(wp3::Sensor& node);
+
+  void getMedianCornerPoints(VecVec2fPoint markerCorners,
+                             std::vector<cv::Mat> &inputDepthVec,
+                             Eigen::Matrix3d intrinsicMatrix,
+                             VecVec3fPoint &markerCornerPoints);
+  
+//  void findBestPose(wp3::Sensor& node, std::vector<cv::Mat> inputDepthVec, Eigen::Matrix3d intrinsicMatrix);
 
 private:
   void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
@@ -93,7 +100,7 @@ private:
   std::vector<cv::Vec3d> rotVecs_, transVecs_;
   std::vector<cv::Mat> maskVec_;
   std::vector<int> markerIdsMean_;
-  VecVec2f markerCornersMean_;
+  VecVec2fPoint markerCornersMean_;
   int acc_; // iterator for accumulator
 //  typedef std::pair<int, Eigen::Matrix4f>
 //  cv::Mat current_depthMat_A_crop1_;
@@ -102,6 +109,10 @@ private:
 //  cv::Mat current_depthMat_B_crop1_;
 //  cv::Mat current_depthMat_B_crop2_;
 //  cv::Mat current_depthMat_B_crop3_;
+  int findBestPose(std::vector<cv::Vec3d> &rotVecs,
+                   std::vector<cv::Vec3d> &transVecs,
+                   Vec3fPoint corners,
+                   double &score);
 };
 
 

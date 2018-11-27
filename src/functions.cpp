@@ -411,6 +411,27 @@ void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat)
 }
 
 
+double calcMedian(std::vector<float> values)
+{
+  size_t size = values.size();
+
+  if (size == 0)
+  {
+    return 0;  // Undefined, really.
+  }
+  else
+  {
+    sort(values.begin(), values.end());
+    if (size % 2 == 0)
+    {
+      return (values[size / 2 - 1] + values[size / 2]) / 2;
+    }
+    else
+    {
+      return values[size / 2];
+    }
+  }
+}
 
 
 
@@ -530,11 +551,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 
 //tf::Quaternion getAverageQuaternion(
 Eigen::Quaternionf getAverageQuaternion(
-//  const std::vector<tf::Quaternion>& quaternions,
-//  const std::vector<double>& weights)
     const std::vector<Eigen::Quaternionf>& quaternions,
     const std::vector<float>& weights)
-    //    const Eigen::Vector3f& weights)
 {
   Eigen::MatrixXd Q = Eigen::MatrixXd::Zero(4, quaternions.size());
   Eigen::Vector3d vec;

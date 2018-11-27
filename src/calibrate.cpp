@@ -68,14 +68,14 @@ int main (int argc, char** argv)
   sleep(3); // wait for ROS debugger
 
   // init pcl viewer
-  wp3::Visualization viewerAruco;
+  wp3::Visualization viewerAruco("Viewer Aruco");
   viewerAruco.initializeSingle();
-  wp3::Visualization viewerArucoCropped;
+  wp3::Visualization viewerArucoCropped("Viewer Aruco Cropped");
   viewerArucoCropped.initializeSingle();
-  wp3::Visualization viewer;
+  wp3::Visualization viewer("Viewer All");
   viewer.initialize();
 #ifdef VIEW_ICP
-  wp3::Visualization viewerICP;
+  wp3::Visualization viewerICP("Viewer ICP steps");
   viewerICP.initializeSingle();
 //  pcl::visualization::PCLVisualizer viewerICP ("ICP Visualizer");
 //  viewerICP.setCameraPosition(-1.23666, -8.81802, -6.55671,
@@ -166,6 +166,7 @@ int main (int argc, char** argv)
       boost::thread_group threadGroup;
       for(int i=0 ; i < num_sensors ; i++)
       {
+//        sensorVec[i]->readTopics(true);
         threadGroup.create_thread( boost::bind( &wp3::Sensor::readTopics, sensorVec[i], true ) );
       }
       // wait for threads to join
@@ -178,34 +179,49 @@ int main (int argc, char** argv)
 //      boost::thread_group threadGroup2;
       for(int i=0 ; i < num_sensors ; i++)
       {
-//        apVec[i].clearAll();
 //        apVec[i].detectMarkers(*sensorVec[i], tfMapVec[i]);
-
         threadGroup.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, boost::ref(apVec[i]), *sensorVec[i], tfMapVec[i] ) );
-//        threadGroup2.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, apVec[i], *sensorVec[i], tfMapVec[i] ) );
       }
       threadGroup.join_all();
       ROS_INFO_STREAM("Processing complete" << std::endl);
 
 
       // View detected images all nodes
-//      for(int i=0 ; i < num_sensors ; i++)
-//        apVec[i].viewImages(*sensorVec[i]);
+      for(int i=0 ; i < num_sensors ; i++)
+      {
+        apVec[i].viewImages(*sensorVec[i]);
+        // clear color images to save memory
+        sensorVec[i]->clearImageMatVec();
+      }
 
       // View detected images single node
-        apVec[0].viewImages(*sensorVec[0]);
-
+//        apVec[0].viewImages(*sensorVec[0]);
 
       // Save cropped accumulated clouds
       for(int i=0 ; i < num_sensors ; i++)
-        sensorVec[i]->cloudCrPtr_ = apVec[i].getCroppedCloud();
+//        sensorVec[i]->cloudCrPtr_ = apVec[i].getCroppedCloud();
+        *sensorVec[i]->cloudCrPtr_ = *apVec[i].getCroppedCloud();
+
+      // TODO remove
+      Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
+      Eigen::Matrix4f transMat_avgB = Eigen::Matrix4f::Identity();
+
 
       // get averaged transformation based on aruco markers
       //TODO: map intersection,  https://stackoverflow.com/questions/3772664/intersection-of-two-stl-maps
       std::vector<Eigen::Matrix4f> transAvgVec(num_sensors, Eigen::Matrix4f::Identity());
       std::vector<MarkerMapType> transMapUsedVec(num_sensors);
       for(int i=0 ; i<num_sensors ; i++)
+      {
         apVec[i].getAverageTransformation(transAvgVec[i], transMapUsedVec[i]);
+
+        // convert and publish ROS TF
+        Eigen::Affine3d transform_affine(transAvgVec[i].cast<double>());
+        tf::Transform transform_tf;
+        tf::transformEigenToTF(transform_affine, transform_tf);
+        std::string tfName = sensorVec[i]->name_ + ".avg";
+        transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), sensorVec[i]->getTfTopic(), tfName ) );
+      }
 
       std::vector<Eigen::Matrix4f> camPoseVec(num_sensors, Eigen::Matrix4f::Identity() );
       for(int i=0 ; i<num_sensors ; i++)
@@ -217,7 +233,10 @@ int main (int argc, char** argv)
 
 //      transform_ATOb = transform_B*transform_A.inverse();
       for(int i=0 ; i < num_sensors ; i++)
+      {
         pcl::transformPointCloud (*sensorVec[i]->cloudCrPtr_, *sensorVec[i]->cloud1CrPtr_, camPoseVec[i] );
+        pcl::transformPointCloud (*sensorVec[i]->cloudPtr_, *sensorVec[i]->cloud1Ptr_, camPoseVec[i]);
+      }
 
 //      pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
 //      pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
@@ -233,7 +252,7 @@ int main (int argc, char** argv)
 #ifdef VIEW_ICP
 //      wp3::calcTransMats(*sensorVec[0], *sensorVec[1], transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print, viewerICP);
 #else
-      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+//      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 #endif
       ROS_INFO_STREAM("ICP complete with fitness score: " << ICP1_fitness_to_print);
 
@@ -244,33 +263,40 @@ int main (int argc, char** argv)
 
 
       //      std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr> cloud_vector_1,
+
       // cropped clouds
       cloud_vector_1.clear();
       for(int i=0 ; i<num_sensors ; i++)
         cloud_vector_1.push_back(sensorVec[i]->cloud1CrPtr_); // step 1
 //      cloud_vector_1.push_back(sensorVec[0]->cloud1CrPtr_); // step 1
 //      cloud_vector_1.push_back(sensorVec[1]->cloudCrPtr_);
+
       cloud_vector_2.clear();
-      cloud_vector_2.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
-      cloud_vector_2.push_back(sensorVec[1]->cloudCrPtr_);
+//      cloud_vector_2.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
+//      cloud_vector_2.push_back(sensorVec[1]->cloudCrPtr_);
       cloud_vector_3.clear();
-      cloud_vector_3.push_back(sensorVec[0]->cloud3CrPtr_); // step 3
-      cloud_vector_3.push_back(sensorVec[1]->cloudCrPtr_);
+//      cloud_vector_3.push_back(sensorVec[0]->cloud3CrPtr_); // step 3
+//      cloud_vector_3.push_back(sensorVec[1]->cloudCrPtr_);
 
       // full clouds
       cloud_vector_4.clear();
-      cloud_vector_4.push_back(sensorVec[0]->cloud1Ptr_); // step 1
-      cloud_vector_4.push_back(sensorVec[1]->cloudPtr_);
+      for(int i=0 ; i<num_sensors ; i++)
+        cloud_vector_4.push_back(sensorVec[i]->cloud1Ptr_); // step 1
+//      cloud_vector_4.clear();
+//      cloud_vector_4.push_back(sensorVec[0]->cloud1Ptr_); // step 1
+//      cloud_vector_4.push_back(sensorVec[1]->cloudPtr_);
+
       cloud_vector_5.clear();
-      cloud_vector_5.push_back(sensorVec[0]->cloud2Ptr_); // step 2
-      cloud_vector_5.push_back(sensorVec[1]->cloudPtr_);
+//      cloud_vector_5.push_back(sensorVec[0]->cloud2Ptr_); // step 2
+//      cloud_vector_5.push_back(sensorVec[1]->cloudPtr_);
       cloud_vector_6.clear();
 //      cloud_vector_6.push_back(sensorVec[0]->cloud3Ptr_); // step 3
-      cloud_vector_6.push_back(sensorVec[1]->cloudPtr_);
+//      cloud_vector_6.push_back(sensorVec[1]->cloudPtr_);
+
       // additional clouds TMP
 //      cloud_vector_6.push_back(sensorVec[0]->cloud2Ptr_); // step 2
 //      cloud_vector_6.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
-      cloud_vector_6.push_back(sensorVec[1]->cloudCrPtr_);
+//      cloud_vector_6.push_back(sensorVec[1]->cloudCrPtr_);
 
 
 
@@ -306,6 +332,7 @@ int main (int argc, char** argv)
       // view Aruco only
       viewerAruco.runSingle(cloud_vector_4, transMap);
       viewerArucoCropped.runSingle(cloud_vector_1, transMap);
+
       // view all results
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
 
@@ -330,13 +357,6 @@ int main (int argc, char** argv)
 //      std::cout << "evaluating node " << reference_node << "vs" << calibration_order_initial[calib_counter] << std::endl;
     }
 
-//    viewer.update();
-    viewer.update();
-    viewerAruco.update();
-    viewerArucoCropped.update();
-#ifdef VIEW_ICP
-//    viewerICP.spinOnce();
-#endif
 
     // TF PUBLISHERS
     // TF - Manual world reference
@@ -347,7 +367,7 @@ int main (int argc, char** argv)
     q.setRPY(-2.44, 0, 0.7);  // j1
 //    q.setRPY(-2.50, 0, -1.571);  // j4
     worldToReference_tf.setRotation(q);
-    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", sensorVec[0]->getTfTopic() ) );
+//    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", sensorVec[0]->getTfTopic() ) );
 //    transform_publisher.sendTransform(tf::StampedTransform(worldToReference_tf, ros::Time::now(), "world", "jetson1_ir_optical_frame" ) );
 
 
@@ -357,10 +377,17 @@ int main (int argc, char** argv)
     Eigen::Affine3d transform_affine(transform_m4d);
     tf::Transform transform_tf;
     tf::transformEigenToTF(transform_affine, transform_tf);
-    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), sensorVec[0]->getTfTopic(), sensorVec[1]->getTfTopic() ) );
+//    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), sensorVec[0]->getTfTopic(), sensorVec[1]->getTfTopic() ) );
 //    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson1_ir_optical_frame", "jetson6_ir_optical_frame" ) );
     ros::spinOnce();
 
+    // refresh viewers
+    viewer.update();
+    viewerAruco.update();
+    viewerArucoCropped.update();
+#ifdef VIEW_ICP
+    //    viewerICP.spinOnce();
+#endif
 
 ////    sleep ROS spinner
 //    loopRate.sleep();

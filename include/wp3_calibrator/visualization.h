@@ -11,7 +11,7 @@ class Visualization
 {
 public:
     // Contructor
-    Visualization();
+    Visualization(std::string name);
 
     // Deconstrucor
     ~Visualization();
@@ -44,6 +44,7 @@ public:
 private:
 //    pcl::visualization::PCLVisualizer& viewer_;
 //    pcl::visualization::PCLVisualizer::Ptr viewer_;
+    std::string name_;
     pcl::visualization::PCLVisualizer viewer_;
     std::vector<cv::Vec3i> colors_;     // vector containing colors to use to identify cameras in the network
     int vp11_;

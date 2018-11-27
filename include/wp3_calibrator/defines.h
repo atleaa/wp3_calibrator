@@ -8,7 +8,7 @@
 
 #define VIEW_ICP // create a viewer to see ICP process.
 #define SHOWDEPTH // view cropped depth images
-#define ACCUMULATE 10
+#define ACCUMULATE 100
 #define ICP_MAX_CORR_DIST 0.6 //
 //#define ICP_CONVERGE 0.00001  // good
 //#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
@@ -123,6 +123,8 @@ const std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
 //#include <opencv2/imgproc/imgproc.hpp>
 //#include <opencv2/core/eigen.hpp>
 
-typedef std::vector<cv::Point2f> Vec2f;
-typedef std::vector<std::vector<cv::Point2f>> VecVec2f;
+typedef std::vector<cv::Point2f> Vec2fPoint;
+typedef std::vector<cv::Point3f> Vec3fPoint;
+typedef std::vector<std::vector<cv::Point2f>> VecVec2fPoint;
+typedef std::vector<std::vector<cv::Point3f>> VecVec3fPoint;
 #endif // DEFINES_H

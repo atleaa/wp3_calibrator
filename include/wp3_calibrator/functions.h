@@ -15,7 +15,7 @@
 //#include <unistd.h>
 //#include <mutex>
 //#include <thread>
-//#include <vector>
+#include <vector>
 
 //#include <limits>
 
@@ -104,7 +104,7 @@ void saveResults(Eigen::Matrix4f transf_to_save, double ICP2_fitnessScore, std::
 
 void readGlobalPose(std::string kinect_number, Eigen::Matrix4f & tMat);
 
-
+double calcMedian(std::vector<float> values);
 
 
 #ifdef VIEW_ICP

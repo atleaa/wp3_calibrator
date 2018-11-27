@@ -4,11 +4,11 @@
 namespace wp3 {
 
 // Constructor
-Visualization::Visualization() :
+Visualization::Visualization(std::string name) :
   //    viewer_(new pcl::visualization::PCLVisualizer("Input clouds and registration"))
-  viewer_("Input clouds and registration")
+  viewer_(name)
 {
-
+name_=name;
 }
 
 
@@ -36,7 +36,7 @@ void Visualization::initialize()
   viewer_.createViewPort (0.0, 0.5, 0.33, 1.0, vp21_);
   viewer_.createViewPort (0.33, 0.5, 0.66, 1.0, vp22_);
   viewer_.createViewPort (0.66, 0.5, 1.0, 1.0, vp23_);
-  viewer_.setBackgroundColor (1.0, 1.0, 1.0);
+  viewer_.setBackgroundColor (0.7, 0.7, 0.7);
   viewer_.addText ("ARUCO CROPPED", 10, 10, "vp11_text", vp11_);
   viewer_.addText ("ICP1 CROPPED", 10, 10, "vp12_text", vp12_);
   viewer_.addText ("ICP2 CROPPED", 10, 10, "vp13_text", vp13_);
@@ -68,7 +68,7 @@ void Visualization::initializeSingle()
     color_stream << *i << ' ' << std::endl;
   ROS_DEBUG_STREAM(color_stream.str());
 
-  viewer_.setBackgroundColor (1.0, 1.0, 1.0);
+  viewer_.setBackgroundColor (0.7, 0.7, 0.7);
     //  viewer_.initCameraParameters();
 
   //Cam:
@@ -215,8 +215,8 @@ void Visualization::run(std::vector<pcl::PointCloud<pcl::PointXYZ>::Ptr >& cloud
   }
 
   // add custom point size
-  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node0_icp2"); //can add viewport
-  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node1_icp2"); //can add viewport
+//  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node0_icp2"); //can add viewport
+//  viewer_.setPointCloudRenderingProperties(pcl::visualization::PCL_VISUALIZER_POINT_SIZE, 5, "Node1_icp2"); //can add viewport
 
   //    pcl::visualization::PointCloudColorHandlerCustom<pcl::PointXYZ> color_1(cloud_vector[cloud_itr], 0, 255, 0);
 
@@ -370,7 +370,7 @@ void Visualization::update()
       viewer_.addText(text_str, 10, 30, "Cam_text");
     }
 
-    viewer_.spinOnce();
+    viewer_.spinOnce(20,"true");
     //    cv::waitKey(1);
   }
 }
