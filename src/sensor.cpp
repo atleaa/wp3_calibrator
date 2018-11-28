@@ -150,15 +150,44 @@ void Sensor::readTopics(bool update = false)
   {
     imageMat_.release();
     depthMat_.release();
-    cloudPtr_->clear();
     imageMatVec_.clear();
     depthMatVec_.clear();
+
+    cloudPtr_->clear();
+    cloudCrPtr_->clear();
+    cloud1Ptr_->clear();
+    cloud1CrPtr_->clear();
+    cloud2Ptr_->clear();
+    cloud2CrPtr_->clear();
+    cloud3Ptr_->clear();
+    cloud3CrPtr_->clear();
+
+    cloudPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloudCrPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud1Ptr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud1CrPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud2Ptr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud2CrPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud3Ptr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+    cloud3CrPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
+
+//    cloudPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloudCrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud1Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud1CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud2Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud2CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud3Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+//    cloud3CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
+
+
+
 //    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
   }
 
   // get color image
   ROS_DEBUG_STREAM("Reading " << imageTopic_ << " ... "<< std::flush);
-  for(int i=0;i<ACCUMULATE;i++)
+  for(int i=0;i<IMAGES_C;i++)
   {
     imageMat_.release();
     while(imageMat_.empty())
@@ -171,7 +200,7 @@ void Sensor::readTopics(bool update = false)
 
   // get depth image
   ROS_DEBUG_STREAM("Reading " << depthTopic_ << " ... "<< std::flush);
-  for(int i=0;i<ACCUMULATE;i++)
+  for(int i=0;i<IMAGES_D;i++)
   {
     depthMat_.release();
     while(depthMat_.empty())
@@ -192,11 +221,11 @@ void Sensor::readTopics(bool update = false)
   ROS_DEBUG_STREAM("Done reading " << cloudTopic_ << std::endl);
 } // end readTopics
 
-void Sensor::appendClouds()
-{
-  *cloudAccPtr_ += *cloudPtr_;
-  *cloud1AccPtr_ += *cloud1Ptr_;
-}
+//void Sensor::appendClouds()
+//{
+//  *cloudAccPtr_ += *cloudPtr_;
+//  *cloud1AccPtr_ += *cloud1Ptr_;
+//}
 
 //} // end namespace calibrate
 } // end namespace wp3

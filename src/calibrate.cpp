@@ -67,6 +67,7 @@ int main (int argc, char** argv)
 
   sleep(3); // wait for ROS debugger
 
+#ifdef VIEWERS_ENABLED
   // init pcl viewer
   wp3::Visualization viewerAruco("Viewer Aruco");
   viewerAruco.initializeSingle();
@@ -74,13 +75,10 @@ int main (int argc, char** argv)
   viewerArucoCropped.initializeSingle();
   wp3::Visualization viewer("Viewer All");
   viewer.initialize();
+#endif
 #ifdef VIEW_ICP
   wp3::Visualization viewerICP("Viewer ICP steps");
   viewerICP.initializeSingle();
-//  pcl::visualization::PCLVisualizer viewerICP ("ICP Visualizer");
-//  viewerICP.setCameraPosition(-1.23666, -8.81802, -6.55671,
-//                            -0.0567675, -2.09815, 5.04277,
-//                            0.323175, -0.832741, 0.449555);
 #endif
 
   std::map<std::string, Eigen::Matrix4f> transMap;
@@ -103,28 +101,24 @@ int main (int argc, char** argv)
   int num_sensors;
   wp3::loadSensors(node_handle, sensorVec, num_sensors);
 
+
   // Init vector of transformations to identity
   std::vector<Eigen::Matrix4f> transformVec(num_sensors, Eigen::Matrix4f::Identity() );
   std::vector<MarkerMapType> tfMapVec(num_sensors);
 
   // Init aruco processor
-//  std::vector<wp3::arucoProcessor::Ptr> apVec; // vector of arucoProcessor
-//  wp3::arucoProcessor ap;
+
   wp3::arucoProcessor aruco_A;
   wp3::arucoProcessor aruco_B;
-//  wp3::arucoProcessor::Ptr ap = boost::make_shared<wp3::arucoProcessor>();
-//  std::vector<wp3::arucoProcessor::Ptr> apVec(num_sensors, ap); // vector of arucoProcessor
-//  wp3::arucoProcessor ap;
-//  std::vector<wp3::arucoProcessor> apVec(num_sensors, ap); // vector of arucoProcessor
+
   std::vector<wp3::arucoProcessor> apVec(num_sensors); // vector of arucoProcessor
-//  std::vector<wp3::arucoProcessor> apVec; // vector of arucoProcessor
-//  for(int i=0; i<num_sensors; i++)
-//    apVec.push_back(ap);
+
 
   wp3::init_reference(reference_node); // create first initial transformation
 
 //  r_mutex2.lock();
-  int key = cv::waitKey(30);
+  int key_cv = cv::waitKey(30);
+  char key;
 //  bool init = false;  // don't autostart
   bool init = true;
   size_t calib_counter = 0;
@@ -136,31 +130,42 @@ int main (int argc, char** argv)
 //  ros::Rate loopRate(ROS_LOOPRATE);
 //  ros::AsyncSpinner spinner(8);
 //  spinner.start();
-
   usleep(1000000); // give the spinner some time to start (1000 ms)
 
 
   // Init threads
 //  boost::thread threads[num_sensors];
 
-  //  begin main while ------------------------------------------------------------------------------------------
-  while ((key != 27) && ros::ok())  // not ESC
-  {
-    key = cv::waitKey(30);
 
-    // the process below is performed initially and updated every time the user presses the "n" key on the RGB image
-    if (key == 110 || init == true) // n
+  //  begin main while ------------------------------------------------------------------------------------------
+  while ((key_cv != 27) && ros::ok())  // not ESC
+  {
+    key_cv = cv::waitKey(30);
+
+//    ROS_INFO_STREAM("\nn to calibrate\nq to quit");
+//    cin >> key;
+//    if(key=='q') break;
+
+
+    // Start new calibration routine --------------------------------------------------------------------------
+    if (key_cv == 110 || key == 'n' || init == true) // n
     {
       init = false;
       ROS_INFO_STREAM("Starting calibration routine" << std::endl);
 
-      // clear image buffers
-      for(int i=0 ; i < num_sensors ; i++)
-      {
+      // makes sure to clear all saved data!
+//      sensorVec[0].reset();
+//      sensorVec[1].reset();
+//      sensorVec[2].reset();
+//      sensorVec[3].reset();
+//      sensorVec[4].reset();
 
-      }
+//      delete &sensorVec;
+//      std::vector<wp3::Sensor::Ptr> sensorVec;
+//      wp3::loadSensors(node_handle, sensorVec, num_sensors);
 
-      // reading topics
+
+      // reading topics -----------------------------------------------------------------------------------------
       ROS_INFO_STREAM("Recording topics...");
       // threads for each worker
       boost::thread_group threadGroup;
@@ -174,22 +179,26 @@ int main (int argc, char** argv)
       ROS_INFO_STREAM("Recording complete" << std::endl);
 
 
-      // detect and accumulate cropped clouds
+
+      // detect and accumulate cropped clouds --------------------------------------------------------------------
       ROS_INFO_STREAM("Processing recorded data...");
 //      boost::thread_group threadGroup2;
       for(int i=0 ; i < num_sensors ; i++)
       {
 //        apVec[i].detectMarkers(*sensorVec[i], tfMapVec[i]);
-        threadGroup.create_thread( boost::bind( &wp3::arucoProcessor::detectMarkers, boost::ref(apVec[i]), *sensorVec[i], tfMapVec[i] ) );
+        threadGroup.create_thread( boost::bind( &wp3::arucoProcessor::processImages, boost::ref(apVec[i]), *sensorVec[i], tfMapVec[i] ) );
       }
       threadGroup.join_all();
       ROS_INFO_STREAM("Processing complete" << std::endl);
 
 
-      // View detected images all nodes
+
+      // View detected images all nodes --------------------------------------------------------------------------
       for(int i=0 ; i < num_sensors ; i++)
       {
+#ifdef VIEW_IMAGES
         apVec[i].viewImages(*sensorVec[i]);
+#endif
         // clear color images to save memory
         sensorVec[i]->clearImageMatVec();
       }
@@ -198,9 +207,10 @@ int main (int argc, char** argv)
 //        apVec[0].viewImages(*sensorVec[0]);
 
       // Save cropped accumulated clouds
-      for(int i=0 ; i < num_sensors ; i++)
+      // (inserted directly in arucoprocessor)
+//      for(int i=0 ; i < num_sensors ; i++)
 //        sensorVec[i]->cloudCrPtr_ = apVec[i].getCroppedCloud();
-        *sensorVec[i]->cloudCrPtr_ = *apVec[i].getCroppedCloud();
+//        *sensorVec[i]->cloudCrPtr_ = *apVec[i].getCroppedCloud();
 
       // TODO remove
       Eigen::Matrix4f transMat_avgA = Eigen::Matrix4f::Identity();
@@ -242,7 +252,7 @@ int main (int argc, char** argv)
 //      pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
       // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
+// BREAK HERE IF RECORDING IS BAD??
 
 
 //      ROS_INFO_STREAM("Performing ICP between " << nodeA.name_ << " and " << nodeB.name_);
@@ -252,7 +262,7 @@ int main (int argc, char** argv)
 #ifdef VIEW_ICP
 //      wp3::calcTransMats(*sensorVec[0], *sensorVec[1], transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print, viewerICP);
 #else
-//      wp3::calcTransMats(nodeA, nodeB, transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
+//      wp3::calcTransMats(*sensorVec[0], *sensorVec[1], transMat_avgA, transMat_avgB, transform_reference_global, transform_ICP1_print, ICP1_fitness_to_print);
 #endif
       ROS_INFO_STREAM("ICP complete with fitness score: " << ICP1_fitness_to_print);
 
@@ -268,12 +278,13 @@ int main (int argc, char** argv)
       cloud_vector_1.clear();
       for(int i=0 ; i<num_sensors ; i++)
         cloud_vector_1.push_back(sensorVec[i]->cloud1CrPtr_); // step 1
+
 //      cloud_vector_1.push_back(sensorVec[0]->cloud1CrPtr_); // step 1
 //      cloud_vector_1.push_back(sensorVec[1]->cloudCrPtr_);
 
       cloud_vector_2.clear();
-//      cloud_vector_2.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
-//      cloud_vector_2.push_back(sensorVec[1]->cloudCrPtr_);
+      cloud_vector_2.push_back(sensorVec[0]->cloud2CrPtr_); // step 2
+      cloud_vector_2.push_back(sensorVec[1]->cloudCrPtr_);
       cloud_vector_3.clear();
 //      cloud_vector_3.push_back(sensorVec[0]->cloud3CrPtr_); // step 3
 //      cloud_vector_3.push_back(sensorVec[1]->cloudCrPtr_);
@@ -329,24 +340,25 @@ int main (int argc, char** argv)
 //      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[1]->name_+"-avg",camB*transMat_avgB ));
 
 
+#ifdef VIEWERS_ENABLED
       // view Aruco only
       viewerAruco.runSingle(cloud_vector_4, transMap);
       viewerArucoCropped.runSingle(cloud_vector_1, transMap);
-
       // view all results
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
+#endif
 
     }
 
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
-    if (key == 115) // s
+    if (key_cv == 115) // s
     {
       wp3::saveResults(transform_ICP1_print, ICP1_fitness_to_print, calibration_order_initial[calib_counter]);
 //      std::cout << numel_calib << std::endl;
     }
 
 
-    if (key == 43) // +
+    if (key_cv == 43) // +
     {
       calib_counter += 1;
 
@@ -381,10 +393,12 @@ int main (int argc, char** argv)
 //    transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson1_ir_optical_frame", "jetson6_ir_optical_frame" ) );
     ros::spinOnce();
 
+#ifdef VIEWERS_ENABLED
     // refresh viewers
     viewer.update();
     viewerAruco.update();
     viewerArucoCropped.update();
+#endif
 #ifdef VIEW_ICP
     //    viewerICP.spinOnce();
 #endif

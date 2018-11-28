@@ -100,7 +100,7 @@ public:
 
   void readTopics(bool update);
 
-  void appendClouds();
+//  void appendClouds();
 
   // Accessors/getter/setter
   std::string getDepthTopic() const;
@@ -130,16 +130,16 @@ public:
   std::vector<cv::Mat> depthMatVec_;  // original depth image in a vector
 
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudPtr_;      // original point cloud
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudAccPtr_;   // original point cloud
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloudAccPtr_;   // original point cloud
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloudCrPtr_;    // original cropped point cloud
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1Ptr_;     // point cloud after 1 transformation
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1AccPtr_;  // point cloud after 1 transformation
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1AccPtr_;  // point cloud after 1 transformation
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud1CrPtr_;   // cropped point cloud after 1 transformation
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2Ptr_;     // point cloud after 2 transformations
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2AccPtr_;   // point cloud after 2 transformations
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2AccPtr_;   // point cloud after 2 transformations
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud2CrPtr_;   // cropped point cloud after 2 transformations
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3Ptr_;     // point cloud after 3 transformations
-  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3AccPtr_;   // point cloud after 3 transformations
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3AccPtr_;   // point cloud after 3 transformations
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3CrPtr_;   // cropped point cloud after 3 transformations
 
 

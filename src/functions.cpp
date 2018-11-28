@@ -444,7 +444,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 #else
 void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
-                   Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore)
+                   Eigen::Matrix4f transform_reference_global,
+                   Eigen::Matrix4f & world_to_B, double & fitnessScore)
 #endif
 {
   Eigen::Matrix4f transform_ATOb;
@@ -455,8 +456,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   transform_ATOb = transform_B*transform_A.inverse();
-  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
-  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
+//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
+//  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -522,10 +523,11 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 //  std::cout << "ICP complete" << std::endl;
 
   sensorA.cloud2CrPtr_ = tmpCloud;
-//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
+  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
   pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
+
 //  trans_AtoB = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
-  trans_AtoB = transform_AtoB_ICP; // value to be written
+//  trans_AtoB = transform_AtoB_ICP; // value to be written
   //		std::cout << "world_to_reference: "<< transform_reference_global << std::endl;
   //		std::cout << "transform_AtoB_ICP: "<< transform_AtoB_ICP << std::endl;
   //		std::cout << "world_to b: "<< world_to_B << std::endl;

@@ -6,9 +6,16 @@
 #define ROS_LOOPRATE 10
 #define ARUCODIMENSION 0.60 // Side length of Aruco markers
 
-#define VIEW_ICP // create a viewer to see ICP process.
-#define SHOWDEPTH // view cropped depth images
-#define ACCUMULATE 100
+//#define VIEW_ICP // create a viewer to see ICP process.
+#define VIEWERS_ENABLED
+#define VIEW_IMAGES
+//#define SHOWDEPTH // view cropped depth images
+
+#define IMAGES_C 400 // Number of color images to capture for aruco detection (Increase if detectionrate is low)
+#define IMAGES_D 50 // Number of depth images to capture for cloud and corner point calculation.
+#define CLOUDS 5 // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+
+
 #define ICP_MAX_CORR_DIST 0.6 //
 //#define ICP_CONVERGE 0.00001  // good
 //#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6

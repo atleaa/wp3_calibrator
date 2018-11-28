@@ -52,7 +52,7 @@ public:
 
   void clearAll();
 
-  void detectMarkers(Sensor &node,
+  void processImages(Sensor &node,
                      MarkerMapType &transform4x4);
 //  void detectMarkers(boost::ref(Sensor),
 //                     MarkerMapType &transform4x4);
@@ -87,9 +87,9 @@ private:
                                  cv::Mat depth_aruco_dummy);
 
   // TODO, create vectors
-  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
-  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
+//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr croppedCloud_; //(new pcl::PointCloud<pcl::PointXYZ>);
 //  std::map<float, Eigen::Matrix4f> transformMap_;
   cv::Mat inputImage_;
