@@ -73,6 +73,8 @@ public:
                              std::vector<cv::Mat> &inputDepthVec,
                              Eigen::Matrix3d intrinsicMatrix,
                              VecVec3fPoint &markerCornerPoints);
+
+  std::vector<Eigen::Matrix4d> transCamToArucoVec_; // Vector of Transformations from camera to markers.
   
 //  void findBestPose(wp3::Sensor& node, std::vector<cv::Mat> inputDepthVec, Eigen::Matrix3d intrinsicMatrix);
 

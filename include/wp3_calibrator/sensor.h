@@ -142,6 +142,9 @@ public:
 //  pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3AccPtr_;   // point cloud after 3 transformations
   pcl::PointCloud<pcl::PointXYZ>::Ptr cloud3CrPtr_;   // cropped point cloud after 3 transformations
 
+  Eigen::Matrix4f transCamToAruco_; // transformation from camera to aruco estimate
+  Eigen::Matrix4f transArucoToICP_; // transformation from aruco estimate to ICP refinement
+
 
   void setCamera_info_topic(const std::string &camera_info_topic);
 

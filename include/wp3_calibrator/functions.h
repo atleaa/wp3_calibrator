@@ -113,10 +113,14 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore,
 //                   pcl::visualization::PCLVisualizer viewerICP);
                    Visualization &viewer);
+
+void refineTransformation(wp3::Sensor &sensor, wp3::Sensor &reference);
 #else
 void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f transform_A, Eigen::Matrix4f transform_B,
                    Eigen::Matrix4f transform_reference_global, Eigen::Matrix4f & world_to_B, double & fitnessScore_to_print);
+
+void refineTransformation(wp3::Sensor &sensor, wp3::Sensor &reference);
 #endif
 
 Eigen::Quaternionf getAverageQuaternion(const std::vector<Eigen::Quaternionf> &quaternions,

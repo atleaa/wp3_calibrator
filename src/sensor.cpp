@@ -19,6 +19,8 @@ Sensor::Sensor(std::string name, ros::NodeHandle & nodehandle) :
   intrinsics_set_(false)
 {
   name_ = name;
+  transCamToAruco_ = Eigen::Matrix4f::Identity();
+  transArucoToICP_ = Eigen::Matrix4f::Identity();
 }
 
 
@@ -171,15 +173,8 @@ void Sensor::readTopics(bool update = false)
     cloud3Ptr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
     cloud3CrPtr_.reset(new pcl::PointCloud<pcl::PointXYZ>);
 
-//    cloudPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloudCrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud1Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud1CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud2Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud2CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud3Ptr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-//    cloud3CrPtr_=new pcl::PointCloud<pcl::PointXYZ>::Ptr;
-
+    transCamToAruco_ = Eigen::Matrix4f::Identity();
+    transArucoToICP_ = Eigen::Matrix4f::Identity();
 
 
 //    ROS_DEBUG_STREAM("emptied cloud, size now for " << cloudTopic_<< " is: " << cloudPtr_->size() << std::endl;);
@@ -195,6 +190,7 @@ void Sensor::readTopics(bool update = false)
       ic_color.getCurrentImage(&imageMat_);
     }
     imageMatVec_.push_back(imageMat_);
+    std::cout << "." << std::flush;
   }
   ROS_DEBUG_STREAM("Done reading " << imageTopic_ << std::endl);
 
@@ -208,6 +204,7 @@ void Sensor::readTopics(bool update = false)
       ic_depth.getCurrentDepthMap(&depthMat_);
     }
     depthMatVec_.push_back(depthMat_);
+    std::cout << "." << std::flush;
   }
 
   ROS_DEBUG_STREAM("Done reading " << depthTopic_ << std::endl);
@@ -217,6 +214,7 @@ void Sensor::readTopics(bool update = false)
   while( cloudPtr_->size() == 0)
   {
     dp.get_filtered_PCL_cloud(cloudPtr_);
+    std::cout << "." << std::flush;
   }
   ROS_DEBUG_STREAM("Done reading " << cloudTopic_ << std::endl);
 } // end readTopics

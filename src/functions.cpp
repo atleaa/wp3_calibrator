@@ -448,14 +448,14 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
                    Eigen::Matrix4f & world_to_B, double & fitnessScore)
 #endif
 {
-  Eigen::Matrix4f transform_ATOb;
+  Eigen::Matrix4f transform_ATOb = Eigen::Matrix4f::Identity();
   Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
   Eigen::Affine3f transform_ICP2 = Eigen::Affine3f::Identity();
   pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud (new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud2 (new pcl::PointCloud<pcl::PointXYZ>);
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  transform_ATOb = transform_B*transform_A.inverse();
+//  transform_ATOb = transform_B*transform_A.inverse();
 //  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
 //  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -478,7 +478,8 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
   {
 //    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
 //    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8/(2^round), fitnessScore1);
-    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
+    wp3::ICP_allign(tmpCloud,sensorB.cloud1CrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
     if (ICP1_converged)
     {
       ROS_INFO_STREAM("Iterative ICP cycle: " << round << ", MaxDistance: " << maxCorrDist/round  <<"\tICP converged with fitness score: " <<  fitnessScore);
@@ -522,9 +523,11 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
   }
 //  std::cout << "ICP complete" << std::endl;
 
-  sensorA.cloud2CrPtr_ = tmpCloud;
-  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
-  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
+//  sensorA.cloud2CrPtr_ = tmpCloud;
+  pcl::transformPointCloud (*sensorA.cloud1CrPtr_, *sensorA.cloud2CrPtr_, transform_AtoB_ICP);
+  pcl::transformPointCloud (*sensorA.cloud1Ptr_, *sensorA.cloud2Ptr_, transform_AtoB_ICP);
+  *sensorB.cloud2Ptr_ = *sensorB.cloud1Ptr_;
+  *sensorB.cloud2CrPtr_ = *sensorB.cloud1CrPtr_;
 
 //  trans_AtoB = transform_reference_global*transform_AtoB_ICP.inverse(); // value to be written
 //  trans_AtoB = transform_AtoB_ICP; // value to be written
@@ -549,6 +552,74 @@ void calcTransMats(wp3::Sensor &sensorA, wp3::Sensor &sensorB,
 //  }
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
+
+void refineTransformation(wp3::Sensor & sensor, wp3::Sensor & reference)
+{
+  Eigen::Matrix4f transform_ATOb = Eigen::Matrix4f::Identity();
+  Eigen::Affine3f transform_ICP = Eigen::Affine3f::Identity();
+  Eigen::Affine3f transform_ICP2 = Eigen::Affine3f::Identity();
+  pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud (new pcl::PointCloud<pcl::PointXYZ>);
+  pcl::PointCloud<pcl::PointXYZ>::Ptr tmpCloud2 (new pcl::PointCloud<pcl::PointXYZ>);
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (Aruco) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//  transform_ATOb = transform_B*transform_A.inverse();
+//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *sensorA.cloud1CrPtr_, transform_ATOb);
+//  pcl::transformPointCloud (*sensorA.cloudPtr_, *sensorA.cloud1Ptr_, transform_ATOb);
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Camera A to camera B (ROI ICP) ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  bool ICP1_converged;
+  double fitnessScore2=1000, fitnessChange=1000;
+  float maxCorrDist = ICP_MAX_CORR_DIST;
+  Eigen::Matrix4f transform_AtoB_ICP = transform_ATOb; // initial ArUco transformation
+  double fitnessScore = 1000;
+
+
+//  pcl::transformPointCloud (*sensorA.cloudCrPtr_, *tmpCloud, transform_AtoB_ICP);
+  *tmpCloud = *sensor.cloud1CrPtr_;
+
+//  for(int i=0 ; i<10; i++)
+  int round = 0;
+  int iterations = ICP_ITERATIONS;
+  while(fitnessChange>ICP_CONVERGE && round<ICP_MAX_ROUNDS) // fitness change used as converge criteria
+  {
+    round++;
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8/(2^round), fitnessScore1);
+//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
+    wp3::ICP_allign(tmpCloud,reference.cloud1CrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
+    if (ICP1_converged)
+    {
+      ROS_DEBUG_STREAM(sensor.name_ << "->ref:\tIterative ICP cycle: " << round << ", MaxDistance: " << maxCorrDist/round
+                      <<"\tICP converged with fitness score: " <<  fitnessScore);
+  //    Eigen::Matrix4f transform_AtoB_ICP = transform_ICP.matrix()*transform_B*transform_A.inverse();
+      transform_AtoB_ICP = transform_ICP.matrix()*transform_AtoB_ICP;
+      pcl::transformPointCloud (*tmpCloud, *tmpCloud2, transform_ICP.matrix());
+      *tmpCloud = *tmpCloud2;
+
+//      fitnessChange = std::abs(fitnessScore1-fitnessScore2)/fitnessScore1;
+      fitnessChange = std::abs(fitnessScore-fitnessScore2)/fitnessScore; // relative change
+      fitnessScore2 = fitnessScore;
+    }
+    else
+    {
+      ROS_ERROR_STREAM(sensor.name_ << "->ref\t ICP did not converge!");
+    }
+  }
+
+  ROS_INFO_STREAM(sensor.name_ << "->ref:\tICP refinement complete." << std::endl
+                  << sensor.name_ << "->ref:\tRefinement iterations:\t"<< round << std::endl
+                  << sensor.name_ << "->ref:\tFinal fitness score:\t" << fitnessScore);
+
+//  sensorA.cloud2CrPtr_ = tmpCloud;
+  pcl::transformPointCloud (*sensor.cloud1CrPtr_, *sensor.cloud2CrPtr_, transform_AtoB_ICP);
+  pcl::transformPointCloud (*sensor.cloud1Ptr_, *sensor.cloud2Ptr_, transform_AtoB_ICP);
+  *reference.cloud2Ptr_ = *reference.cloud1Ptr_;
+  *reference.cloud2CrPtr_ = *reference.cloud1CrPtr_;
+// save transformation in sensor class
+  sensor.transArucoToICP_ = transform_AtoB_ICP;
+} // end refineTransformation
+
 
 
 //tf::Quaternion getAverageQuaternion(

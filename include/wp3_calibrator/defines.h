@@ -4,29 +4,43 @@
 #include <string>
 
 #define ROS_LOOPRATE 10
-#define ARUCODIMENSION 0.60 // Side length of Aruco markers
+const double ARUCODIMENSION = 0.60; // Side length of Aruco markers
 
+
+
+// Recording ---------------------
+const int IMAGES_C = 400; // Number of color images to capture for aruco detection (Increase if detectionrate is low)
+const int IMAGES_D = 50; // Number of depth images to capture for cloud and corner point calculation.
+
+// Refinement (ICP) ------------- ACCURATE
+const int CLOUDS = 10; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
+const double ICP_CONVERGE = 1e-8;  // abs(curr_fitness - last_fitness) / curr_fitness
+const int ICP_MAX_ROUNDS = 10;  // second end criteria
+const int ICP_ITERATIONS = 100; // ICP iterations for each round (multiplied with round number)
+const double ICP_TRANS_EPSILON = 1e-14; // Transformation refinement resolution)
+
+// Refinement (ICP) ------------- GOOD
+//const int CLOUDS = 5; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+//const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
+//const double ICP_CONVERGE = 1e-6;  // abs(curr_fitness - last_fitness) / curr_fitness
+//const int ICP_MAX_ROUNDS = 10;  // second end criteria
+//const int ICP_ITERATIONS = 100; // ICP iterations for each round (multiplied with round number)
+//const double ICP_TRANS_EPSILON = 1e-12; // Transformation refinement resolution)
+
+// Refinement (ICP) ------------- FAST
+//const int CLOUDS = 2; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+//const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
+//const double ICP_CONVERGE = 1e-6;  // abs(curr_fitness - last_fitness) / curr_fitness
+//const int ICP_MAX_ROUNDS = 2;  // second end criteria
+//const int ICP_ITERATIONS = 10; // ICP iterations for each round (multiplied with round number)
+//const double ICP_TRANS_EPSILON = 1e-3; // Transformation refinement resolution)
+
+// Visualization ------------------------
 //#define VIEW_ICP // create a viewer to see ICP process.
 #define VIEWERS_ENABLED
 #define VIEW_IMAGES
 //#define SHOWDEPTH // view cropped depth images
-
-#define IMAGES_C 400 // Number of color images to capture for aruco detection (Increase if detectionrate is low)
-#define IMAGES_D 50 // Number of depth images to capture for cloud and corner point calculation.
-#define CLOUDS 5 // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
-
-
-#define ICP_MAX_CORR_DIST 0.6 //
-//#define ICP_CONVERGE 0.00001  // good
-//#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
-#define ICP_CONVERGE 1e-3  // abs(curr_fitness - last_fitness) / curr_fitness  // 1e-6
-#define ICP_MAX_ROUNDS 30  // second end criteria
-//#define ICP_CONVERGE 1e+30  // TULL fast
-//#define ICP_ITERATIONS 100 // ICP iterations (multiplied with round number)
-#define ICP_ITERATIONS 10 // QUICK TEST
-//#define ICP_TRANS_EPSILON 1e-11 //1e-11
-#define ICP_TRANS_EPSILON 1e-6 // QUICK TEST
-//#define ICP_TRANS_EPSILON 1e-7 // TULL faster
 
 enum Cropping {Rect, Mask};
 

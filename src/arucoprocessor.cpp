@@ -33,6 +33,7 @@ void arucoProcessor::clearAll()
 //  src_cloud_crop3_->clear();
   croppedCloud_->clear();
   transformMap_.clear();
+  transCamToArucoVec_.clear();
 }
 
 void arucoProcessor::max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag)
@@ -656,16 +657,17 @@ for(int m=0 ; m<numMarkers ; m++)
   // Save the transformation closest to depth measurements
     index = findBestPose(rotVecsTmp, transVecsTmp, markerCornerPoints[m], score);
     ROS_DEBUG_STREAM(node.name_ << "." << markerIdsMean_[m] << "\tscore: " << score);
-//    if(score>1.0)
-//    {
-//    ROS_ERROR_STREAM(node.name_ << "." << markerIdsMean_[m] << "\tscore: " << score
-//                     << std::endl << "Score indicates very poor marker detection. Recapture recommended.");
-//    }
+    if(score>1.0)
+    {
+    ROS_ERROR_STREAM(node.name_ << "." << markerIdsMean_[m] << "\tscore: " << score
+                     << std::endl << "Score > 1 indicates poor marker transformation alignment."
+                                     "Calibration refinement may not be possible. Recapture recommended.");
+    }
     rotVecs_.push_back(rotVecsTmp[index]);
     transVecs_.push_back(transVecsTmp[index]);
 
 
-    // convert and publish ROS TF
+    // convert
     Eigen::Matrix3d R;  // rotation
     Eigen::Vector3d T;  // translation
     cv::Mat R_mat;
@@ -680,11 +682,16 @@ for(int m=0 ; m<numMarkers ; m++)
     tf_OtoM.setIdentity();   // Set to Identity to make bottom row of Matrix 0,0,0,1
     tf_OtoM.block<3,3>(0,0) = R;
     tf_OtoM.block<3,1>(0,3) = T;
-    Eigen::Affine3d transform_affine(tf_OtoM);
-    tf::Transform transform_tf;
-    tf::transformEigenToTF(transform_affine, transform_tf);
-    std::string tfName = node.name_ + "." + std::to_string(markerIdsMean_[m]);
-    tfPub_local.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), node.getTfTopic(), tfName ) );
+
+    //save
+    transCamToArucoVec_.push_back(tf_OtoM);
+
+//    // publish
+//    Eigen::Affine3d transform_affine(tf_OtoM);
+//    tf::Transform transform_tf;
+//    tf::transformEigenToTF(transform_affine, transform_tf);
+//    std::string tfName = node.name_ + "." + std::to_string(markerIdsMean_[m]);
+//    tfPub_local.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), node.getTfTopic(), tfName ) );
 }
 
   // calculate pose based on average corners ( may return wrong pose due to ambiguity)

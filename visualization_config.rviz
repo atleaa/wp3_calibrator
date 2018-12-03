@@ -6,8 +6,8 @@ Panels:
       Expanded:
         - /Global Options1
         - /Status1
+        - /Grid1/Line Style1
         - /Grid1/Offset1
-        - /TF1
         - /TF1/Frames1
         - /J1-SD-dm1/Auto Size1
         - /J2-SD-dm1/Auto Size1
@@ -28,9 +28,20 @@ Panels:
         - /J3-SD-dm-rgb2/Autocompute Value Bounds1
         - /J3-SD-dm-rgb-HD1/Auto Size1
         - /J3-SD-dm-rgb-HD1/Autocompute Value Bounds1
-        - /J6-Camera-SD1
-      Splitter Ratio: 0.512820542
-    Tree Height: 753
+        - /J1-SD-dm-rgb-acc2/Auto Size1
+        - /J1-SD-dm-rgb-acc2/Autocompute Value Bounds1
+        - /J2-SD-dm-rgb-acc2/Auto Size1
+        - /J2-SD-dm-rgb-acc2/Autocompute Value Bounds1
+        - /J3-SD-dm-rgb-acc2/Auto Size1
+        - /J3-SD-dm-rgb-acc2/Autocompute Value Bounds1
+        - /J4-SD-dm-rgb-acc2/Auto Size1
+        - /J4-SD-dm-rgb-acc2/Autocompute Value Bounds1
+        - /J5-SD-dm-rgb-acc2/Auto Size1
+        - /J5-SD-dm-rgb-acc2/Autocompute Value Bounds1
+        - /J6-SD-dm-rgb-acc2/Auto Size1
+        - /J6-SD-dm-rgb-acc2/Autocompute Value Bounds1
+      Splitter Ratio: 0.639769435
+    Tree Height: 931
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -50,7 +61,7 @@ Panels:
     Experimental: false
     Name: Time
     SyncMode: 0
-    SyncSource: J6-SD-dm-rgb-acc
+    SyncSource: J4-SD-dm-acc
   - Class: rviz/Selection
     Name: Selection
 Visualization Manager:
@@ -59,11 +70,11 @@ Visualization Manager:
     - Alpha: 1
       Cell Size: 1
       Class: rviz/Grid
-      Color: 0; 0; 0
+      Color: 255; 0; 0
       Enabled: true
       Line Style:
-        Line Width: 0.0299999993
-        Value: Lines
+        Line Width: 0.00499999989
+        Value: Billboards
       Name: Grid
       Normal Cell Count: 0
       Offset:
@@ -74,6 +85,24 @@ Visualization Manager:
       Plane Cell Count: 10
       Reference Frame: <Fixed Frame>
       Value: true
+    - Alpha: 1
+      Cell Size: 0.100000001
+      Class: rviz/Grid
+      Color: 0; 0; 0
+      Enabled: false
+      Line Style:
+        Line Width: 0.0299999993
+        Value: Lines
+      Name: Grid 10x
+      Normal Cell Count: 0
+      Offset:
+        X: 5
+        Y: 5
+        Z: 0
+      Plane: XY
+      Plane Cell Count: 100
+      Reference Frame: <Fixed Frame>
+      Value: false
     - Alpha: 0.5
       Cell Size: 5
       Class: rviz/Grid
@@ -191,148 +220,60 @@ Visualization Manager:
       Value: false
     - Class: rviz/TF
       Enabled: true
-      Frame Timeout: 999999
+      Frame Timeout: 3
       Frames:
-        0:
+        All Enabled: false
+        jetson1.ICP:
+          Value: false
+        jetson1.avg:
           Value: true
-        1:
+        jetson10:
           Value: true
-        10:
+        jetson11:
           Value: true
-        11:
-          Value: true
-        12:
-          Value: true
-        13:
-          Value: true
-        14:
-          Value: true
-        15:
-          Value: true
-        16:
-          Value: true
-        17:
-          Value: true
-        18:
-          Value: true
-        19:
-          Value: true
-        2:
-          Value: true
-        20:
-          Value: true
-        21:
-          Value: true
-        22:
-          Value: true
-        23:
-          Value: true
-        24:
-          Value: true
-        25:
-          Value: true
-        26:
-          Value: true
-        27:
-          Value: true
-        28:
-          Value: true
-        29:
-          Value: true
-        3:
-          Value: true
-        30:
-          Value: true
-        31:
-          Value: true
-        32:
-          Value: true
-        33:
-          Value: true
-        34:
-          Value: true
-        35:
-          Value: true
-        36:
-          Value: true
-        37:
-          Value: true
-        38:
-          Value: true
-        39:
-          Value: true
-        4:
-          Value: true
-        40:
-          Value: true
-        41:
-          Value: true
-        42:
-          Value: true
-        43:
-          Value: true
-        44:
-          Value: true
-        45:
-          Value: true
-        46:
-          Value: true
-        47:
-          Value: true
-        48:
-          Value: true
-        49:
-          Value: true
-        5:
-          Value: true
-        6:
-          Value: true
-        7:
-          Value: true
-        8:
-          Value: true
-        9:
-          Value: true
-        All Enabled: true
-        jetson1.0:
-          Value: true
-        jetson1.1:
-          Value: true
-        jetson1.2:
+        jetson12:
           Value: true
         jetson1_ir_optical_frame:
           Value: true
-        jetson2_ir_optical_frame:
+        jetson3.ICP:
+          Value: false
+        jetson3.avg:
           Value: true
-        jetson3.0:
+        jetson30:
           Value: true
-        jetson3.1:
+        jetson31:
           Value: true
-        jetson3.2:
+        jetson32:
           Value: true
         jetson3_ir_optical_frame:
           Value: true
-        jetson4.0:
+        jetson4.ICP:
+          Value: false
+        jetson4.avg:
           Value: true
-        jetson4.1:
+        jetson40:
           Value: true
-        jetson4.2:
+        jetson41:
+          Value: true
+        jetson42:
           Value: true
         jetson4_ir_optical_frame:
           Value: true
-        jetson5.0:
+        jetson5.ICP:
+          Value: false
+        jetson5.avg:
           Value: true
-        jetson5.1:
+        jetson50:
           Value: true
-        jetson5.2:
+        jetson51:
+          Value: true
+        jetson52:
           Value: true
         jetson5_ir_optical_frame:
           Value: true
-        jetson6.0:
-          Value: true
-        jetson6.1:
-          Value: true
-        jetson6.2:
+        jetson6.ICP:
+          Value: false
+        jetson6.avg:
           Value: true
         jetson60:
           Value: true
@@ -342,133 +283,65 @@ Visualization Manager:
           Value: true
         jetson6_ir_optical_frame:
           Value: true
+        jetson6_ir_optical_frame2:
+          Value: true
         multisense/left_camera_optical_frame:
           Value: true
         velodyne:
           Value: true
         world:
           Value: true
-      Marker Scale: 2
+      Marker Scale: 0.5
       Name: TF
       Show Arrows: false
       Show Axes: true
-      Show Names: true
+      Show Names: false
       Tree:
         world:
-          jetson1_ir_optical_frame:
-            jetson1.0:
+          jetson4_ir_optical_frame:
+            jetson1_ir_optical_frame:
+              jetson1.avg:
+                jetson1.ICP:
+                  {}
+              jetson10:
+                {}
+              jetson11:
+                {}
+              jetson12:
+                {}
+            jetson3_ir_optical_frame:
+              jetson3.avg:
+                jetson3.ICP:
+                  {}
+              jetson30:
+                {}
+              jetson31:
+                {}
+              jetson32:
+                {}
+            jetson4.avg:
+              jetson4.ICP:
+                {}
+            jetson40:
               {}
-            jetson1.1:
+            jetson41:
               {}
-            jetson1.2:
+            jetson42:
               {}
+            jetson5_ir_optical_frame:
+              jetson5.avg:
+                jetson5.ICP:
+                  {}
+              jetson50:
+                {}
+              jetson51:
+                {}
+              jetson52:
+                {}
             jetson6_ir_optical_frame:
-              0:
-                {}
-              1:
-                {}
-              10:
-                {}
-              11:
-                {}
-              12:
-                {}
-              13:
-                {}
-              14:
-                {}
-              15:
-                {}
-              16:
-                {}
-              17:
-                {}
-              18:
-                {}
-              19:
-                {}
-              2:
-                {}
-              20:
-                {}
-              21:
-                {}
-              22:
-                {}
-              23:
-                {}
-              24:
-                {}
-              25:
-                {}
-              26:
-                {}
-              27:
-                {}
-              28:
-                {}
-              29:
-                {}
-              3:
-                {}
-              30:
-                {}
-              31:
-                {}
-              32:
-                {}
-              33:
-                {}
-              34:
-                {}
-              35:
-                {}
-              36:
-                {}
-              37:
-                {}
-              38:
-                {}
-              39:
-                {}
-              4:
-                {}
-              40:
-                {}
-              41:
-                {}
-              42:
-                {}
-              43:
-                {}
-              44:
-                {}
-              45:
-                {}
-              46:
-                {}
-              47:
-                {}
-              48:
-                {}
-              49:
-                {}
-              5:
-                {}
-              6:
-                {}
-              7:
-                {}
-              8:
-                {}
-              9:
-                {}
-              jetson6.0:
-                {}
-              jetson6.1:
-                {}
-              jetson6.2:
-                {}
+              jetson6.avg:
+                jetson6.ICP:
+                  {}
               jetson60:
                 {}
               jetson61:
@@ -477,32 +350,10 @@ Visualization Manager:
                 {}
               multisense/left_camera_optical_frame:
                 {}
-              velodyne:
-                {}
-          jetson2_ir_optical_frame:
-            {}
-          jetson3_ir_optical_frame:
-            jetson3.0:
+          jetson6_ir_optical_frame2:
+            velodyne:
               {}
-            jetson3.1:
-              {}
-            jetson3.2:
-              {}
-          jetson4_ir_optical_frame:
-            jetson4.0:
-              {}
-            jetson4.1:
-              {}
-            jetson4.2:
-              {}
-          jetson5_ir_optical_frame:
-            jetson5.0:
-              {}
-            jetson5.1:
-              {}
-            jetson5.2:
-              {}
-      Update Interval: 0
+      Update Interval: 0.100000001
       Value: true
     - Alpha: 0.800000012
       Autocompute Intensity Bounds: false
@@ -1069,7 +920,7 @@ Visualization Manager:
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 0.5
-        Value: true
+        Value: false
       Autocompute Intensity Bounds: false
       Autocompute Value Bounds:
         Max Value: 10
@@ -1082,7 +933,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson1/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1099,6 +950,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1120,7 +972,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson2/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1137,7 +989,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1159,7 +1011,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson3/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1176,7 +1028,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1185,7 +1037,7 @@ Visualization Manager:
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 0.5
-        Value: true
+        Value: false
       Autocompute Intensity Bounds: false
       Autocompute Value Bounds:
         Max Value: 10
@@ -1198,7 +1050,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson4/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1215,6 +1067,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1236,7 +1089,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson5/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1253,7 +1106,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1262,7 +1115,7 @@ Visualization Manager:
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 0.5
-        Value: true
+        Value: false
       Autocompute Intensity Bounds: false
       Autocompute Value Bounds:
         Max Value: 10
@@ -1275,7 +1128,7 @@ Visualization Manager:
       Color Image Topic: ""
       Color Transformer: Intensity
       Color Transport Hint: compressed
-      Decay Time: 5
+      Decay Time: 2
       Depth Map Topic: /jetson6/sd/image_depth_rect
       Depth Map Transport Hint: compressed
       Enabled: false
@@ -1292,6 +1145,7 @@ Visualization Manager:
       Queue Size: 5
       Selectable: true
       Size (Pixels): 3
+      Size (m): 0.00499999989
       Style: Flat Squares
       Topic Filter: true
       Use Fixed Frame: false
@@ -1308,11 +1162,11 @@ Visualization Manager:
       Class: rviz/PointCloud2
       Color: 255; 255; 255
       Color Transformer: Intensity
-      Decay Time: 0
+      Decay Time: 1
       Enabled: false
       Invert Rainbow: false
       Max Color: 255; 255; 255
-      Max Intensity: 210
+      Max Intensity: 126
       Min Color: 0; 0; 0
       Min Intensity: 0
       Name: VLP-16
@@ -1320,7 +1174,7 @@ Visualization Manager:
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.0299999993
+      Size (m): 0.0199999996
       Style: Flat Squares
       Topic: /velodyne_points
       Unreliable: false
@@ -2052,7 +1906,7 @@ Visualization Manager:
       Decay Time: 3
       Depth Map Topic: /jetson1/sd/image_depth_rect
       Depth Map Transport Hint: compressed
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 50; 255; 255
       Max Intensity: 10
@@ -2071,7 +1925,7 @@ Visualization Manager:
       Topic Filter: true
       Use Fixed Frame: false
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 1.5
@@ -2130,7 +1984,7 @@ Visualization Manager:
       Decay Time: 3
       Depth Map Topic: /jetson3/sd/image_depth_rect
       Depth Map Transport Hint: compressed
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 50; 255; 255
       Max Intensity: 10
@@ -2149,7 +2003,7 @@ Visualization Manager:
       Topic Filter: true
       Use Fixed Frame: false
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 1.5
@@ -2169,7 +2023,7 @@ Visualization Manager:
       Decay Time: 3
       Depth Map Topic: /jetson4/sd/image_depth_rect
       Depth Map Transport Hint: compressed
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 50; 255; 255
       Max Intensity: 10
@@ -2188,7 +2042,7 @@ Visualization Manager:
       Topic Filter: true
       Use Fixed Frame: false
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 1
@@ -2208,7 +2062,7 @@ Visualization Manager:
       Decay Time: 3
       Depth Map Topic: /jetson5/sd/image_depth_rect
       Depth Map Transport Hint: compressed
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 50; 255; 255
       Max Intensity: 10
@@ -2227,7 +2081,7 @@ Visualization Manager:
       Topic Filter: true
       Use Fixed Frame: false
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.300000012
       Auto Size:
         Auto Size Factor: 0.5
@@ -2247,7 +2101,7 @@ Visualization Manager:
       Decay Time: 3
       Depth Map Topic: /jetson6/sd/image_depth_rect
       Depth Map Transport Hint: compressed
-      Enabled: true
+      Enabled: false
       Invert Rainbow: false
       Max Color: 50; 255; 255
       Max Intensity: 10
@@ -2266,7 +2120,7 @@ Visualization Manager:
       Topic Filter: true
       Use Fixed Frame: false
       Use rainbow: false
-      Value: true
+      Value: false
     - Alpha: 0.800000012
       Auto Size:
         Auto Size Factor: 1.5
@@ -3087,6 +2941,7 @@ Visualization Manager:
         Axes: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -3228,6 +3083,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -3258,6 +3114,7 @@ Visualization Manager:
         Axes: true
         Camera3: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -3399,6 +3256,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -4293,6 +4151,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -4433,6 +4292,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -4671,6 +4531,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -4811,6 +4672,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -5088,6 +4950,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -5228,6 +5091,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -5319,6 +5183,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -5459,6 +5324,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -5550,6 +5416,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -5690,6 +5557,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -5721,6 +5589,7 @@ Visualization Manager:
         Camera3: true
         Camera4: true
         Grid: true
+        Grid 10x: true
         Grid wall XZ: true
         Grid wall YZ: true
         Grid wall YZ2: true
@@ -5861,6 +5730,7 @@ Visualization Manager:
         J6-c-rainbow: true
         J6-cloudify: true
         J6-ir: true
+        JDs VL16 super: true
         K2-SD-points: true
         K2DepthCloud: true
         TF: true
@@ -5875,6 +5745,270 @@ Visualization Manager:
         robot1: true
         robot1sim: true
       Zoom Factor: 1
+    - Alpha: 1
+      Autocompute Intensity Bounds: true
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: -10
+        Value: true
+      Axis: Z
+      Channel Name: intensity
+      Class: rviz/PointCloud2
+      Color: 255; 255; 255
+      Color Transformer: Intensity
+      Decay Time: 0
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 255; 255; 255
+      Max Intensity: 4
+      Min Color: 0; 0; 0
+      Min Intensity: 1
+      Name: JDs VL16 super
+      Position Transformer: XYZ
+      Queue Size: 10
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.0299999993
+      Style: Boxes
+      Topic: /master/jetson6/velodyne_decomp
+      Unreliable: false
+      Use Fixed Frame: true
+      Use rainbow: true
+      Value: false
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson1/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson1/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J1-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson2/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson2/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: false
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J2-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: false
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson3/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson3/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J3-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 1.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson4/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson4/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J4-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 1
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson5/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson5/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J5-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
+    - Alpha: 0.200000003
+      Auto Size:
+        Auto Size Factor: 0.5
+        Value: false
+      Autocompute Intensity Bounds: false
+      Autocompute Value Bounds:
+        Max Value: 10
+        Min Value: 3.00000024
+        Value: false
+      Axis: Z
+      Channel Name: rgb
+      Class: rviz/DepthCloud
+      Color: 100; 255; 255
+      Color Image Topic: /jetson6/sd/image_color_rect
+      Color Transformer: RGB8
+      Color Transport Hint: compressed
+      Decay Time: 1
+      Depth Map Topic: /jetson6/sd/image_depth_rect
+      Depth Map Transport Hint: compressed
+      Enabled: true
+      Invert Rainbow: false
+      Max Color: 50; 255; 255
+      Max Intensity: 10
+      Min Color: 20; 55; 55
+      Min Intensity: 3
+      Name: J6-SD-dm-rgb-acc
+      Occlusion Compensation:
+        Occlusion Time-Out: 1
+        Value: false
+      Position Transformer: XYZ
+      Queue Size: 5
+      Selectable: true
+      Size (Pixels): 3
+      Size (m): 0.00499999989
+      Style: Flat Squares
+      Topic Filter: true
+      Use Fixed Frame: false
+      Use rainbow: false
+      Value: true
   Enabled: true
   Global Options:
     Background Color: 100; 100; 100
@@ -5900,25 +6034,25 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 6.31639385
+      Distance: 12.9515667
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
       Focal Point:
-        X: 5.07711887
-        Y: 5.66381931
-        Z: -0.314190984
+        X: 5
+        Y: 5
+        Z: 0
       Focal Shape Fixed Size: true
       Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Pitch: 1.12947714
+      Pitch: 0.914999664
       Target Frame: map
       Value: Orbit (rviz)
-      Yaw: 0.319008678
+      Yaw: 3.11659145
     Saved:
       - Class: rviz/Orbit
         Distance: 8.35884762
@@ -6175,26 +6309,91 @@ Visualization Manager:
         Target Frame: map
         Value: Orbit (rviz)
         Yaw: 5.52198792
+      - Angle: -1.57000005
+        Class: rviz/TopDownOrtho
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Invert Z Axis: false
+        Name: AA Journal1
+        Near Clip Distance: 0.00999999978
+        Scale: 148.792297
+        Target Frame: map
+        Value: TopDownOrtho (rviz)
+        X: 5
+        Y: 5
+      - Angle: -1.57000005
+        Class: rviz/TopDownOrtho
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Invert Z Axis: false
+        Name: AA Journal2
+        Near Clip Distance: 0.00999999978
+        Scale: 241.672684
+        Target Frame: map
+        Value: TopDownOrtho (rviz)
+        X: 5
+        Y: 5
       - Class: rviz/Orbit
-        Distance: 6.31639385
+        Distance: 12.9515667
         Enable Stereo Rendering:
           Stereo Eye Separation: 0.0599999987
           Stereo Focal Distance: 1
           Swap Stereo Eyes: false
           Value: false
         Focal Point:
-          X: 5.07711887
-          Y: 5.66381931
-          Z: -0.314190984
+          X: 5
+          Y: 5
+          Z: 0
         Focal Shape Fixed Size: true
         Focal Shape Size: 0.0500000007
         Invert Z Axis: false
-        Name: AA Journal1
+        Name: AA Journal3
         Near Clip Distance: 0.00999999978
-        Pitch: 1.12947714
+        Pitch: 0.800000012
         Target Frame: map
         Value: Orbit (rviz)
-        Yaw: 0.319008678
+        Yaw: 3.14159012
+      - Class: rviz/Orbit
+        Distance: 6.60365438
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Focal Point:
+          X: 5
+          Y: 5
+          Z: 0
+        Focal Shape Fixed Size: true
+        Focal Shape Size: 0.0500000007
+        Invert Z Axis: false
+        Name: AA Journal4
+        Near Clip Distance: 0.00999999978
+        Pitch: 0.25
+        Target Frame: map
+        Value: Orbit (rviz)
+        Yaw: 3.14159012
+      - Angle: -1.57000005
+        Class: rviz/TopDownOrtho
+        Enable Stereo Rendering:
+          Stereo Eye Separation: 0.0599999987
+          Stereo Focal Distance: 1
+          Swap Stereo Eyes: false
+          Value: false
+        Invert Z Axis: false
+        Name: AA Journal5
+        Near Clip Distance: 0.00999999978
+        Scale: 1164.0741
+        Target Frame: map
+        Value: TopDownOrtho (rviz)
+        X: 4.5022893
+        Y: 4.28051758
 Window Geometry:
   Camera3:
     collapsed: false
@@ -6202,7 +6401,7 @@ Window Geometry:
     collapsed: false
   Displays:
     collapsed: false
-  Height: 1200
+  Height: 1056
   Hide Left Dock: false
   Hide Right Dock: true
   J1-Camera-HD:
@@ -6291,7 +6490,7 @@ Window Geometry:
     collapsed: false
   J6-ir:
     collapsed: false
-  QMainWindow State: 000000ff00000000fd00000004000000000000016a0000041dfc0200000041fc00000041000003500000000000fffffffaffffffff0100000003fb0000000a004a0031002d00690072020000017e000001770000016e00000150fb000000100044006900730070006c0061007900730000000000ffffffff0000016a00fffffffb0000000a005600690065007700730000000000000001670000010f00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001200530065006c0065006300740069006f006e0000000397000000c70000006100fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000028000000640000006100fffffffb00000016004a0032002d0049006d006100670065002d0053004402000001de000000180000019300000140fb0000000a004a0034002d0069007202000002ef0000001e0000018500000158fb0000000a004a0036002d0069007202000002f1000002cc0000017b00000142fb00000016006d0075006c007400690020006400650070007400680200000210000000b7000004be000002bafb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000016004a0034002d0049006d006100670065002d0053004402000003d60000001e0000018200000147fb00000016004a0031002d0049006d006100670065002d0053004402000001de0000015c000001bb00000158fb00000018004a0032002d0049006d006100670065002d00710048004402000001ca000000150000020a00000144fb00000010004a0033002d0049006d00610067006502000004b60000003c000002ca000001a1fb0000001200530065006c0065006300740069006f006e00000001c2000002060000006100fffffffb0000000a004a0035002d0069007200000003ad000000d30000001600fffffffb00000010004a0034002d0064006500700074006802000001ba000000bc0000042f00000342fb000000120044006900730070006c006100790073003200000002e3000001250000000000000000fb0000000c00430061006d00650072006102000001ee000001450000031c00000220fb0000000e00430061006d006500720061003302000000f9000000b800000407000002fcfb0000001800430061006d00650072006100640065007000740068003302000001f8000000b20000042c0000032bfb0000000e00430061006d006500720061003402000000c9000000ab0000043700000312fb0000000e00430061006d0065007200610033000000019f000000580000000000000000fb00000010004a0034002d0064006500700074006800000001c2000000600000000000000000fb00000018004a0036002d0049006d006100670065002d00710048004402000003e9000002950000021500000157fb0000000a004a0034002d00690072000000021f000000760000000000000000fb0000000a004a0036002d00690072000000025e000000840000000000000000fb0000000a004a0033002d0069007202000001550000001e000005f9000003c9fb0000000e00430061006d006500720061003400000003ac000000d40000000000000000fb0000001e006b0069006e00650063003200200049005200200049006d00610067006502000001a300000000000005a900000438fb0000000a0049006d0061006700650000000338000000d00000000000000000fb0000001a006b0069006e0065006300740032002000640065007000740068000000030c000000fc0000001600fffffffb00000018004a0031002d0049006d006100670065002d00640048004402000002eb000000ed0000010e000000b9fb00000018004a0032002d0049006d006100670065002d00640048004402000002e1000000180000010e000000cafb00000018004a0033002d0049006d006100670065002d00640048004402000002e1000001ab0000011f000000c3fb00000018004a0034002d0049006d006100670065002d00640048004402000001e2000000180000054000000421fb00000018004a0035002d0049006d006100670065002d0064004800440200000400000000e80000013f000000cafb00000018004a0031002d0049006d006100670065002d00710048004402000001c900000150000001f800000148fb00000016004a0033002d0049006d006100670065002d0053004402000001dc000002b7000001b10000015bfb00000018004a0034002d0049006d006100670065002d00710048004402000003ed0000001e0000020e00000148fb00000016004a0035002d0049006d006100670065002d0053004402000003b20000016f000001db00000134fb00000016004a0036002d0049006d006100670065002d0053004402000003ca000002ae000001ab0000016efb00000010004a0031002d0049006d006100670065020000022d00000136000001d600000155fb00000010004a0032002d0049006d006100670065020000047c0000001e000001cb00000122fb00000018004a0033002d0049006d006100670065002d00710048004402000001da0000029a000001e700000156fb00000010004a0034002d0049006d00610067006502000001b3000000150000017f000000f2fb00000018004a0035002d0049006d006100670065002d00710048004402000003f30000015c0000021200000143fb00000010004a0036002d0049006d00610067006502000002560000001e000003b10000028afb0000000a004a0033002d006900720300000121000002d1000001a70000016afb0000000a004a0032002d00690072020000017d0000001e000001710000015bfb00000018004a0031002d0049006d006100670065002d00530044006302000001680000001e000001ca0000018cfb00000018004a0032002d0049006d006100670065002d005300440063020000035e0000002a000001d40000016efb00000018004a0033002d0049006d006100670065002d0053004400630200000165000001b3000001f900000174fb00000018004a0034002d0049006d006100670065002d00530044006302000003630000018f000001ac000001a7fb00000018004a0035002d0049006d006100670065002d00530044006302000001690000032d000001fc00000161fb00000018004a0036002d0049006d006100670065002d005300440063020000036500000327000001be00000164fb0000000e00430061006d006500720061003102000002ed0000010a000002ee000001d3fb00000018004a0031002d00430061006d006500720061002d00480044020000017400000015000005b300000423fb00000018004a0032002d00430061006d006500720061002d0048004402000001a200000015000005de00000423fb00000018004a0034002d00430061006d006500720061002d00480044020000019600000000000005ea00000438fb00000018004a0036002d00430061006d006500720061002d00480044020000019e0000003500000597000003e3fb00000018004a0035002d00430061006d006500720061002d0053004402000001bc0000001e0000049400000386fb00000018004a0036002d00430061006d006500720061002d0053004402000001b80000007800000572000003df000000010000010f000003bcfc0200000001fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000000000020000075c0000017efc0100000009fb00000010004a0031002d0049006d00610067006502000001e50000009b0000028c0000017efb00000010004a0032002d0049006d00610067006502000004d6000001a8000002aa0000017efb00000018004a0036002d0049006d006100670065002d00640048004402000001fd00000073000004f1000003c5fc00000000000007470000000000fffffffa000000000200000002fb00000010004a0036002d0049006d0061006700650300000653000001a80000013b000000bcfb00000010004a0033002d0049006d006100670065030000053a0000019800000119000000a6fb00000010004a0034002d0049006d00610067006503000006590000001e00000105000000b0fb00000020006d0075006c007400690020006c00650066007400200063006f006c006f007202000001ae000000ad000002f3000002f5fb00000010004a0035002d0049006d00610067006502000005fd0000004300000180000000f0fb00000010004a0035002d0049006d0061006700650000000000000007470000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003bfc0100000002fb0000000800540069006d006500000000000000064f0000030000fffffffb0000000800540069006d0065010000000000000450000000000000000000000780000004b000000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730000000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd00000004000000000000016a00000402fc0200000041fc0000000000000402000000f50100001dfa000000010100000003fb0000000a004a0031002d00690072020000017e000001770000016e00000150fb000000100044006900730070006c0061007900730100000000ffffffff0000016a00fffffffb0000000a005600690065007700730100000000000001670000010f00fffffffb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb0000001200530065006c0065006300740069006f006e0000000397000000c70000006100fffffffb0000001e0054006f006f006c002000500072006f00700065007200740069006500730000000416000000640000006100fffffffb00000016004a0032002d0049006d006100670065002d0053004402000001de000000180000019300000140fb0000000a004a0034002d0069007202000002ef0000001e0000018500000158fb0000000a004a0036002d0069007202000002680000029a0000018e00000162fb00000016006d0075006c007400690020006400650070007400680200000210000000b7000004be000002bafb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261fb00000016004a0034002d0049006d006100670065002d0053004402000003d60000001e0000018200000147fb00000016004a0031002d0049006d006100670065002d0053004402000001de0000015c000001bb00000158fb00000018004a0032002d0049006d006100670065002d00710048004402000001ca000000150000020a00000144fb00000010004a0033002d0049006d00610067006502000004b60000003c000002ca000001a1fb0000001200530065006c0065006300740069006f006e00000001c2000002060000006100fffffffb0000000a004a0035002d0069007200000003a7000000d30000001600fffffffb00000010004a0034002d0064006500700074006802000001ba000000bc0000042f00000342fb000000120044006900730070006c006100790073003200000002e3000001250000000000000000fb0000000c00430061006d00650072006102000001ee000001450000031c00000220fb0000000e00430061006d006500720061003302000000f9000000b800000407000002fcfb0000001800430061006d00650072006100640065007000740068003302000001f8000000b20000042c0000032bfb0000000e00430061006d006500720061003402000000c9000000ab0000043700000312fb0000000e00430061006d0065007200610033000000019f000000580000000000000000fb00000010004a0034002d0064006500700074006800000001c2000000600000000000000000fb00000018004a0036002d0049006d006100670065002d00710048004402000003e9000002950000021500000157fb0000000a004a0034002d00690072000000021f000000760000000000000000fb0000000a004a0036002d00690072000000025e000000840000000000000000fb0000000a004a0033002d0069007202000001550000001e000005f9000003c9fb0000000e00430061006d006500720061003400000003ac000000d40000000000000000fb0000001e006b0069006e00650063003200200049005200200049006d00610067006502000001a300000000000005a900000438fb0000000a0049006d0061006700650000000338000000d00000000000000000fb0000001a006b0069006e0065006300740032002000640065007000740068000000030c000000fc0000001600fffffffb00000018004a0031002d0049006d006100670065002d00640048004402000002eb000000ed0000010e000000b9fb00000018004a0032002d0049006d006100670065002d00640048004402000002e1000000180000010e000000cafb00000018004a0033002d0049006d006100670065002d00640048004402000002e1000001ab0000011f000000c3fb00000018004a0034002d0049006d006100670065002d00640048004402000001e2000000180000054000000421fb00000018004a0035002d0049006d006100670065002d0064004800440200000400000000e80000013f000000cafb00000018004a0031002d0049006d006100670065002d00710048004402000001c900000150000001f800000148fb00000016004a0033002d0049006d006100670065002d0053004402000001dc000002b7000001b10000015bfb00000018004a0034002d0049006d006100670065002d00710048004402000003ed0000001e0000020e00000148fb00000016004a0035002d0049006d006100670065002d0053004402000003b20000016f000001db00000134fb00000016004a0036002d0049006d006100670065002d0053004402000003ca000002ae000001ab0000016efb00000010004a0031002d0049006d006100670065020000022d00000136000001d600000155fb00000010004a0032002d0049006d006100670065020000047c0000001e000001cb00000122fb00000018004a0033002d0049006d006100670065002d00710048004402000001da0000029a000001e700000156fb00000010004a0034002d0049006d00610067006502000001b3000000180000017f000000f2fb00000018004a0035002d0049006d006100670065002d00710048004402000003f30000015c0000021200000143fb00000010004a0036002d0049006d00610067006502000002560000001e000003b10000028afb0000000a004a0033002d006900720300000121000002d1000001a70000016afb0000000a004a0032002d00690072020000017d0000001e000001710000015bfb00000018004a0031002d0049006d006100670065002d00530044006302000001680000001e000001ca0000018cfb00000018004a0032002d0049006d006100670065002d005300440063020000035e0000002a000001d40000016efb00000018004a0033002d0049006d006100670065002d0053004400630200000165000001b3000001f900000174fb00000018004a0034002d0049006d006100670065002d00530044006302000003630000018f000001ac000001a7fb00000018004a0035002d0049006d006100670065002d00530044006302000001690000032d000001fc00000161fb00000018004a0036002d0049006d006100670065002d005300440063020000036500000327000001be00000164fb0000000e00430061006d006500720061003102000002ed0000010a000002ee000001d3fb00000018004a0031002d00430061006d006500720061002d00480044020000017400000015000005b300000423fb00000018004a0032002d00430061006d006500720061002d0048004402000001a200000015000005de00000423fb00000018004a0034002d00430061006d006500720061002d00480044020000019600000000000005ea00000438fb00000018004a0036002d00430061006d006500720061002d00480044020000019e0000003500000597000003e3fb00000018004a0035002d00430061006d006500720061002d0053004402000001bc0000001e0000049400000386fb00000018004a0036002d00430061006d006500720061002d0053004402000001b80000007800000572000003df000000010000010f000003bcfc0200000001fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000000000020000075c0000017efc0100000009fb00000010004a0031002d0049006d00610067006502000001e50000009b0000028c0000017efb00000010004a0032002d0049006d00610067006502000004d6000001a8000002aa0000017efb00000018004a0036002d0049006d006100670065002d00640048004402000001fd00000073000004f1000003c5fc00000000000007470000000000fffffffa000000000200000002fb00000010004a0036002d0049006d0061006700650300000653000001a80000013b000000bcfb00000010004a0033002d0049006d006100670065030000053a0000019800000119000000a6fb00000010004a0034002d0049006d00610067006503000006590000001e00000105000000b0fb00000020006d0075006c007400690020006c00650066007400200063006f006c006f007202000001ae000000ad000002f3000002f5fb00000010004a0035002d0049006d00610067006502000005fd0000004300000180000000f0fb00000010004a0035002d0049006d0061006700650000000000000007470000000000000000fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000064f0000003bfc0100000002fb0000000800540069006d006500000000000000064f0000030000fffffffb0000000800540069006d00650100000000000004500000000000000000000005e70000040200000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730000000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -6300,9 +6499,9 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: false
-  Width: 1920
-  X: 0
-  Y: 0
+  Width: 1879
+  X: 41
+  Y: 24
   kinec2 IR Image:
     collapsed: false
   kinect2 depth:
