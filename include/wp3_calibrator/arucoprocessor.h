@@ -61,7 +61,7 @@ public:
 
 //  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
-  void createTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
+  void covertRodriguesToTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
 
   void getAverageTransformation(Eigen::Matrix4f& transMat_avg, MarkerMapType& transMapUsed);
 
@@ -77,6 +77,8 @@ public:
   std::vector<Eigen::Matrix4d> transCamToArucoVec_; // Vector of Transformations from camera to markers.
   
 //  void findBestPose(wp3::Sensor& node, std::vector<cv::Mat> inputDepthVec, Eigen::Matrix3d intrinsicMatrix);
+
+  void simulateMarker(int id, Eigen::Vector3f R, Eigen::Vector3f T);
 
 private:
   void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);

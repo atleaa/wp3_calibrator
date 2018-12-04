@@ -375,4 +375,8 @@ void Visualization::update()
   }
 }
 
+void Visualization::spin()
+{
+  viewer_.spin();
+}
 } // end namespace wp3

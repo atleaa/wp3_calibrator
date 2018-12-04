@@ -76,6 +76,8 @@ int main (int argc, char** argv)
   viewerAruco.initializeSingle();
   wp3::Visualization viewerArucoCropped("Viewer Aruco Cropped");
   viewerArucoCropped.initializeSingle();
+  wp3::Visualization viewerWorld("Viewer World Map");
+  viewerWorld.initializeSingle();
   wp3::Visualization viewer("Viewer All");
   viewer.initialize();
 #endif
@@ -92,6 +94,8 @@ int main (int argc, char** argv)
   //size_t numel_calib = sizeof(calibration_order_initial)/sizeof(calibration_order_initial[0]);
   size_t numel_calib = 5;
 
+
+
   // Subscribers:
 //  ros::Subscriber camera_info_sub = nh.subscribe(camera_info_topic, 1, cameraInfoCallback);
 
@@ -104,6 +108,14 @@ int main (int argc, char** argv)
   int num_sensors;
   wp3::loadSensors(node_handle, sensorVec, num_sensors);
 
+  //init world as a sensor
+  wp3::Sensor::Ptr worldSensor = boost::make_shared<wp3::Sensor>("world", node_handle);
+
+  //world
+  wp3::arucoProcessor worldAruco;
+  Eigen::Matrix4f tf_worldToAvg;
+  MarkerMapType worldMarkerMap;
+  pcl::PointCloud<pcl::PointXYZ>::Ptr worldCloud(new pcl::PointCloud<pcl::PointXYZ>);
 
   // Init vector of transformations to identity
   std::vector<Eigen::Matrix4f> transformVec(num_sensors, Eigen::Matrix4f::Identity() );
@@ -150,23 +162,42 @@ int main (int argc, char** argv)
 //    if(key=='q') break;
 
 
+    if(init)
+    {
+      // TULL TEST CREATE ARUCO MARKER IMAGE ----------------------------------
+//      init = false;
+
+      Eigen::Vector3f T(5.067, 7.864, 0.732); // translation X,Y,Z
+      Eigen::Vector3f R(PI/2, 0.0, 0.0); // rotation euler Z, Y, X
+      worldAruco.simulateMarker(1,R,T);
+
+      T = Eigen::Vector3f(6.585, 3.920, 0.330); // translation X,Y,Z
+      R = Eigen::Vector3f(0.0, 0.0, 0.0); // rotation euler Z, Y, X
+      worldAruco.simulateMarker(13,R,T);
+
+      T = Eigen::Vector3f(4.520, 4.500, 0.003); // translation X,Y,Z
+      R = Eigen::Vector3f(0.0, 0.0, 0.0); // rotation euler Z, Y, X
+      worldAruco.simulateMarker(40,R,T);
+
+      worldAruco.getAverageTransformation(tf_worldToAvg, worldMarkerMap);
+      worldCloud = worldAruco.getCroppedCloud();
+      worldSensor->cloud1CrPtr_ = worldCloud;
+      worldSensor->cloud1Ptr_ = worldCloud;
+      worldSensor->transCamToAruco_ = tf_worldToAvg;
+
+      // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    }
+
+
+
+
+
     // Start new calibration routine --------------------------------------------------------------------------
     if (key_cv == 110 || key == 'n' || init == true) // n
     {
       t1 = ros::Time::now().toSec();
       init = false;
       ROS_INFO_STREAM("Starting calibration routine" << std::endl);
-
-      // makes sure to clear all saved data!
-//      sensorVec[0].reset();
-//      sensorVec[1].reset();
-//      sensorVec[2].reset();
-//      sensorVec[3].reset();
-//      sensorVec[4].reset();
-
-//      delete &sensorVec;
-//      std::vector<wp3::Sensor::Ptr> sensorVec;
-//      wp3::loadSensors(node_handle, sensorVec, num_sensors);
 
 
       // reading topics -----------------------------------------------------------------------------------------
@@ -222,7 +253,7 @@ int main (int argc, char** argv)
       for(int i=0 ; i<num_sensors ; i++)
       {
         apVec[i].getAverageTransformation(transAvgVec[i], transMapUsedVec[i]);
-        camPoseVec[i] = transAvgVec[i].inverse();
+        camPoseVec[i] = tf_worldToAvg * transAvgVec[i].inverse();
         sensorVec[i]->transCamToAruco_ = transAvgVec[i];
       }
 
@@ -243,9 +274,10 @@ int main (int argc, char** argv)
       ROS_INFO_STREAM("Performing ICP refinement between sensors and reference map"); // << sensorVec[i]->name_ << " and " << sensorVec[2]->name_);
       for(int i=0 ; i<num_sensors ; i++)
       {
-        if(i==2) continue; // skip reference node
+//        if(i==2) continue; // skip reference node
 //        wp3::refineTransformation(*sensorVec[i], *sensorVec[2]);
-        threadGroup.create_thread(boost::bind(wp3::refineTransformation, boost::ref(*sensorVec[i]), boost::ref(*sensorVec[2]) ));
+//        threadGroup.create_thread(boost::bind(wp3::refineTransformation, boost::ref(*sensorVec[i]), boost::ref(*sensorVec[2]) ));
+        threadGroup.create_thread(boost::bind(wp3::refineTransformation, boost::ref(*sensorVec[i]), boost::ref(*worldSensor) ));
       }
       threadGroup.join_all();
 #endif
@@ -263,6 +295,12 @@ int main (int argc, char** argv)
       cloud_vector_4.clear();
       cloud_vector_5.clear();
       cloud_vector_6.clear();
+
+      // world map
+      cloud_vector_1.push_back(worldSensor->cloud1CrPtr_); // step 1 Aruco cropped
+      cloud_vector_2.push_back(worldSensor->cloud1CrPtr_); // step 2 ICP cropped
+
+      // sensors
       for(int i=0 ; i<num_sensors ; i++)
       {
         cloud_vector_1.push_back(sensorVec[i]->cloud1CrPtr_); // step 1 Aruco cropped
@@ -273,20 +311,22 @@ int main (int argc, char** argv)
 //        cloud_vector_6.push_back(sensorVec[i]->cloud3Ptr_); // step 3 NA
       }
 
-
-
       transMap.clear();
+      // origin
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". World-Origin", Eigen::Matrix4f::Identity() ));
+      // world map markers
+      for(auto j : worldMarkerMap)
+        transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". World-"+std::to_string(j.first), j.second ));
+      // insert averaged world marker pose
+      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". World-avg",tf_worldToAvg ));
+
       for(int i=0 ; i<num_sensors ; i++)
       {
         // insert camera pose
         transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[i]->name_,camPoseVec[i]) );
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[0]->name_,camA ));
-//      transMap.insert (std::pair<std::string, Eigen::Matrix4f> (sensorVec[1]->name_,camB ));
-
         // insert pose of induvidual markers
         for(auto j : transMapUsedVec[i])
           transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[i]->name_+"-"+std::to_string(j.first), camPoseVec[i]*j.second ));
-
         // insert averaged marker pose
         transMap.insert (std::pair<std::string, Eigen::Matrix4f> (". "+sensorVec[i]->name_+"-avg",camPoseVec[i]*transAvgVec[i] )); //camPoseVec[i]*transAvgVec[i]= identity
 
@@ -308,6 +348,7 @@ int main (int argc, char** argv)
       // view Aruco only
       viewerAruco.runSingle(cloud_vector_4, transMap);
       viewerArucoCropped.runSingle(cloud_vector_1, transMap);
+//      viewerWorld.runSingle(cloud_vector_1, transMap);
       // view all results
       viewer.run(cloud_vector_1, cloud_vector_2, cloud_vector_3, cloud_vector_4, cloud_vector_5, cloud_vector_6, transMap);
 #endif
@@ -340,8 +381,6 @@ int main (int argc, char** argv)
                       << "Time to calculate aruco transformations:\t" << t5-t4 << std::endl
                       << "Time to perform ICP refinement:\t" << t6-t5 << std::endl
                       << "Time to do point cloud visualization:\t" << t7-t6 );
-
-
     } // End calibration routine --------------------------------------------------------------------------
 
     // if "s" is pressed on the RGB image the transformation from ICP1 and fitness result of ICP2 are saved
@@ -415,15 +454,17 @@ int main (int argc, char** argv)
       toString = sensorVec[i]->name_ + ".ICP";
       transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), fromString, toString ) );
 
-      if(i==2) continue; // skip rest if reference node
+//      if(i==2) continue; // skip rest if reference node
       // publish camera pose
-      transform_m4f = sensorVec[2]->transCamToAruco_ // pose avg aruco [ref]
+//      transform_m4f = sensorVec[2]->transCamToAruco_ // pose avg aruco [ref]
+      transform_m4f = worldSensor->transCamToAruco_ // pose avg aruco [ref]
                     * sensorVec[i]->transArucoToICP_ // pose ICP refined [i]
                     * sensorVec[i]->transCamToAruco_.inverse(); // pose Cam [i]
       transform_m4d = transform_m4f.cast <double>();
       transform_affine = Eigen::Affine3d(transform_m4d);
       tf::transformEigenToTF(transform_affine, transform_tf);
-      fromString = sensorVec[2]->getTfTopic();
+//      fromString = sensorVec[2]->getTfTopic();
+      fromString = "world";
       toString = sensorVec[i]->getTfTopic();
       transform_publisher.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), fromString, toString ) );
     }
@@ -441,6 +482,7 @@ int main (int argc, char** argv)
 
 #ifdef VIEWERS_ENABLED
     // refresh viewers
+    viewerWorld.update();
     viewer.update();
     viewerAruco.update();
     viewerArucoCropped.update();

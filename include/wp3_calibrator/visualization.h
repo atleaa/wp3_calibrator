@@ -41,6 +41,8 @@ public:
     // Spin and update pose
     void update();
 
+    void spin();
+
 private:
 //    pcl::visualization::PCLVisualizer& viewer_;
 //    pcl::visualization::PCLVisualizer::Ptr viewer_;
