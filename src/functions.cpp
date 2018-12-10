@@ -571,7 +571,7 @@ void refineTransformation(wp3::Sensor & sensor, wp3::Sensor & reference)
   bool ICP1_converged;
   double fitnessScore2=1000, fitnessChange=1000;
   float maxCorrDist = ICP_MAX_CORR_DIST;
-  Eigen::Matrix4f transform_AtoB_ICP = transform_ATOb; // initial ArUco transformation
+  Eigen::Matrix4f transform_AtoB_ICP = Eigen::Matrix4f::Identity(); // initially transformed by ArUco transformation
   double fitnessScore = 1000;
 
 
@@ -584,9 +584,6 @@ void refineTransformation(wp3::Sensor & sensor, wp3::Sensor & reference)
   while(fitnessChange>ICP_CONVERGE && round<ICP_MAX_ROUNDS) // fitness change used as converge criteria
   {
     round++;
-//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8-0.1*i, fitnessScore1);
-//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, 0.8/(2^round), fitnessScore1);
-//    wp3::ICP_allign(tmpCloud,sensorB.cloudCrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
     wp3::ICP_allign(tmpCloud,reference.cloud1CrPtr_,transform_ICP, ICP1_converged, maxCorrDist/round, iterations*round, fitnessScore);
     if (ICP1_converged)
     {
@@ -612,12 +609,15 @@ void refineTransformation(wp3::Sensor & sensor, wp3::Sensor & reference)
                   << sensor.name_ << "->ref:\tFinal fitness score:\t" << fitnessScore);
 
 //  sensorA.cloud2CrPtr_ = tmpCloud;
+  // TULL comment out for testing
   pcl::transformPointCloud (*sensor.cloud1CrPtr_, *sensor.cloud2CrPtr_, transform_AtoB_ICP);
   pcl::transformPointCloud (*sensor.cloud1Ptr_, *sensor.cloud2Ptr_, transform_AtoB_ICP);
   *reference.cloud2Ptr_ = *reference.cloud1Ptr_;
   *reference.cloud2CrPtr_ = *reference.cloud1CrPtr_;
 // save transformation in sensor class
   sensor.transArucoToICP_ = transform_AtoB_ICP;
+
+//  std::cout << "transform_AtoB_ICP - " << sensor.name_ << std::endl << transform_AtoB_ICP << std::endl;
 } // end refineTransformation
 
 

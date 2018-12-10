@@ -184,6 +184,11 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
 //  std::cout << "filtered Cloud: " << output_cloud->size() << std::endl;
 }
 
+std::vector<int> arucoProcessor::getMarkerIdsMean() const
+{
+  return markerIdsMean_;
+}
+
 pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 {
   return croppedCloud_;
@@ -813,13 +818,18 @@ void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, Mar
  * Aruco id
  * R rotation euler Z, Y, X
  * T translation X,Y,Z */
-void arucoProcessor::simulateMarker(int id, Eigen::Vector3f R, Eigen::Vector3f T)
+void arucoProcessor::simulateMarker(int id, Eigen::Vector3d R, Eigen::Vector3d T)
 {
   auto aruco_dict=cv::aruco::getPredefinedDictionary(cv::aruco::DICT_4X4_50);
   int pixelsPerMeter=200;
   cv::Mat markerImg(ARUCODIMENSION*pixelsPerMeter,ARUCODIMENSION*pixelsPerMeter,CV_8UC1);
 
   cv::aruco::drawMarker(aruco_dict,id,markerImg.rows,markerImg,1);
+
+  // add padding
+  int pad = (int) (PADDING*0.5*markerImg.rows);
+  cv::copyMakeBorder( markerImg, markerImg, pad, pad, pad, pad, cv::BORDER_CONSTANT, cv::Scalar(255) );
+
   cv::imshow("Marker "+std::to_string(id),markerImg);
   cv::waitKey(30);
 
@@ -869,23 +879,27 @@ void arucoProcessor::simulateMarker(int id, Eigen::Vector3f R, Eigen::Vector3f T
                            Eigen::Quaternionf(0.0,0.0,0.0,0.0));
 
 
-  Eigen::Quaternion<float> q =
-      Eigen::AngleAxisf(R[0], Eigen::Vector3f::UnitZ())
-      * Eigen::AngleAxisf(R[1], Eigen::Vector3f::UnitY())
-      * Eigen::AngleAxisf(R[2], Eigen::Vector3f::UnitX());
-  Eigen::Matrix3f Rmat = q.matrix();
+  Eigen::Quaternion<double> q =
+      Eigen::AngleAxisd(R[0], Eigen::Vector3d::UnitZ())
+      * Eigen::AngleAxisd(R[1], Eigen::Vector3d::UnitY())
+      * Eigen::AngleAxisd(R[2], Eigen::Vector3d::UnitX());
+  Eigen::Matrix3d Rmat = q.matrix();
 
-  Eigen::Matrix4f tf_OtoM; // Transformation world origin to marker
+  Eigen::Matrix4d tf_OtoM; // Transformation world origin to marker
   // Create Eigen Transformation Matrix
   tf_OtoM.setIdentity();   // Set to Identity to make bottom row of Matrix 0,0,0,1
   tf_OtoM.block<3,3>(0,0) = Rmat;
   tf_OtoM.block<3,1>(0,3) = T;
 
   // transform marker to input pose
-  pcl::transformPointCloud(*marker_cloud, *marker_cloud, tf_OtoM);
+  pcl::transformPointCloud(*marker_cloud, *marker_cloud, tf_OtoM.cast<float>());
 
-  transformMap_.insert (std::pair<int, Eigen::Matrix4f> (id, tf_OtoM ));
+  transformMap_.insert (std::pair<int, Eigen::Matrix4f> (id, tf_OtoM.cast<float>() ));
   *croppedCloud_ += *marker_cloud;
+
+  // log inserted marker
+  markerIdsMean_.push_back(id);
+  transCamToArucoVec_.push_back(tf_OtoM);
 
 } // end arucoProcessor::simulateMarker
 

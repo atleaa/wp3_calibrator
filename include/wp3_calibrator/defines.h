@@ -34,7 +34,7 @@ const double ICP_TRANS_EPSILON = 1e-12; // Transformation refinement resolution)
 //const double ICP_CONVERGE = 1e-6;  // abs(curr_fitness - last_fitness) / curr_fitness
 //const int ICP_MAX_ROUNDS = 2;  // second end criteria
 //const int ICP_ITERATIONS = 10; // ICP iterations for each round (multiplied with round number)
-//const double ICP_TRANS_EPSILON = 1e-3; // Transformation refinement resolution)
+//const double ICP_TRANS_EPSILON = 1e-6; // Transformation refinement resolution)
 
 // Visualization ------------------------
 //#define VIEW_ICP // create a viewer to see ICP process.
@@ -45,9 +45,9 @@ const double ICP_TRANS_EPSILON = 1e-12; // Transformation refinement resolution)
 enum Cropping {Rect, Mask};
 const double PI = 3.14159265358979323846;  //PI
 
-// added marker padding in %   ( (new size/old size)-1 )
-// eg. 0.5 squares around is 7.0/6.0-1.0 = 0.166666
-const float PADDING = 0.1666666;
+// added marker padding in %   (padding size/aruco size)
+// eg. 0.5 squares around is 1.0/6.0 = 0.166666
+const float PADDING = 2.0/6.0;
 
 
 namespace wp3 {

@@ -78,7 +78,9 @@ public:
   
 //  void findBestPose(wp3::Sensor& node, std::vector<cv::Mat> inputDepthVec, Eigen::Matrix3d intrinsicMatrix);
 
-  void simulateMarker(int id, Eigen::Vector3f R, Eigen::Vector3f T);
+  void simulateMarker(int id, Eigen::Vector3d R, Eigen::Vector3d T);
+
+  std::vector<int> getMarkerIdsMean() const;
 
 private:
   void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
