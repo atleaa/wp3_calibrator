@@ -1,0 +1,577 @@
+20181214-1518 VERY REFINED!
+
+sfi@wp3rack:~$ roslaunch wp3_calibrator calibrate.launch
+... logging to /home/sfi/.ros/log/b12f71b0-ffa4-11e8-969e-309c2320963d/roslaunch-wp3rack-7067.log
+Checking log directory for disk usage. This may take awhile.
+Press Ctrl-C to interrupt
+Done checking log file disk usage. Usage is <1GB.
+
+started roslaunch server http://10.225.120.50:46571/
+
+SUMMARY
+========
+
+PARAMETERS
+ * /calibrate/num_sensors: 6
+ * /calibrate/sensor_0/camera_info: /jetson1/sd/camer...
+ * /calibrate/sensor_0/cloud: /jetson1/sd/points
+ * /calibrate/sensor_0/color: /jetson1/sd/image...
+ * /calibrate/sensor_0/depth: /jetson1/sd/image...
+ * /calibrate/sensor_0/name: jetson1
+ * /calibrate/sensor_0/tf: jetson1_ir_optica...
+ * /calibrate/sensor_1/camera_info: /jetson2/sd/camer...
+ * /calibrate/sensor_1/cloud: /jetson2/sd/points
+ * /calibrate/sensor_1/color: /jetson2/sd/image...
+ * /calibrate/sensor_1/depth: /jetson2/sd/image...
+ * /calibrate/sensor_1/name: jetson2
+ * /calibrate/sensor_1/tf: jetson2_ir_optica...
+ * /calibrate/sensor_2/camera_info: /jetson3/sd/camer...
+ * /calibrate/sensor_2/cloud: /jetson3/sd/points
+ * /calibrate/sensor_2/color: /jetson3/sd/image...
+ * /calibrate/sensor_2/depth: /jetson3/sd/image...
+ * /calibrate/sensor_2/name: jetson3
+ * /calibrate/sensor_2/tf: jetson3_ir_optica...
+ * /calibrate/sensor_3/camera_info: /jetson4/sd/camer...
+ * /calibrate/sensor_3/cloud: /jetson4/sd/points
+ * /calibrate/sensor_3/color: /jetson4/sd/image...
+ * /calibrate/sensor_3/depth: /jetson4/sd/image...
+ * /calibrate/sensor_3/name: jetson4
+ * /calibrate/sensor_3/tf: jetson4_ir_optica...
+ * /calibrate/sensor_4/camera_info: /jetson5/sd/camer...
+ * /calibrate/sensor_4/cloud: /jetson5/sd/points
+ * /calibrate/sensor_4/color: /jetson5/sd/image...
+ * /calibrate/sensor_4/depth: /jetson5/sd/image...
+ * /calibrate/sensor_4/name: jetson5
+ * /calibrate/sensor_4/tf: jetson5_ir_optica...
+ * /calibrate/sensor_5/camera_info: /jetson6/sd/camer...
+ * /calibrate/sensor_5/cloud: /jetson6/sd/points
+ * /calibrate/sensor_5/color: /jetson6/sd/image...
+ * /calibrate/sensor_5/depth: /jetson6/sd/image...
+ * /calibrate/sensor_5/name: jetson6
+ * /calibrate/sensor_5/tf: jetson6_ir_optica...
+ * /rosdistro: kinetic
+ * /rosversion: 1.12.14
+
+NODES
+  /
+    calibrate (wp3_calibrator/calibrate)
+
+ROS_MASTER_URI=http://10.225.120.50:11311
+
+process[calibrate-1]: started with pid [7084]
+[ INFO] [1544795539.443625610]: Keyboard controls of calibrator:
+n   - new image 
+s   - save image 
++   - next sensor 
+esc - quit 
+
+[ INFO] [1544795542.443862503]: Starting: 
+
+[DEBUG] [1544795545.632521661]: Created colors:
+[255, 0, 0] 
+[0, 255, 0] 
+[0, 0, 255] 
+[255, 0, 255] 
+[255, 255, 0] 
+[0, 255, 255] 
+
+[DEBUG] [1544795545.697910964]: Created colors:
+[255, 0, 0] 
+[0, 255, 0] 
+[0, 0, 255] 
+[255, 0, 255] 
+[255, 255, 0] 
+[0, 255, 255] 
+
+[DEBUG] [1544795545.817477711]: Created colors:
+[255, 0, 0] 
+[0, 255, 0] 
+[0, 0, 255] 
+[255, 0, 255] 
+[255, 255, 0] 
+[0, 255, 255] 
+
+[DEBUG] [1544795545.889915883]: Created colors:
+[255, 0, 0] 
+[0, 255, 0] 
+[0, 0, 255] 
+[255, 0, 255] 
+[255, 255, 0] 
+[0, 255, 255] 
+
+[DEBUG] [1544795545.934418515]: Loading parameters for jetson1
+[DEBUG] [1544795545.966970408]: Loading parameters for jetson2
+[DEBUG] [1544795545.971330413]: Loading parameters for jetson3
+[DEBUG] [1544795545.976136932]: Loading parameters for jetson4
+[DEBUG] [1544795545.980103356]: Loading parameters for jetson5
+[DEBUG] [1544795545.983833586]: Loading parameters for jetson6
+Creating global reference in file /home/sfi/catkin_ws/src/wp3_calibrator/kinect_ICP1_tMat/kinect1/results.yaml  ... done
+Opening global reference: /home/sfi/catkin_ws/src/wp3_calibrator/kinect_ICP1_tMat/kinect1/results.yaml  ... done
+[ INFO] [1544795547.357186584]: Starting calibration routine
+
+[ INFO] [1544795547.357220300]: Recording topics...
+[ERROR] [1544795547.365194299]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[ERROR] [1544795547.367611362]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.369854270]: Subscribing to /jetson3/sd/image_depth_rect
+[ERROR] [1544795547.371304511]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.373609327]: Subscribing to /jetson4/sd/image_depth_rect
+[ERROR] [1544795547.375170885]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.377958040]: Subscribing to /jetson6/sd/image_depth_rect
+[ERROR] [1544795547.378558963]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.383665926]: Subscribing to /jetson5/sd/image_depth_rect
+[ERROR] [1544795547.384476607]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.386384600]: Subscribing to /jetson2/sd/image_depth_rect
+[DEBUG] [1544795547.387360986]: Subscribing to /jetson1/sd/image_depth_rect
+[DEBUG] [1544795547.389905563]: Subscribing to /jetson3/sd/image_color_rect
+[ERROR] [1544795547.390410558]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.392705168]: Subscribing to /jetson4/sd/image_color_rect
+[ERROR] [1544795547.393681525]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.395851215]: Subscribing to /jetson6/sd/image_color_rect
+[ERROR] [1544795547.396905522]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.399505089]: Subscribing to /jetson5/sd/image_color_rect
+[ERROR] [1544795547.400253274]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.403079553]: Subscribing to /jetson2/sd/image_color_rect
+[ERROR] [1544795547.403560089]: Tried to advertise a service that is already advertised in this node [/calibrate/compressed/set_parameters]
+[DEBUG] [1544795547.406086014]: Subscribing to /jetson1/sd/image_color_rect
+[DEBUG] [1544795547.449168775]: Reading /jetson3/sd/image_color_rect ... 
+[DEBUG] [1544795547.452005568]: Reading /jetson4/sd/image_color_rect ... 
+[DEBUG] [1544795547.454376816]: Reading /jetson6/sd/image_color_rect ... 
+[DEBUG] [1544795547.456561693]: Reading /jetson5/sd/image_color_rect ... 
+[DEBUG] [1544795547.459282608]: Reading /jetson2/sd/image_color_rect ... 
+[DEBUG] [1544795547.462269292]: Reading /jetson1/sd/image_color_rect ... 
+[DEBUG] [1544795548.036940659]: Received camera information for jetson6
+D:
+0.0853529 -0.272569 0 0 0.10086 
+K:
+367.574       0 257.007
+      0 367.574 206.327
+      0       0       1
+
+[DEBUG] [1544795548.407550104]: Received camera information for jetson4
+D:
+0.0931691 -0.271576 0 0 0.0964462 
+K:
+365.176       0 255.802
+      0 365.176 208.819
+      0       0       1
+
+[DEBUG] [1544795548.408876475]: Received camera information for jetson2
+D:
+0.094288 -0.274469 0 0 0.0965604 
+K:
+365.037       0 256.056
+      0 365.037 205.287
+      0       0       1
+
+[DEBUG] [1544795548.414946751]: Received camera information for jetson1
+D:
+0.0905461 -0.271138 0 0 0.098171 
+K:
+366.069       0 254.281
+      0 366.069 210.482
+      0       0       1
+
+[DEBUG] [1544795548.418143504]: Received camera information for jetson5
+D:
+0.0963131 -0.273069 0 0 0.0940337 
+K:
+ 364.27       0 258.127
+      0  364.27 205.126
+      0       0       1
+
+[DEBUG] [1544795548.445212846]: Received camera information for jetson3
+D:
+0.0917032 -0.268741 0 0 0.0944366 
+K:
+365.332       0 258.138
+      0 365.332 208.098
+      0       0       1
+
+..............................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................................[DEBUG] [1544795568.746464389]: Done reading /jetson5/sd/image_color_rect
+
+[DEBUG] [1544795568.746489736]: Reading /jetson5/sd/image_depth_rect ... 
+....................................................................................................[DEBUG] [1544795569.511859291]: Done reading /jetson4/sd/image_color_rect
+
+[DEBUG] [1544795569.511900065]: Reading /jetson4/sd/image_depth_rect ... 
+...................[DEBUG] [1544795569.683722154]: Done reading /jetson3/sd/image_color_rect
+
+[DEBUG] [1544795569.683759719]: Reading /jetson3/sd/image_depth_rect ... 
+..........................................................[DEBUG] [1544795570.211007930]: Done reading /jetson1/sd/image_color_rect
+
+[DEBUG] [1544795570.211068324]: Reading /jetson1/sd/image_depth_rect ... 
+.........................................................................[DEBUG] [1544795570.958546185]: Done reading /jetson6/sd/image_color_rect
+
+[DEBUG] [1544795570.958581502]: Reading /jetson6/sd/image_depth_rect ... 
+..........[DEBUG] [1544795571.055370151]: Done reading /jetson2/sd/image_color_rect
+
+[DEBUG] [1544795571.055412623]: Reading /jetson2/sd/image_depth_rect ... 
+.................................................................................................................................................................................................................................................................................................................................................................................................[DEBUG] [1544795575.055927216]: Done reading /jetson5/sd/image_depth_rect
+
+[DEBUG] [1544795575.055980087]: Reading /jetson5/sd/points ... 
+..[DEBUG] [1544795575.060456178]: Done reading /jetson5/sd/points
+
+[DEBUG] [1544795575.062184314]: ROS stopped Depth Import
+[DEBUG] [1544795575.065212705]: ROS stopped Topic Subscription of /jetson5/sd/image_color_rect
+.[DEBUG] [1544795575.066457149]: ROS stopped Topic Subscription of /jetson5/sd/image_depth_rect
+...................[DEBUG] [1544795575.381303874]: Done reading /jetson4/sd/image_depth_rect
+
+[DEBUG] [1544795575.381374288]: Reading /jetson4/sd/points ... 
+.[DEBUG] [1544795575.391294886]: Done reading /jetson4/sd/points
+
+[DEBUG] [1544795575.392836214]: ROS stopped Depth Import
+[DEBUG] [1544795575.395200022]: ROS stopped Topic Subscription of /jetson4/sd/image_color_rect
+.[DEBUG] [1544795575.395743048]: ROS stopped Topic Subscription of /jetson4/sd/image_depth_rect
+.....................................................[DEBUG] [1544795575.955314129]: Done reading /jetson1/sd/image_depth_rect
+
+[DEBUG] [1544795575.955363613]: Reading /jetson1/sd/points ... 
+..[DEBUG] [1544795575.960231573]: Done reading /jetson1/sd/points
+
+[DEBUG] [1544795575.962186359]: ROS stopped Depth Import
+[DEBUG] [1544795575.964718027]: ROS stopped Topic Subscription of /jetson1/sd/image_color_rect
+[DEBUG] [1544795575.965288607]: ROS stopped Topic Subscription of /jetson1/sd/image_depth_rect
+........[DEBUG] [1544795576.095238147]: Done reading /jetson2/sd/image_depth_rect
+
+[DEBUG] [1544795576.095286397]: Reading /jetson2/sd/points ... 
+.[DEBUG] [1544795576.101044467]: Done reading /jetson2/sd/points
+
+[DEBUG] [1544795576.105463814]: ROS stopped Depth Import
+[DEBUG] [1544795576.108487556]: ROS stopped Topic Subscription of /jetson2/sd/image_color_rect
+[DEBUG] [1544795576.109089438]: ROS stopped Topic Subscription of /jetson2/sd/image_depth_rect
+...[DEBUG] [1544795576.140367677]: Done reading /jetson6/sd/image_depth_rect
+
+[DEBUG] [1544795576.140411681]: Reading /jetson6/sd/points ... 
+.[DEBUG] [1544795576.145305783]: Done reading /jetson6/sd/points
+
+[DEBUG] [1544795576.147003690]: ROS stopped Depth Import
+.[DEBUG] [1544795576.150046217]: ROS stopped Topic Subscription of /jetson6/sd/image_color_rect
+[DEBUG] [1544795576.150889772]: ROS stopped Topic Subscription of /jetson6/sd/image_depth_rect
+.............................[DEBUG] [1544795577.590206929]: Done reading /jetson3/sd/image_depth_rect
+
+[DEBUG] [1544795577.590241611]: Reading /jetson3/sd/points ... 
+.[DEBUG] [1544795577.594537166]: Done reading /jetson3/sd/points
+
+[DEBUG] [1544795577.596277522]: ROS stopped Depth Import
+[DEBUG] [1544795577.598564330]: ROS stopped Topic Subscription of /jetson3/sd/image_color_rect
+[DEBUG] [1544795577.599961397]: ROS stopped Topic Subscription of /jetson3/sd/image_depth_rect
+[ INFO] [1544795577.601588118]: Recording complete
+
+[ INFO] [1544795577.601625699]: Processing recorded data...
+[DEBUG] [1544795585.555612022]: jetson2 detection rate Id 1:	62.25%
+[DEBUG] [1544795585.555707738]: jetson2 detection rate Id 13:	98.75%
+[DEBUG] [1544795585.555770708]: jetson2 detection rate Id 40:	100%
+[DEBUG] [1544795585.555877695]: jetson2 Id: 1 averaged corners:
+[218.28206, 47.316982;
+ 237.83928, 34.578503;
+ 257.56949, 46.334343;
+ 236.45264, 57.622234]
+[DEBUG] [1544795585.556025270]: jetson2 Id: 13 averaged corners:
+[288.23218, 87.975479;
+ 312.3418, 70.249077;
+ 336.09085, 81.840683;
+ 317.47696, 100.94078]
+[DEBUG] [1544795585.556141556]: jetson2 Id: 40 averaged corners:
+[143.69885, 179.90088;
+ 175.99933, 159.9975;
+ 201.00058, 178.99957;
+ 168.70067, 203.04126]
+[DEBUG] [1544795585.632191868]: jetson5 detection rate Id 1:	100%
+[DEBUG] [1544795585.632290104]: jetson5 detection rate Id 13:	100%
+[DEBUG] [1544795585.632308931]: jetson5 detection rate Id 40:	5.5%
+[ERROR] [1544795585.632331805]: jetson5 Id 40 detection rate is 5.5% with only 22 detections in 400 images. Consider moving marker or recalibrating the sensor intrinsics.
+[DEBUG] [1544795585.632516403]: jetson5 Id: 1 averaged corners:
+[202.02908, 176.45894;
+ 174.13556, 199.69183;
+ 144.49373, 180.6257;
+ 174.14447, 159.9218]
+[DEBUG] [1544795585.632677508]: jetson5 Id: 13 averaged corners:
+[113.98916, 124.92976;
+ 86.372711, 143.16885;
+ 63.635319, 128.81047;
+ 94.865356, 111.59518]
+[DEBUG] [1544795585.632716419]: jetson5 Id: 40 averaged corners:
+[232.33813, 51.816925;
+ 213.38934, 65.475777;
+ 194.03339, 58.275711;
+ 214.10979, 44.660877]
+[DEBUG] [1544795585.845285043]: jetson3 detection rate Id 1:	100%
+[DEBUG] [1544795585.845366518]: jetson3 detection rate Id 13:	100%
+[DEBUG] [1544795585.845434002]: jetson3 detection rate Id 40:	100%
+[DEBUG] [1544795585.845576762]: jetson3 Id: 1 averaged corners:
+[319.99969, 189.00095;
+ 326.54681, 223.44969;
+ 281.53284, 224.17801;
+ 279.80704, 189.66766]
+[DEBUG] [1544795585.845689357]: jetson3 Id: 13 averaged corners:
+[180.99191, 190.97078;
+ 176.10945, 225.57976;
+ 131.16003, 225.58134;
+ 138.75815, 191.57759]
+[DEBUG] [1544795585.845806574]: jetson3 Id: 40 averaged corners:
+[195.34071, 60.231815;
+ 192.93172, 80.919701;
+ 162.478, 81.726913;
+ 166.91714, 60.754467]
+[DEBUG] [1544795586.066490390]: jetson6 detection rate Id 1:	97.25%
+[DEBUG] [1544795586.066562316]: jetson6 detection rate Id 13:	53.5%
+[DEBUG] [1544795586.066615123]: jetson6 detection rate Id 40:	99.75%
+[DEBUG] [1544795586.066750040]: jetson6 Id: 1 averaged corners:
+[232.90852, 100.0673;
+ 217.63589, 83.400642;
+ 241.65521, 77.268135;
+ 258.49524, 94.268623]
+[DEBUG] [1544795586.066822797]: jetson6 Id: 13 averaged corners:
+[311.91501, 76.166878;
+ 297.02457, 60.854912;
+ 317.68735, 54.440289;
+ 334.47626, 66.90966]
+[DEBUG] [1544795586.066939621]: jetson6 Id: 40 averaged corners:
+[434.63306, 156.82278;
+ 405.97021, 137.52672;
+ 428.30405, 126.36505;
+ 457.30734, 144.51462]
+[DEBUG] [1544795586.078330377]: jetson1 detection rate Id 1:	100%
+[DEBUG] [1544795586.078414212]: jetson1 detection rate Id 13:	100%
+[DEBUG] [1544795586.078474760]: jetson1 detection rate Id 40:	100%
+[DEBUG] [1544795586.078610084]: jetson1 Id: 1 averaged corners:
+[395.66559, 140.67842;
+ 429.00668, 152.61493;
+ 412.90787, 170.215;
+ 381.00354, 156.00142]
+[DEBUG] [1544795586.078732872]: jetson1 Id: 13 averaged corners:
+[335.99884, 201.00058;
+ 372.45325, 217.24144;
+ 349.1958, 244.95804;
+ 314.00116, 222.99945]
+[DEBUG] [1544795586.078839199]: jetson1 Id: 40 averaged corners:
+[190.11374, 124.10987;
+ 214.51663, 138.11134;
+ 189.01122, 152.54535;
+ 166.88817, 136.17047]
+[DEBUG] [1544795586.238628408]: jetson4 detection rate Id 1:	100%
+[DEBUG] [1544795586.238720526]: jetson4 detection rate Id 13:	100%
+[DEBUG] [1544795586.238784184]: jetson4 detection rate Id 40:	100%
+[DEBUG] [1544795586.238957813]: jetson4 Id: 1 averaged corners:
+[189.44795, 77.18795;
+ 192.67432, 53.555794;
+ 221.7702, 53.442276;
+ 219.59898, 76.840416]
+[DEBUG] [1544795586.239082457]: jetson4 Id: 13 averaged corners:
+[300.59979, 78.383713;
+ 298.8306, 54.264515;
+ 328.17578, 54.694382;
+ 331.99576, 79.479134]
+[DEBUG] [1544795586.239185459]: jetson4 Id: 40 averaged corners:
+[312.59793, 231.25226;
+ 309.2215, 194.54689;
+ 352.2504, 195.07761;
+ 358.79556, 231.29486]
+[DEBUG] [1544795587.030020217]: jetson2.1	score: 0.0954557
+[DEBUG] [1544795587.050574750]: jetson2.13	score: 0.0199327
+[DEBUG] [1544795587.066642831]: jetson2.40	score: 0.0752428
+[DEBUG] [1544795587.162973951]: jetson5.1	score: 0.000966525
+[DEBUG] [1544795587.186842710]: jetson5.13	score: 0.00673962
+[DEBUG] [1544795587.188363247]: jetson5.40	score: 0.0728273
+[DEBUG] [1544795587.344405140]: jetson3.1	score: 0.0118623
+[DEBUG] [1544795587.362170651]: jetson3.13	score: 0.0338537
+[DEBUG] [1544795587.378281187]: jetson3.40	score: 0.0281553
+[DEBUG] [1544795587.556214958]: jetson1.1	score: 32.926
+[ERROR] [1544795587.556259993]: jetson1.1	score: 32.926
+Score > 1 indicates poor marker transformation alignment.Calibration refinement may not be possible. Recapture recommended.
+[DEBUG] [1544795587.570967171]: jetson1.13	score: 0.104866
+[DEBUG] [1544795587.587977678]: jetson1.40	score: 0.0120766
+[DEBUG] [1544795587.647670538]: jetson6.1	score: 0.0201091
+[DEBUG] [1544795587.655850190]: jetson6.13	score: 0.0337825
+[DEBUG] [1544795587.672240618]: jetson6.40	score: 0.00176718
+[DEBUG] [1544795587.734418743]: jetson4.1	score: 0.248946
+[DEBUG] [1544795587.749193939]: jetson4.13	score: 0.0427553
+[DEBUG] [1544795587.761619580]: jetson4.40	score: 0.038457
+[ INFO] [1544795587.764747985]: Processing complete
+
+[ INFO] [1544795593.163817950]: Performing ICP refinement between sensors and reference map
+[DEBUG] [1544795613.874996998]: jetson6->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 14.4907
+[DEBUG] [1544795619.282706658]: jetson5->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 11.4512
+[DEBUG] [1544795621.911083330]: jetson2->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 7.40461
+[DEBUG] [1544795627.447622235]: jetson4->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 9.94006
+[DEBUG] [1544795628.790655371]: jetson1->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 11.0715
+[DEBUG] [1544795629.952157739]: jetson2->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 7.40496
+[DEBUG] [1544795632.126104806]: jetson6->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 14.4902
+[DEBUG] [1544795634.479463239]: jetson6->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 14.4902
+[DEBUG] [1544795635.698464056]: jetson3->ref:	Iterative ICP cycle: 1, MaxDistance: 1	ICP converged with fitness score: 9.79966
+[DEBUG] [1544795637.313379713]: jetson6->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 14.4902
+[DEBUG] [1544795638.506658586]: jetson5->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 11.454
+[DEBUG] [1544795643.601278575]: jetson6->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 14.4902
+[DEBUG] [1544795646.291217945]: jetson1->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 11.0714
+[DEBUG] [1544795646.889164782]: jetson6->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 14.4901
+[DEBUG] [1544795652.059847533]: jetson6->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 14.49
+[DEBUG] [1544795656.740842205]: jetson1->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 11.0714
+[DEBUG] [1544795658.985633140]: jetson1->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 11.0714
+[DEBUG] [1544795662.374210962]: jetson6->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 14.4894
+[DEBUG] [1544795670.995218117]: jetson6->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 14.4894
+[DEBUG] [1544795683.104938141]: jetson6->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 14.49
+[ INFO] [1544795683.148400695]: jetson6->ref:	ICP refinement complete.
+jetson6->ref:	Refinement iterations:	10
+jetson6->ref:	Final fitness score:	14.49
+[DEBUG] [1544795695.193701314]: jetson4->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 9.94014
+[DEBUG] [1544795697.667986493]: jetson4->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 9.94009
+[DEBUG] [1544795715.334357947]: jetson2->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 7.40495
+[DEBUG] [1544795716.528495046]: jetson5->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 11.4556
+[DEBUG] [1544795721.310838129]: jetson3->ref:	Iterative ICP cycle: 2, MaxDistance: 0.5	ICP converged with fitness score: 9.80005
+[DEBUG] [1544795723.978466054]: jetson3->ref:	Iterative ICP cycle: 3, MaxDistance: 0.333333	ICP converged with fitness score: 9.80004
+[DEBUG] [1544795725.817551828]: jetson3->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 9.80004
+[DEBUG] [1544795728.182307453]: jetson2->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 7.40503
+[DEBUG] [1544795755.324510142]: jetson2->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 7.40478
+[DEBUG] [1544795769.503584465]: jetson2->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 7.40483
+[DEBUG] [1544795820.060836010]: jetson5->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 11.4555
+[DEBUG] [1544795832.385436047]: jetson4->ref:	Iterative ICP cycle: 4, MaxDistance: 0.25	ICP converged with fitness score: 9.94008
+[DEBUG] [1544795836.863666988]: jetson4->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 9.94006
+[DEBUG] [1544795836.873015244]: jetson1->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 11.0715
+[DEBUG] [1544795839.115757649]: jetson1->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 11.0715
+[DEBUG] [1544795848.829551176]: jetson1->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 11.0715
+[DEBUG] [1544795867.007833543]: jetson1->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 11.072
+[DEBUG] [1544795878.148733429]: jetson1->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 11.0721
+[DEBUG] [1544795908.398229743]: jetson1->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 11.0717
+[ INFO] [1544795908.497393671]: jetson1->ref:	ICP refinement complete.
+jetson1->ref:	Refinement iterations:	10
+jetson1->ref:	Final fitness score:	11.0717
+[DEBUG] [1544795938.073507573]: jetson3->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 9.80004
+[DEBUG] [1544795949.258555350]: jetson5->ref:	Iterative ICP cycle: 5, MaxDistance: 0.2	ICP converged with fitness score: 11.4555
+[DEBUG] [1544795967.420085121]: jetson2->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 7.40477
+[DEBUG] [1544795984.130791942]: jetson2->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 7.40405
+[DEBUG] [1544795999.133984482]: jetson2->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 7.40401
+[DEBUG] [1544796021.191117503]: jetson2->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 7.40543
+[ INFO] [1544796021.264075881]: jetson2->ref:	ICP refinement complete.
+jetson2->ref:	Refinement iterations:	10
+jetson2->ref:	Final fitness score:	7.40543
+[DEBUG] [1544796038.332807333]: jetson4->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 9.94002
+[DEBUG] [1544796056.460546792]: jetson4->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 9.93954
+[DEBUG] [1544796103.894945200]: jetson5->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 11.4556
+[DEBUG] [1544796191.790318423]: jetson3->ref:	Iterative ICP cycle: 6, MaxDistance: 0.166667	ICP converged with fitness score: 9.80005
+[DEBUG] [1544796195.697077052]: jetson3->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 9.80004
+[DEBUG] [1544796215.895326807]: jetson3->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 9.80004
+[DEBUG] [1544796284.472733263]: jetson5->ref:	Iterative ICP cycle: 7, MaxDistance: 0.142857	ICP converged with fitness score: 11.4556
+[DEBUG] [1544796324.031202591]: jetson4->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 9.93579
+[DEBUG] [1544796490.445259128]: jetson5->ref:	Iterative ICP cycle: 8, MaxDistance: 0.125	ICP converged with fitness score: 11.4555
+[DEBUG] [1544796496.211069871]: jetson5->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 11.4555
+[DEBUG] [1544796504.987000177]: jetson5->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 11.4554
+[ INFO] [1544796505.055183444]: jetson5->ref:	ICP refinement complete.
+jetson5->ref:	Refinement iterations:	10
+jetson5->ref:	Final fitness score:	11.4554
+[DEBUG] [1544796592.374281618]: jetson3->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 9.80006
+[DEBUG] [1544796623.258873824]: jetson4->ref:	Iterative ICP cycle: 9, MaxDistance: 0.111111	ICP converged with fitness score: 9.93541
+[DEBUG] [1544796642.119721215]: jetson4->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 9.93589
+[ INFO] [1544796642.213421173]: jetson4->ref:	ICP refinement complete.
+jetson4->ref:	Refinement iterations:	10
+jetson4->ref:	Final fitness score:	9.93589
+[DEBUG] [1544797003.826360441]: jetson3->ref:	Iterative ICP cycle: 10, MaxDistance: 0.1	ICP converged with fitness score: 9.80005
+[ INFO] [1544797003.939553523]: jetson3->ref:	ICP refinement complete.
+jetson3->ref:	Refinement iterations:	10
+jetson3->ref:	Final fitness score:	9.80005
+[ INFO] [1544797004.642492920]: All ICP refinement complete
+[ INFO] [1544797008.881861501]: 
+			CALIBRATION SUMMARY
+=====================================================
+Aruco size:	0.6
+Color images node:	400
+Depth images per node:	100
+Point clouds per node:	20
+ICP, starting search radius:	1
+ICP, convergence limit:	1e-12
+ICP, maximum rounds:	10
+ICP, maximum iterations in first round:	100
+ICP, transformation step size:	1e-18
+-----------------------------------------------------
+Time to record data:	30.2445
+Time to process images:	10.1632
+Time to view images:	1.75378
+Time to calculate aruco transformations:	3.64523
+Time to perform ICP refinement:	1411.48
+Time to do point cloud visualization:	4.23929
+[ INFO] [1544797008.881907395]: Node	Id	x	y	median	mean	stdDev		SEM		Cx	Cy	Cz	Cdistance	Wx	Wy	Wz	Ex	Ey	Ez	Ed	Hres	Vres
+=======================================================================================================
+[ INFO] [1544797008.882050527]: jetson1	11	61	175	6.433	6.43713	0.00493288	0.00061661	-3.39656	-0.62353	6.433	7.30129	2.00994	2.01695	0.00252724		0.00979233	0.0164263	0.000793132	0.0191401	0.0175954	0.0175193
+[ INFO] [1544797008.882142887]: jetson1	21	160	255	5.202	5.2033	0.0015603	0.000195037	-1.33977	0.632621	5.202	5.40888	4.71614	2.00444	0.000354767		0.00398874	0.00601089	0.0025902	0.00766486	0.0142284	0.0141669
+[ INFO] [1544797008.882255551]: jetson1	22*	295.5	146.5	6.92575	6.92723	0.00217405	0.000271756	0.779837	-1.21049	6.92575	7.07386	4.70271	5.30001	0.00760365		0.00888491	0.000662804	0.00458691	0.010021	0.0189432	0.0188612
+[ INFO] [1544797008.882362052]: jetson1	31*	185.5	275.5	4.9605	4.962	0.00176407	0.000220509	-0.932028	0.881042	4.9605	5.12362	5.25119	2.00361	-0.00149107		-0.00137615	0.00296402	-0.000208295	0.00327454	0.0135679	0.0135092
+[ INFO] [1544797008.882442659]: jetson1	32	321	159	6.661	6.6622	0.00206391	0.000257989	1.21402	-0.936765	6.661	6.83523	5.28015	5.29007	0.00475931		0.00504398	0.0015173	0.00254737	0.0058509	0.0182191	0.0181402
+[ INFO] [1544797008.882525827]: jetson1	41	288	359	4.161	4.16208	0.0015841	0.000196483	0.383277	1.68816	4.161	4.50674	6.98911	1.98707	0.00334787		-0.0099225	-0.0122888	0.00130049	0.0158481	0.0113811	0.0113319
+[ INFO] [1544797008.882623125]: jetson2	11	191	349	4.019	4.02212	0.0186352	0.00225985	-0.716259	1.58226	4.019	4.37823	2.01701	2.00511	0.0369234		0.0168631	0.00458312	0.0351893	0.0392894	0.0109927	0.0109451
+[ INFO] [1544797008.882707345]: jetson2	12	57	195	5.528	5.53061	0.00421379	0.000514796	-3.01444	-0.155786	5.528	6.29841	2.0316	5.25762	0.0176435		0.0312009	-0.00496054	0.0181567	0.0364385	0.0151201	0.0150547
+[ INFO] [1544797008.882790246]: jetson2	21	338	210	5.167	5.16563	0.0178642	0.00216636	1.15989	0.0667084	5.167	5.29601	4.68798	2.0098	0.0131688		-0.0241652	0.0113729	0.0154042	0.0308316	0.0141327	0.0140716
+[ INFO] [1544797008.882873187]: jetson2	22	192	113	6.6655	6.66694	0.00217092	0.000263263	-1.16965	-1.68515	6.6655	6.974	4.68398	5.28717	0.0118074		-0.00985003	-0.0121861	0.00879071	0.0179666	0.0182314	0.0181525
+[ INFO] [1544797008.882959679]: jetson2	31	360	189	5.414	5.41281	0.0187833	0.00227782	1.54163	-0.241562	5.414	5.63439	5.23705	2.01684	-0.00222683		-0.0155201	0.0161879	-0.000944055	0.0224458	0.0148083	0.0147442
+[ INFO] [1544797008.883039717]: jetson2	32	216	99	6.906	6.90605	0.00686643	0.000832676	-0.757809	-2.01081	6.906	7.2326	5.26143	5.27917	0.0112338		-0.0136771	-0.00937557	0.00902187	0.0188775	0.0188892	0.0188075
+[ INFO] [1544797008.883121729]: jetson2	41	421	132	6.129	6.13094	0.00385292	0.000470709	2.76942	-1.2305	6.129	6.83728	6.96803	2.00178	0.00883818		-0.0310016	0.00242257	0.0067908	0.0318289	0.016764	0.0166914
+[ INFO] [1544797008.883215985]: jetson3	11	98	51	7.906	7.92083	0.0341825	0.00394705	-3.46548	-3.3997	7.906	9.27752	1.99113	2.01176	0.0212779		-0.00902462	0.0112381	0.0195438	0.0242837	0.0216244	0.0215308
+[ INFO] [1544797008.883304158]: jetson3	21	60	137	6.329	6.3297	0.00584704	0.000637964	-3.43254	-1.2317	6.329	7.3045	4.6717	1.96468	-0.000669003		-0.0404444	-0.0337409	0.00156643	0.0526939	0.017311	0.0172361
+[ INFO] [1544797008.883411040]: jetson3	22*	252.5	134.5	6.3615	6.36211	0.00197166	0.000215126	-0.0981726	-1.28156	6.3615	6.49005	4.71187	5.29932	0.00767612		0.0180421	-3.14713e-05	0.00465939	0.0186341	0.0173999	0.0173246
+[ INFO] [1544797008.883498874]: jetson3	23	468	116	6.662	6.66283	0.00225931	0.000246511	3.82694	-1.67945	6.662	7.86437	4.33069	9.23756	0.00847721		0.0498633	0.0331469	0.00463255	0.0600544	0.0182218	0.018143
+[ INFO] [1544797008.883589137]: jetson3	31	51	159	6.011	6.01207	0.00601962	0.000656795	-3.40815	-0.807838	6.011	6.95703	5.20207	1.97323	0.00284815		-0.0504932	-0.0274172	0.00413092	0.057605	0.0164412	0.0163701
+[ INFO] [1544797008.883696202]: jetson3	32*	252.5	158.5	6.024	6.0244	0.00172433	0.00018814	-0.0929642	-0.817829	6.024	6.07997	5.2853	5.28741	0.00312614		0.0101933	-0.00113869	0.000914205	0.0102974	0.0164768	0.0164055
+[ INFO] [1544797008.883785700]: jetson3	41	10	253	4.966	4.96711	0.00462578	0.000504714	-3.37297	0.610357	4.966	6.03412	6.96395	1.95581	-0.000712872		-0.0350828	-0.0435483	-0.00276025	0.05599	0.0135829	0.0135242
+[ INFO] [1544797008.883897829]: jetson3	42**	318	325	2.0385	2.03437	0.00979045	0.00104536	0.334022	0.652297	2.0385	2.16623	8.84888	5.60478	2.33291		0.698033	-0.345185	1.96761	2.1161	0.00557568	0.00555155
+[ INFO] [1544797008.883980731]: jetson3	43	500	322	4.047	4.04744	0.00106822	0.000116552	2.67925	1.26176	4.047	5.01484	8.21444	7.97285	0.359255		0.069005	0.0218177	-0.00569475	0.0725957	0.0110693	0.0110214
+[ INFO] [1544797008.884106672]: jetson4	12*	232	312.5	4.4065	4.40563	0.0209974	0.0027571	-0.287209	1.25109	4.4065	4.58966	2.00956	5.26901	0.00978422		0.00915623	0.00642872	0.0102974	0.0152053	0.0120526	0.0120004
+[ INFO] [1544797008.884215364]: jetson4	21*	440.5	152	5.93075	5.936	0.00412219	0.000545997	2.99965	-0.922793	5.93075	6.70994	4.70874	2.01831	0.00314569		-0.00340319	0.0198907	0.00538113	0.0208848	0.0162217	0.0161515
+[ INFO] [1544797008.884317543]: jetson4	22*	238	149.5	5.913	5.91686	0.0169823	0.00222989	-0.288247	-0.960512	5.913	5.99744	4.68525	5.30639	0.0128899		-0.00857449	0.00703478	0.00987313	0.0148489	0.0161732	0.0161032
+[ INFO] [1544797008.884430643]: jetson4	31*	432	128.5	6.22825	6.23293	0.00388287	0.000514299	3.00515	-1.36989	6.22825	7.04972	5.24576	2.02016	0.00964165		-0.0068078	0.0195072	0.0109244	0.0233713	0.0170354	0.0169617
+[ INFO] [1544797008.884537285]: jetson4	32*	239.5	124.5	6.2375	6.23996	0.00213521	0.000282816	-0.278445	-1.44024	6.2375	6.40767	5.2645	5.30447	0.0155301		-0.0105977	0.0159183	0.0133182	0.023304	0.0170607	0.0169869
+[ INFO] [1544797008.884623498]: jetson4	33	14	115	6.326	6.32956	0.0025356	0.000335849	-4.18877	-1.62525	6.326	7.75922	5.4141	9.21731	0.015635		-0.00320578	-0.0181103	0.00887666	0.0204219	0.0173028	0.0172279
+[ INFO] [1544797008.884713896]: jetson4	41	409	66	7.1885	7.21515	0.0168562	0.00231537	3.01572	-2.81141	7.1885	8.28692	6.9777	2.03326	0.0296621		-0.0213351	0.0338986	0.0276148	0.0486506	0.0196619	0.0195768
+[ INFO] [1544797008.884817234]: jetson5	13*	447	120	6.9715	6.9834	0.0134621	0.00168277	3.6147	-1.62917	6.9715	8.02011	2.02482	8.71192	0.0584297		0.0258124	0.0131426	0.0581798	0.0649915	0.0190683	0.0189858
+[ INFO] [1544797008.884902327]: jetson5	22	220	122	6.853	6.85448	0.0017265	0.000210926	-0.717282	-1.56385	6.853	7.06567	4.71631	5.31525	0.00555801		0.0224805	0.015903	0.00254128	0.0276539	0.0187442	0.0186631
+[ INFO] [1544797008.884992382]: jetson5	23	433	202	5.586	5.58742	0.00225729	0.000275772	2.68164	-0.0479411	5.586	6.19652	4.26795	9.22067	0.0563893		-0.0128775	0.0162535	0.0525447	0.0564885	0.0152787	0.0152126
+[ INFO] [1544797008.885083408]: jetson5	32	198	137	6.551	6.55236	0.00176417	0.000215528	-1.08132	-1.22518	6.551	6.75173	5.29769	5.29461	0.00530386		0.0225844	0.00606441	0.00309192	0.023588	0.0179182	0.0178407
+[ INFO] [1544797008.885198222]: jetson5	42*	76	250.5	4.504	4.50522	0.00185593	0.000226738	-2.2519	0.561021	4.504	5.06674	8.15818	5.95696	0.365592		0.00733471	0.0070014	0.000289112	0.010144	0.0123193	0.012266
+[ INFO] [1544797008.885316579]: jetson5	43**	196	349	3.73825	3.73979	0.00248685	0.000303817	-0.637566	1.47648	3.73825	4.06952	8.14969	7.96444	0.386623		0.00425243	0.0134082	0.021674	0.0258385	0.0102248	0.0101806
+[ INFO] [1544797008.885408555]: jetson6	12	432	235	5.238	5.2388	0.00198982	0.000237829	2.49368	0.408598	5.238	5.81567	1.99496	5.28592	0.0246024		-0.00543737	0.0233407	0.0251156	0.0347152	0.0143269	0.0142649
+[ INFO] [1544797008.885498507]: jetson6	13	221	361	4.035	4.03596	0.00152686	0.000182494	-0.395265	1.6979	4.035	4.39549	1.99502	8.6705	0.017756		-0.00398088	-0.0282841	0.0175061	0.0335007	0.0110365	0.0109887
+[ INFO] [1544797008.885586731]: jetson6	22	315	138	6.784	6.78526	0.00177484	0.000212133	1.07032	-1.26105	6.784	6.98273	4.67865	5.3152	-0.0021801		-0.0151834	0.0158529	-0.00519683	0.0225579	0.0185555	0.0184752
+[ INFO] [1544797008.885666858]: jetson6	23	115	239	5.171	5.17184	0.00130373	0.000155825	-1.99774	0.459643	5.171	5.56251	4.26418	9.16276	0.000985146		-0.0166445	-0.0416536	-0.00285951	0.0449471	0.0141436	0.0140824
+[ INFO] [1544797008.885759119]: jetson6	31	417	79	8.261	8.27226	0.0202024	0.00241465	3.59573	-2.86159	8.261	9.45315	5.22188	2.02497	0.0092988		-0.0306835	0.0243173	0.0105816	0.0405559	0.0225954	0.0224976
+[ INFO] [1544797008.885848308]: jetson6	33	92	191	5.823	5.82431	0.00192266	0.000229802	-2.61399	-0.242802	5.823	6.38743	5.40323	9.18939	-0.0115948		-0.01408	-0.0460339	-0.0183531	0.0515189	0.015927	0.0158581
+[ INFO] [1544797008.885934298]: jetson4	Refl.	308	220	4.794	4.79561	0.00141117	0.000186914	0.685257	0.146778	4.794	4.84495	3.15311	4.31441	0.32028		3.15311	3.31441	0.32028	4.58585	0.0131125	0.0130557
+[ INFO] [1544797008.886021324]: jetson4	Paper	290	220	4.7935	4.8017	0.00754265	0.000999049	0.448907	0.146763	4.7935	4.81671	3.14963	4.55073	0.31882		3.14963	3.55073	0.31882	4.75705	0.0131111	0.0130544
+[ INFO] [1544797008.886101229]: jetson4	Robot	300	220	4.8015	4.808	0.00616442	0.000816498	0.581141	0.147008	4.8015	4.83877	3.15573	4.41852	0.313128		3.15573	3.41852	0.313128	4.66294	0.013133	0.0130762
+[ INFO] [1544797008.886185711]: jetson4	Refl.2	225	65	6.6855	6.68979	0.00506299	0.000670609	-0.563904	-2.63299	6.6855	7.2074	6.49812	5.6091	0.315916		6.49812	4.6091	0.315916	7.97303	0.0182861	0.018207
+[ INFO] [1544797008.886262082]: jetson4	Paper2	230	65	6.6885	6.71871	0.0226779	0.00314486	-0.472578	-2.63417	6.6885	7.20404	6.50203	5.51781	0.314832		6.50203	4.51781	0.314832	7.92377	0.0182943	0.0182151
+[ INFO] [1544797008.886333993]: jetson4	Robot2	225	65	6.6855	6.68979	0.00506299	0.000670609	-0.563904	-2.63299	6.6855	7.2074	6.49812	5.6091	0.315916		6.49812	4.6091	0.315916	7.97303	0.0182861	0.018207
+
+========================================================================================================================
+
+
+sfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson1_ir_optical_frame
+At time 1544797640.284
+- Translation: [7.803, 0.502, 4.180]
+- Rotation: in Quaternion [0.872, 0.318, -0.133, -0.348]
+            in RPY (radian) [-2.378, 0.011, 0.703]
+            in RPY (degree) [-136.232, 0.619, 40.266]
+^Csfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson2_ir_optical_frame
+At time 1544797647.559
+- Translation: [1.730, 0.506, 4.140]
+- Rotation: in Quaternion [0.869, -0.369, 0.111, -0.310]
+            in RPY (radian) [-2.471, 0.036, -0.790]
+            in RPY (degree) [-141.556, 2.043, -45.267]
+^Csfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson3_ir_optical_frame
+At time 1544797654.186
+- Translation: [9.527, 5.247, 4.359]
+- Rotation: in Quaternion [0.681, 0.662, -0.218, -0.225]
+            in RPY (radian) [-2.505, -0.001, 1.541]
+            in RPY (degree) [-143.498, -0.083, 88.289]
+^Csfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson4_ir_optical_frame
+At time 1544797660.591
+- Translation: [0.561, 4.997, 4.356]
+- Rotation: in Quaternion [0.681, -0.670, 0.210, -0.207]
+            in RPY (radian) [-2.542, -0.008, -1.557]
+            in RPY (degree) [-145.671, -0.456, -89.222]
+^Csfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson5_ir_optical_frame
+At time 1544797666.308
+- Translation: [8.878, 9.193, 4.197]
+- Rotation: in Quaternion [0.417, 0.840, -0.306, -0.166]
+            in RPY (radian) [-2.431, -0.023, 2.212]
+            in RPY (degree) [-139.307, -1.324, 126.717]
+^Csfi@wp3rack:/mnt/work/201812-Journal$ rosrun tf tf_echo world jetson6_ir_optical_frame
+At time 1544797679.543
+- Translation: [0.553, 9.129, 4.145]
+- Rotation: in Quaternion [-0.458, 0.812, -0.318, 0.174]
+            in RPY (radian) [-2.401, -0.009, -2.119]
+            in RPY (degree) [-137.568, -0.493, -121.399]
