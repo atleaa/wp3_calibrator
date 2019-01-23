@@ -11,6 +11,8 @@ const double ARUCODIMENSION = 0.60; // Side length of Aruco markers
 // Recording ---------------------
 const int IMAGES_C = 400; // Number of color images to capture for aruco detection (Increase if detectionrate is low)
 const int IMAGES_D = 100; // Number of depth images to capture for cloud and corner point calculation.
+const std::string IMAGE_TYPE = "raw"; // Use for journal rosbag playback as compressed was not recorded
+//const std::string IMAGE_TYPE = "compressed";
 
 // Refinement (ICP) ------------- VERY ACCURATE (never reach end criteria)
 //const int CLOUDS = 20; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
@@ -21,20 +23,20 @@ const int IMAGES_D = 100; // Number of depth images to capture for cloud and cor
 //const double ICP_TRANS_EPSILON = 1e-18; // Transformation refinement resolution)
 
 // Refinement (ICP) ------------- ACCURATE
-const int CLOUDS = 10; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
-const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
-const double ICP_CONVERGE = 1e-8;  // abs(curr_fitness - last_fitness) / curr_fitness
-const int ICP_MAX_ROUNDS = 10;  // second end criteria
-const int ICP_ITERATIONS = 100; // ICP iterations for each round (multiplied with round number)
-const double ICP_TRANS_EPSILON = 1e-14; // Transformation refinement resolution)
-
-// Refinement (ICP) ------------- GOOD
-//const int CLOUDS = 5; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+//const int CLOUDS = 10; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
 //const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
-//const double ICP_CONVERGE = 1e-6;  // abs(curr_fitness - last_fitness) / curr_fitness
+//const double ICP_CONVERGE = 1e-8;  // abs(curr_fitness - last_fitness) / curr_fitness
 //const int ICP_MAX_ROUNDS = 10;  // second end criteria
 //const int ICP_ITERATIONS = 100; // ICP iterations for each round (multiplied with round number)
-//const double ICP_TRANS_EPSILON = 1e-12; // Transformation refinement resolution)
+//const double ICP_TRANS_EPSILON = 1e-14; // Transformation refinement resolution)
+
+// Refinement (ICP) ------------- GOOD
+const int CLOUDS = 5; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
+const float ICP_MAX_CORR_DIST = 1.0; // search radius for first round [m]
+const double ICP_CONVERGE = 1e-6;  // abs(curr_fitness - last_fitness) / curr_fitness
+const int ICP_MAX_ROUNDS = 10;  // second end criteria
+const int ICP_ITERATIONS = 100; // ICP iterations for each round (multiplied with round number)
+const double ICP_TRANS_EPSILON = 1e-12; // Transformation refinement resolution)
 
 // Refinement (ICP) ------------- FAST
 //const int CLOUDS = 2; // Number of images to convert to clouds for refinement. Must be smaller than IMAGES_D (Requires time and memory)
@@ -45,7 +47,6 @@ const double ICP_TRANS_EPSILON = 1e-14; // Transformation refinement resolution)
 //const double ICP_TRANS_EPSILON = 1e-6; // Transformation refinement resolution)
 
 // Visualization ------------------------
-//#define VIEW_ICP // create a viewer to see ICP process.
 #define VIEWERS_ENABLED
 #define VIEW_IMAGES
 #define SHOWDEPTH // view cropped depth images

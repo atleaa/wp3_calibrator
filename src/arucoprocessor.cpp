@@ -7,98 +7,36 @@
 
 namespace wp3 {
 
-//std::string package_path = "/home/sfi/catkin_ws/src/wp3_calibrator/";
-
 // Constructor
 arucoProcessor::arucoProcessor() :
-//  src_cloud_crop1_(new pcl::PointCloud<pcl::PointXYZ>),
-//  src_cloud_crop2_(new pcl::PointCloud<pcl::PointXYZ>),
-//  src_cloud_crop3_(new pcl::PointCloud<pcl::PointXYZ>),
   croppedCloud_(new pcl::PointCloud<pcl::PointXYZ>)
 {
   clearAll();
 }
 
-
 // Destrucor
 arucoProcessor::~arucoProcessor()
 {
- // boost::shared_ptr are autmatically removed when leaving scope, but can be cleared using ptr.reset();
+  // boost::shared_ptr are autmatically removed when leaving scope, but can be cleared using ptr.reset();
 }
 
 
 void arucoProcessor::clearAll()
 {
   acc_ = 0;
-//  src_cloud_crop1_->clear();
-//  src_cloud_crop2_->clear();
-//  src_cloud_crop3_->clear();
   croppedCloud_->clear();
   transformMap_.clear();
   transCamToArucoVec_.clear();
 }
 
-void arucoProcessor::max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag)
-{
-  //	std::shared_ptr<Point2f> john;
-  std::vector<cv::Point2f> temp_max_values = cornerPoints;
-  std::vector<cv::Point2f> temp_min_values = cornerPoints;
-  float max_factor_x = 5;
-  float min_factor_x = 5;
-  float max_factor_y = 5;
-  float min_factor_y = 5;
-  flag = false;
-  // Turn the flag "true" for invalid points
-
-  for (int z = 0; z < 4; z++)
-  {
-    if ((cornerPoints[z].x < 0.1 && cornerPoints[z].x > 3000 ) || (cornerPoints[z].y < 0.1 && cornerPoints[z].y > 3000 ))
-    {
-      flag = true;
-    }
-    if (flag)
-    {
-      break;
-    }
-  }
-
-  if (!flag)
-  {
-    topx = std::max(std::max(max_factor_x+temp_max_values[0].x,max_factor_x+temp_max_values[1].x),std::max(max_factor_x+temp_max_values[2].x,max_factor_x+temp_max_values[3].x));
-    topx = floor(topx);
-
-    topy = std::max(std::max(max_factor_y+temp_max_values[0].y,max_factor_y+temp_max_values[1].y),std::max(max_factor_y+temp_max_values[2].y,max_factor_y+temp_max_values[3].y));
-    topy = floor(topy);
-
-    botx = std::min(std::min(-min_factor_x+temp_min_values[0].x,-min_factor_x+temp_min_values[1].x),std::min(-min_factor_x+temp_min_values[2].x,-min_factor_x+temp_min_values[3].x));
-    botx = floor(botx);
-
-    boty = std::min(std::min(-min_factor_y+temp_min_values[0].y,-min_factor_y+temp_min_values[1].y),std::min(-min_factor_y+temp_min_values[2].y,-min_factor_y+temp_min_values[3].y));
-    boty = floor(boty);
-  }
-
-  // Check if the padding is out of bound
-  if ((topx > 1920) || (topy > 1080) || (topx <= 0) || (topy <= 0))
-  {
-    flag = true;
-  }
-
-  // Deallocate memory
-  std::vector<cv::Point2f>().swap(temp_min_values);
-  std::vector<cv::Point2f>().swap(temp_max_values);
-}
-
-
 void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
-                               Eigen::Matrix3d& depth_intrinsics,
-                               pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
-                               bool crop = false,
-                               std::vector<int> c_ext = {},
-                               cv::Mat depth_aruco_dummy = {})
+                                               Eigen::Matrix3d& depth_intrinsics,
+                                               pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
+                                               bool crop = false,
+                                               std::vector<int> c_ext = {},
+                                               cv::Mat depth_aruco_dummy = {})
 {
   // For point clouds XYZ
-//  float depth_focal_inverted_x = 1/depth_intrinsics(0,0);  // 1/fx
-//  float depth_focal_inverted_y = 1/depth_intrinsics(1,1);  // 1/fy
   double depth_focal_inverted_x = 1/depth_intrinsics(0,0);  // 1/fx
   double depth_focal_inverted_y = 1/depth_intrinsics(1,1);  // 1/fy
 
@@ -178,10 +116,10 @@ void arucoProcessor::pointcloudFromDepthImage (cv::Mat& depth_image,
       }
     }
   }
-//  std::cout << "nan      Cloud: " << cloud_source_xyz_org->size() << std::endl;
-//  pcl::removeNaNFromPointCloud(*cloud_source_xyz_org,*output_cloud, indices1);
+  //  std::cout << "nan      Cloud: " << cloud_source_xyz_org->size() << std::endl;
+  //  pcl::removeNaNFromPointCloud(*cloud_source_xyz_org,*output_cloud, indices1);
   output_cloud = cloud_source_xyz_org;
-//  std::cout << "filtered Cloud: " << output_cloud->size() << std::endl;
+  //  std::cout << "filtered Cloud: " << output_cloud->size() << std::endl;
 }
 
 std::vector<int> arucoProcessor::getMarkerIdsMean() const
@@ -198,7 +136,7 @@ pcl::PointCloud<pcl::PointXYZ>::Ptr arucoProcessor::getCroppedCloud() const
 void arucoProcessor::viewImages(wp3::Sensor& node)
 {
   std::string imageName, maskName, imageCroppedName, imageCropDepthName;
-    // show full color image
+  // show full color image
   imageName = node.name_ + " Input";
   //cv::aruco::drawDetectedMarkers(inputImage,rejectedCandidatesAll, cv::noArray(), cv::Scalar(100, 0, 255) );
   //cv::aruco::drawDetectedMarkers(inputImage,markerCornersAll, cv::noArray(), cv::Scalar(200, 255, 200) );
@@ -232,9 +170,9 @@ void arucoProcessor::viewImages(wp3::Sensor& node)
     cv::waitKey(30);
 #endif
     // Show current mask
-//        std::string maskName = node.name_ + " Id:" + std::to_string(markerIdsMean_[i]) + " mask";
-//        cv::imshow(maskName,maskVec_[i]);
-//        cv::waitKey(30);
+    //        std::string maskName = node.name_ + " Id:" + std::to_string(markerIdsMean_[i]) + " mask";
+    //        cv::imshow(maskName,maskVec_[i]);
+    //        cv::waitKey(30);
 
   }
 }
@@ -250,8 +188,8 @@ void arucoProcessor::getMedianCornerPoints(VecVec2fPoint markerCorners,
   double depth_focal_inverted_x = 1/intrinsicMatrix(0,0);  // 1/fx
   double depth_focal_inverted_y = 1/intrinsicMatrix(1,1);  // 1/fy
 
-//  markerCornerPoints.resize(markerCornersMean_.size());
-//  typedef std::vector<std::vector<cv::Point3f>> VecVec3f;
+  //  markerCornerPoints.resize(markerCornersMean_.size());
+  //  typedef std::vector<std::vector<cv::Point3f>> VecVec3f;
   markerCornerPoints.resize(markerCorners.size(), std::vector<cv::Point3f>(4));
 
   for(size_t i = 0; i < markerCorners.size(); i++) // i markers
@@ -288,11 +226,11 @@ void arucoProcessor::getMedianCornerPoints(VecVec2fPoint markerCorners,
 
       markerCornerPoints[i][j] = point_med;
 
-//      std:: cout << node.name_ << ", corner " << j
-//                 << "\t marker: " << markerIdsMean_[i]
-//                 << "\t x: " << x <<", y: " << y
-//                 << "\t point: " << point_cv
-//                 << "\t point_median: " << points3D_med  << std::endl;
+      //      std:: cout << node.name_ << ", corner " << j
+      //                 << "\t marker: " << markerIdsMean_[i]
+      //                 << "\t x: " << x <<", y: " << y
+      //                 << "\t point: " << point_cv
+      //                 << "\t point_median: " << points3D_med  << std::endl;
 
     } // j corners
   }
@@ -366,10 +304,10 @@ int arucoProcessor::findBestPose(std::vector<cv::Vec3d> &rotVecs,
     }
 
     // optionally publish tf to test
-//    Eigen::Affine3d transform_affine(tf_OtoM);
-//    tf::Transform transform_tf;
-//    tf::transformEigenToTF(transform_affine, transform_tf);
-//    tfPub_local.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson6_ir_optical_frame", std::to_string(i) ) );
+    //    Eigen::Affine3d transform_affine(tf_OtoM);
+    //    tf::Transform transform_tf;
+    //    tf::transformEigenToTF(transform_affine, transform_tf);
+    //    tfPub_local.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), "jetson6_ir_optical_frame", std::to_string(i) ) );
 
     //      Eigen::Affine3d transform_affine2(tf_cam_c1);
     //      tf::transformEigenToTF(transform_affine2, transform_tf);
@@ -576,14 +514,6 @@ void arucoProcessor::processImages(wp3::Sensor & node,
   }
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
 
-  // DEBUG
-  //  cv::Mat dst;
-  //  cv::bitwise_xor(maskVec[0], maskVec[1], dst);
-  //  if(cv::countNonZero(dst) > 0) //check non-0 pixels
-  //     std::cout << "mask 0 is different from mask1" << std::endl;
-  //  else
-  //    std::cout << "mask 0 = mask1" << std::endl;
-
 
   //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Crop depth images ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~||
   cv::Mat depthMatCropped(inputDepth_.rows, inputDepth_.cols,CV_32F);
@@ -699,20 +629,6 @@ void arucoProcessor::processImages(wp3::Sensor & node,
     //    tfPub_local.sendTransform(tf::StampedTransform(transform_tf, ros::Time::now(), node.getTfTopic(), tfName ) );
   }
 
-  // calculate pose based on average corners ( may return wrong pose due to ambiguity)
-  //  cv::aruco::estimatePoseSingleMarkers(markerCornersMean_, arucoSquareDimension, intrinsicMat_, distortionMat_, rotVecs_, transVecs_);
-
-  // Check if rotation is valid
-  //  for(int i=0 ; i<rotVecs_.size(); i++)
-  //  {
-  //    std::cout << std::endl << node.name_ << " : " << markerIdsMean_[i] << std::endl
-  //              << markerCornersMean_[i] << std::endl;
-  //    cv::Rodrigues(rotVecs_[i], rotation_matrix);
-  ////    std::cout << "\nrotation_matrix:\n" << rotation_matrix << std::endl;
-  //    std::cout << "R.R^t=" << rotation_matrix*rotation_matrix.t() << std::endl;
-  //    std::cout << "det(R)=" << cv::determinant(rotation_matrix) << std::endl << std::endl;
-  //  }
-
   for(size_t i = 0; i < markerIdsMean_.size(); i++)
   {
     covertRodriguesToTransMatrix(rotVecs_[i],transVecs_[i], tmatTemp);
@@ -756,7 +672,7 @@ void arucoProcessor::covertRodriguesToTransMatrix(cv::Vec3d rotationVectors, cv:
 void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, MarkerMapType &transMapUsed)
 {
   int validCount=0;
-//  Eigen::Vector3f weight = {1, 1, 1};
+  //  Eigen::Vector3f weight = {1, 1, 1};
   std::vector<float> weight = {1, 1, 1};
   std::vector<float> weights;
   Eigen::Vector3f pos={0,0,0}, pos_avg;
@@ -765,35 +681,35 @@ void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, Mar
   transMapUsed.clear();
 
   int i=0;
-  // loop is obsolete. Ss only best aruco pose is used, there will not be multiple pose instances
-//  for(int i=0 ; i<acc_ ; i++) // loop all images
-//  {
-    // if all markers are found
-    if(transformMap_.count(1+100*i)>0 && transformMap_.count(13+100*i)>0 && transformMap_.count(40+100*i)>0)
-    {
-//      std::cout << "found all IDs for acc= " << i << std:: endl;
+  // loop is obsolete. As only best aruco pose is used, there will not be multiple pose instances
+  //  for(int i=0 ; i<acc_ ; i++) // loop all images
+  //  {
+  // if all markers are found
+  if(transformMap_.count(1+100*i)>0 && transformMap_.count(13+100*i)>0 && transformMap_.count(40+100*i)>0)
+  {
+    //      std::cout << "found all IDs for acc= " << i << std:: endl;
 
-      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (1+100*i, transformMap_.at(1+100*i) ));
-      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (13+100*i, transformMap_.at(13+100*i) ));
-      transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (40+100*i, transformMap_.at(40+100*i) ));
+    transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (1+100*i, transformMap_.at(1+100*i) ));
+    transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (13+100*i, transformMap_.at(13+100*i) ));
+    transMapUsed.insert (std::pair<int, Eigen::Matrix4f> (40+100*i, transformMap_.at(40+100*i) ));
 
-      // que rotations
-      Eigen::Quaternionf q1(transformMap_.at(1+100*i).block<3,3>(0,0));
-      Eigen::Quaternionf q2(transformMap_.at(13+100*i).block<3,3>(0,0));
-      Eigen::Quaternionf q3(transformMap_.at(40+100*i).block<3,3>(0,0));
-      quaternions.push_back(q1);
-      quaternions.push_back(q2);
-      quaternions.push_back(q3);
+    // que rotations
+    Eigen::Quaternionf q1(transformMap_.at(1+100*i).block<3,3>(0,0));
+    Eigen::Quaternionf q2(transformMap_.at(13+100*i).block<3,3>(0,0));
+    Eigen::Quaternionf q3(transformMap_.at(40+100*i).block<3,3>(0,0));
+    quaternions.push_back(q1);
+    quaternions.push_back(q2);
+    quaternions.push_back(q3);
 
-      // que positions
-      pos = pos + weight[0]*transformMap_.at(1+100*i).block<3, 1>(0, 3);
-      pos = pos + weight[1]*transformMap_.at(13+100*i).block<3, 1>(0, 3);
-      pos = pos + weight[2]*transformMap_.at(40+100*i).block<3, 1>(0, 3);
+    // que positions
+    pos = pos + weight[0]*transformMap_.at(1+100*i).block<3, 1>(0, 3);
+    pos = pos + weight[1]*transformMap_.at(13+100*i).block<3, 1>(0, 3);
+    pos = pos + weight[2]*transformMap_.at(40+100*i).block<3, 1>(0, 3);
 
-      validCount++;
-      weights.insert(weights.end(), std::begin(weight), std::end(weight));
-    }
-//  }
+    validCount++;
+    weights.insert(weights.end(), std::begin(weight), std::end(weight));
+  }
+  //  }
 
   // calculate average quaternion
   Eigen::Quaternionf q_avg(wp3::getAverageQuaternion(quaternions, weights));
@@ -810,7 +726,7 @@ void arucoProcessor::getAverageTransformation(Eigen::Matrix4f& transMat_avg, Mar
   transMat_avg = Eigen::Matrix4f::Identity();
   transMat_avg.block<3, 3>(0, 0) = R_avg;
   transMat_avg.block<3, 1>(0, 3) = pos_avg;
-//  return transMat_avgA;
+  //  return transMat_avgA;
 
 }
 
@@ -840,14 +756,6 @@ void arucoProcessor::simulateMarker(int id, Eigen::Vector3d R, Eigen::Vector3d T
   marker_cloud->width = markerImg.cols;
   marker_cloud->height = markerImg.rows;
   marker_cloud->is_dense = true;
-
-//  Eigen::Vector4f sensor_origin( (-markerImg.cols/2+0.5)/pixelsPerMeter, ((markerImg.rows/2)-0.5)/pixelsPerMeter, 0.0, 0.0);
-//  marker_cloud->sensor_origin_ = sensor_origin;
-
-//  transformPointCloud (const pcl::PointCloud<PointT> &cloud_in,
-//                       pcl::PointCloud<PointT> &cloud_out,
-//                       const Eigen::Vector3f &offset,
-//                       const Eigen::Quaternionf &rotation)
 
   for (int i=0;i<markerImg.rows;i++)
   {

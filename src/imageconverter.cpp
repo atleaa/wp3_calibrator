@@ -17,14 +17,14 @@ imageConverter::imageConverter(const std::string& inputName,
   topic_type_ = inputName;
   if (type == "depth")
   {
-    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_depth, this, image_transport::TransportHints("compressed"));
+    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_depth, this, image_transport::TransportHints(IMAGE_TYPE));
 //    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_depth, this);
     ROS_DEBUG_STREAM("Subscribing to " << inputName);
   }
 
   else if (type == "color")
   {
-    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_color, this, image_transport::TransportHints("compressed"));
+    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_color, this, image_transport::TransportHints(IMAGE_TYPE));
 //    image_sub_ = image_transport_nh.subscribe(inputName, 1, &imageConverter::callback_color, this);
     ROS_DEBUG_STREAM("Subscribing to " << inputName);
   }
@@ -68,12 +68,8 @@ void imageConverter::getCurrentDepthMap(cv::Mat *input_image)
 
 void imageConverter::callback_depth(const sensor_msgs::ImageConstPtr& msg)
 {
-//  ros::Time frame_time = ros::Time::now();
-//  timestamp_ = frame_time;
   timestamp_ = msg->header.stamp;
   cv_bridge::CvImageConstPtr pCvImage;
-
-  //                std::cout << "D1";
 
   try
   {
@@ -85,28 +81,13 @@ void imageConverter::callback_depth(const sensor_msgs::ImageConstPtr& msg)
     return;
   }
 
-  //                std::cout << "D2";
   pCvImage->image.copyTo(src_depth_);
   src_depth_.convertTo(src_depth_,  CV_32F, 0.001);
-
-
-  // TULL Resizing
-  //        cv::Mat tmp_depth;
-  //        pCvImage->image.copyTo(tmp_depth);
-  //        tmp_depth.convertTo(tmp_depth,  CV_32F, 0.001);
-  //        // scale open cv image: TULL
-  //        d_mutex.lock();
-  //        cv::resize(tmp_depth, src_depth, cv::Size(1920,1080), 0, 0, cv::INTER_CUBIC); // resize to 1920x1080 resolution
-  //        d_mutex.unlock();
-
-  //                std::cout << "D3" << std::endl;
 }
 
 
 void imageConverter::callback_color(const sensor_msgs::ImageConstPtr& msg)
 {
-//  ros::Time frame_time = ros::Time::now();
-//  timestamp_ = frame_time;
   timestamp_ = msg->header.stamp;
   cv_bridge::CvImagePtr cv_ptr;
 
@@ -117,17 +98,13 @@ void imageConverter::callback_color(const sensor_msgs::ImageConstPtr& msg)
   catch (cv_bridge::Exception& e)
   {
     ROS_ERROR("cv_bridge exception: %s", e.what());
-    //r_mutex.unlock();
     return;
   }
-
-  //                std::cout << "C2";
 
   i_mutex.lock();
   src_image_ = cv_ptr->image;
   i_mutex.unlock();
 
-  //                std::cout << "C3" << std::endl;
 }
 
 

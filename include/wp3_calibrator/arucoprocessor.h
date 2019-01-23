@@ -54,12 +54,6 @@ public:
 
   void processImages(Sensor &node,
                      MarkerMapType &transform4x4);
-//  void detectMarkers(boost::ref(Sensor),
-//                     MarkerMapType &transform4x4);
-
-//  void makeCroppedCloud();
-
-//  void getCroppedCloud(pcl::PointCloud<pcl::PointXYZ>::Ptr cloud);
 
   void covertRodriguesToTransMatrix(cv::Vec3d rotationVectors, cv::Vec3d translationVectors, Eigen::Matrix4f& tMat);
 
@@ -83,8 +77,6 @@ public:
   std::vector<int> getMarkerIdsMean() const;
 
 private:
-  void max4points(std::vector<cv::Point2f> cornerPoints, float & topx, float & topy, float & botx, float & boty, bool &flag);
-
   void pointcloudFromDepthImage (cv::Mat& depth_image,
                                  Eigen::Matrix3d &depth_intrinsics,
                                  pcl::PointCloud<pcl::PointXYZ>::Ptr& output_cloud,
@@ -92,12 +84,7 @@ private:
                                  std::vector<int> c_ext,
                                  cv::Mat depth_aruco_dummy);
 
-  // TODO, create vectors
-//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop1_; //(new pcl::PointCloud<pcl::PointXYZ>);
-//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop2_; //(new pcl::PointCloud<pcl::PointXYZ>);
-//  pcl::PointCloud<pcl::PointXYZ>::Ptr src_cloud_crop3_; //(new pcl::PointCloud<pcl::PointXYZ>);
   pcl::PointCloud<pcl::PointXYZ>::Ptr croppedCloud_; //(new pcl::PointCloud<pcl::PointXYZ>);
-//  std::map<float, Eigen::Matrix4f> transformMap_;
   cv::Mat inputImage_;
   cv::Mat inputDepth_;
   cv::Mat distortionMat_;
@@ -108,21 +95,12 @@ private:
   std::vector<int> markerIdsMean_;
   VecVec2fPoint markerCornersMean_;
   int acc_; // iterator for accumulator
-//  typedef std::pair<int, Eigen::Matrix4f>
-//  cv::Mat current_depthMat_A_crop1_;
-//  cv::Mat current_depthMat_A_crop2_;
-//  cv::Mat current_depthMat_A_crop3_;
-//  cv::Mat current_depthMat_B_crop1_;
-//  cv::Mat current_depthMat_B_crop2_;
-//  cv::Mat current_depthMat_B_crop3_;
+
   int findBestPose(std::vector<cv::Vec3d> &rotVecs,
                    std::vector<cv::Vec3d> &transVecs,
                    Vec3fPoint corners,
                    double &score);
-};
-
-
-
+}; // end class arucoProcessor
 
 } // end namespace wp3
 
