@@ -62,7 +62,7 @@ catkin_make
 ## Usage
 
 To run the calibration on logged data from the Industrial Robotics Lab at UiA:
-* Download the ROS bag from (to be added)
+* Download the ROS bag from dataverse, [![DOI](https://zenodo.org/badge/DOI/10.18710/VIJXTL.svg)](https://doi.org/10.18710/VIJXTL)
 * Decompress
     ````bash
     rosbag decompress *.bag
@@ -75,6 +75,8 @@ To run the calibration on logged data from the Industrial Robotics Lab at UiA:
         
 The final calibration of the journal paper may be applied directly by using:
 ````bash
+rosparam set use_sim_time true
+rosbag play --clock -l rosbagname.bag
 roslaunch wp3_calibrator tf_resultC.launch
 ````
 
