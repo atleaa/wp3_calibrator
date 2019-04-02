@@ -54,7 +54,7 @@ If you use this work in an academic context, please cite the following publicati
 To build from source, clone the latest version from this repository into your catkin workspace and compile the package using
 ````bash
 cd catkin_workspace/src
-git clone https://github.com/SFI-Mechatronics/wp3_calibrator.git
+git clone https://github.com/atleaa/wp3_calibrator.git
 cd ../
 catkin_make
 ````
